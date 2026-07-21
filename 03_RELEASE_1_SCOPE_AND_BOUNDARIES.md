@@ -17,6 +17,8 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 本文档不冻结数据库、API、页面、Prompt、Agent Runtime 或最终字段。
 
+完整 Release 1 是长期边界。当前实施边界由 [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) 定义；长期演进问题登记在 [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)。
+
 ---
 
 ## 2. Release 1 定位
@@ -33,6 +35,8 @@ Release 1 是：
 - 在多个项目之间决定当前优先级。
 - 定义准备验证的实验。
 - 根据路线生成不同交付包。
+
+Release 1A 不要求完整 Release 1 的全部 Gate 和 Route 机制一次性实现。当前只实现 MVP 所需的人工状态、Decision Record 和 OWNED_CONTENT 交付链。
 
 ---
 

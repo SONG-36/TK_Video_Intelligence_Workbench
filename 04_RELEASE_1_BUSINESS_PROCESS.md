@@ -40,6 +40,8 @@ flowchart LR
 
 ## 3. 统一 Gate Decision
 
+> Release 1A 注意：Gate 0～Gate 3 当前是长期业务框架。Release 1A 仅实现人工状态和 Decision Record。具体 Gate 规则属于 Provisional Design，需要由真实商品使用数据继续验证。
+
 每次 Gate 必须生成正式记录：
 
 ```text
@@ -68,6 +70,8 @@ Gate Decision
 | RECYCLE | 保留方向，修改当前阶段产物后重审 |
 
 Gate 不是 AI 自动评分结果，最终由授权责任人决定。
+
+Release 1A 不实现 Gate Engine、自动阻断、复杂条件矩阵、多人会签、Override 机制、Permission Matrix、Gate Score 或可配置 Gate DSL。长期 Gate 演进登记在 [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)。
 
 ---
 

@@ -74,6 +74,25 @@ flowchart LR
 - 发布和表现数据回收。
 - 自动证明实验结果。
 
+### Release 1A 与 Release 1B+
+
+完整 Release 1 拆分为：
+
+```text
+Release 1A — Content Decision Workspace MVP
+Release 1B+ — Decision Governance and Route Expansion
+```
+
+Release 1A 先跑通：
+
+```text
+Product → Reference → Creative → Owned Pack
+```
+
+Release 1A 的实施范围由 [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) 定义，实施顺序由 [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) 定义。
+
+Gate、Priority、Experiment 和 Route-specific Pack 的完整机制进入后续版本演进，不强行确定 Release 1B 的日期或完整范围。
+
 ---
 
 ## 4. Release 2：素材与视频生产
@@ -179,12 +198,14 @@ flowchart TB
 
 - Release 1 创建 Experiment Contract。
 - Release 1 产生 Route-specific Delivery Pack。
+- Release 1A 是完整 Release 1 的第一个可运行子版本。
 - Release 3 回收并解释实验结果。
 - Release 4 正式生成 Handoff 和 Route Hypothesis。
 - Release 1 只提供 Priority Lite。
 
 当前不冻结：
 
+- Release 1B+ 的详细范围和日期。
 - Release 2～5 的详细状态机。
 - 实验统计方法。
 - 自动 Priority 算法。

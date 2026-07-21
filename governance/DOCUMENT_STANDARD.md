@@ -18,6 +18,15 @@ Optional fields:
 - `depends_on`
 - `supersedes`
 - `canonical`
+- `implementation_scope`
+
+When implementation is explicitly enabled, the document must include a clear `implementation_scope`.
+
+Current allowed `implementation_scope` values:
+
+- `RELEASE_1A_MVP_ONLY`
+
+Long-term Backlog documents never constitute implementation authorization.
 
 ## 2. Status Enum
 
@@ -84,4 +93,4 @@ Check:
 
 Implementation changes are not allowed while `implementation_allowed: false`.
 
-Before any future implementation change, confirm the relevant formal documents have approved implementation.
+Before any future implementation change, confirm the relevant formal Scope or Plan document has approved implementation and a clear `implementation_scope`.

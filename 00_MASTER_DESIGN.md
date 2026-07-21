@@ -346,7 +346,26 @@ Kernel Policy 只负责执行允许、拒绝、审批和 Override，不拥有业
 
 ---
 
-## 11. 当前禁止项
+## 11. 双轨推进与演进式实施
+
+当前正式采用双轨推进：
+
+```text
+Track A：Release 1A MVP Delivery
+Track B：Long-term Evolution Backlog
+```
+
+Track A 是实际开发主线。Release 1A 先交付真实可运行 MVP，用真实商品跑通 Product → Reference → Creative → Owned Content Production Pack。
+
+Track B 保存 Gate、Route、Priority、Experiment、Compliance、Store Health、Agent 增强等长期问题。Backlog 只记录问题、MVP 临时处理方式和重新设计触发条件，不自动构成开发授权。
+
+真实业务反馈驱动 Gate、Route、Priority 和 Experiment 的演进。长期 Roadmap 不自动构成开发授权；只有批准的 Implementation Scope 才允许写代码。
+
+当前实施授权由 [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) 和 [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) 限定。长期演进问题集中登记在 [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)。
+
+---
+
+## 12. 当前禁止项
 
 当前不做：
 
@@ -365,7 +384,7 @@ Kernel Policy 只负责执行允许、拒绝、审批和 Override，不拥有业
 
 ---
 
-## 12. 文档权威关系
+## 13. 文档权威关系
 
 ```mermaid
 flowchart TB
@@ -373,6 +392,9 @@ flowchart TB
     C[01_CAPABILITY_ROADMAP]
     D[02_DELIVERY_RELEASES]
     R[03_RELEASE_1_SCOPE_AND_BOUNDARIES]
+    S[06_RELEASE_1A_MVP_SCOPE]
+    I[07_RELEASE_1A_IMPLEMENTATION_PLAN]
+    E[08_LONG_TERM_EVOLUTION_BACKLOG]
     P[architecture/01_PLATFORM_ARCHITECTURE]
     A[architecture/02_ARCHITECTURE_DECISIONS]
     BP[04_RELEASE_1_BUSINESS_PROCESS]
@@ -381,6 +403,11 @@ flowchart TB
     M --> C
     M --> D
     D --> R
+    R --> S
+    S --> I
+    M --> E
+    C --> E
+    D --> E
     M --> P
     P --> A
     R --> BP
@@ -389,14 +416,14 @@ flowchart TB
 
 ---
 
-## 13. 当前状态
+## 14. 当前状态
 
 ```yaml
 baseline_version: "0.3"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 next_focus:
-  - Gate 0 至 Gate 3 的输入、判断标准和输出
-  - Content Route Hypothesis 的最小业务契约
-  - 不同 Route 的交付包边界
+  - Release 1A MVP Implementation Preparation
+  - Existing System Mapping
+  - 三商品 Pilot 数据准备
 ```

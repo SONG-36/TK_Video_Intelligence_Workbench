@@ -18,6 +18,9 @@ FORMAL_DOCS = [
     "03_RELEASE_1_SCOPE_AND_BOUNDARIES.md",
     "04_RELEASE_1_BUSINESS_PROCESS.md",
     "05_RELEASE_1_VERTICAL_SLICES.md",
+    "06_RELEASE_1A_MVP_SCOPE.md",
+    "07_RELEASE_1A_IMPLEMENTATION_PLAN.md",
+    "08_LONG_TERM_EVOLUTION_BACKLOG.md",
     "architecture/01_PLATFORM_ARCHITECTURE.md",
     "architecture/02_ARCHITECTURE_DECISIONS.md",
 ]
@@ -40,6 +43,15 @@ ALLOWED_STATUS = {
     "BASELINE_APPROVED",
     "SUPERSEDED",
     "ARCHIVED",
+}
+
+IMPLEMENTATION_TRUE_ALLOWED = {
+    "06_RELEASE_1A_MVP_SCOPE.md",
+    "07_RELEASE_1A_IMPLEMENTATION_PLAN.md",
+}
+
+ALLOWED_IMPLEMENTATION_SCOPES = {
+    "RELEASE_1A_MVP_ONLY",
 }
 
 
@@ -136,6 +148,7 @@ def check_fences(path: Path, text: str) -> None:
 
 def check_frontmatter(path: Path, text: str) -> None:
     rel = path.relative_to(ROOT)
+    rel_str = str(rel)
     frontmatter = parse_frontmatter(text)
     if not frontmatter:
         report_fail(f"{rel} has no parseable frontmatter")
@@ -153,11 +166,22 @@ def check_frontmatter(path: Path, text: str) -> None:
     else:
         report_fail(f"{rel} status is not allowed: {status or '<missing>'}")
 
-    implementation_allowed = frontmatter.get("implementation_allowed", "")
-    if implementation_allowed.lower() == "false":
-        report_pass(f"{rel} implementation_allowed is false")
+    implementation_allowed = frontmatter.get("implementation_allowed", "").lower()
+    implementation_scope = frontmatter.get("implementation_scope", "")
+    if implementation_allowed == "false":
+        if rel_str == "08_LONG_TERM_EVOLUTION_BACKLOG.md":
+            report_pass(f"{rel} is a non-implementation backlog")
+        else:
+            report_pass(f"{rel} implementation_allowed is false")
+    elif implementation_allowed == "true":
+        if rel_str not in IMPLEMENTATION_TRUE_ALLOWED:
+            report_fail(f"{rel} is not allowed to set implementation_allowed true")
+        elif implementation_scope not in ALLOWED_IMPLEMENTATION_SCOPES:
+            report_fail(f"{rel} has invalid or missing implementation_scope: {implementation_scope or '<missing>'}")
+        else:
+            report_pass(f"{rel} implementation authorization is scoped: {implementation_scope}")
     else:
-        report_fail(f"{rel} implementation_allowed is not false")
+        report_fail(f"{rel} implementation_allowed is neither true nor false")
 
 
 def strip_code_fences(text: str) -> str:

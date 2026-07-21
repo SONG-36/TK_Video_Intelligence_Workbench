@@ -236,7 +236,33 @@ Release 3 回收结果，Release 4 将 Learning 反哺选品。
 
 ---
 
-## 7. 当前能力覆盖
+## 7. Release 1A 能力分类
+
+Release 1A 使用以下分类，避免把长期能力误纳入当前 MVP：
+
+```text
+MVP_IMPLEMENTED
+MVP_LIGHTWEIGHT
+FUTURE_CAPABILITY
+```
+
+| 能力 | Release 1A 分类 | 说明 |
+|---|---|---|
+| Product Knowledge | MVP_IMPLEMENTED | Product、Product Version、Evidence、人工事实确认、Knowledge Baseline |
+| Reference Workspace | MVP_IMPLEMENTED | 保存参考、来源、拆解、适配性判断、Reference Pack |
+| Owned Content Pack | MVP_IMPLEMENTED | Script、Storyboard、Shot List、Owned Content Production Pack |
+| Stage Gate | MVP_LIGHTWEIGHT | 人工状态与 Decision Record，不实现 Gate Engine |
+| Route Hypothesis | MVP_LIGHTWEIGHT | 简单 Route 字段与人工说明，允许 UNKNOWN |
+| Priority | FUTURE_CAPABILITY | MVP 可手工排序，不实现 Priority Algorithm |
+| Experiment Management | FUTURE_CAPABILITY | MVP 只记录准备验证的问题 |
+| Other Route Packs | FUTURE_CAPABILITY | Creator、Paid、Listing/Search、Live、Hybrid 暂不完整实现 |
+| Feedback Loop | FUTURE_CAPABILITY | 发布、表现数据、学习反哺后续实现 |
+
+当前实施范围以 [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) 为准；长期能力问题登记在 [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)。
+
+---
+
+## 8. 当前能力覆盖
 
 ```mermaid
 flowchart LR
@@ -257,7 +283,7 @@ flowchart LR
 
 ---
 
-## 8. 冻结内容
+## 9. 冻结内容
 
 本版本冻结：
 

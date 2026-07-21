@@ -194,3 +194,5 @@ AI Evaluation 不等于 Business Experiment Result。
 - 分布式 Workflow Engine。
 
 首版应由领域 Application Service 实现清晰、有限的 Gate 和 Route 流程；重复稳定后再抽取。
+
+Release 1A 使用 Kernel Lite，由真实 Product、Reference、Creative 和 Owned Pack 切片拉动。长期能力不提前抽象为通用平台，Platform Kernel 仍只保留 Resource、Capability、Execution、Policy、Trace 五机制。

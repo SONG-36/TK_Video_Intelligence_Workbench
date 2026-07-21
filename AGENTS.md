@@ -7,9 +7,15 @@ This is a design-first and documentation-first repository.
 Current project constraints:
 
 - `implementation_allowed: false` remains in effect.
-- Business code must not be created yet.
+- Business code may only be created when a formal Scope or Plan document explicitly enables implementation and has a clear `implementation_scope`.
 - Do not create backend, frontend, domain, kernel, skills, agents, workflows, deploy, or similar implementation directories.
 - Repository documents are the formal source of truth.
+
+Long-term Roadmap, Business Process, and Evolution Backlog documents do not automatically authorize implementation.
+
+Current allowed implementation scope:
+
+- `RELEASE_1A_MVP_ONLY`, only as defined by [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) and [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md).
 
 Detailed document rules live in [governance/DOCUMENT_STANDARD.md](governance/DOCUMENT_STANDARD.md).
 
@@ -23,8 +29,11 @@ Canonical documents, in authority order:
 4. [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
 5. [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md)
 6. [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md)
-7. [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md)
-8. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+7. [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md)
+8. [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md)
+9. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
+10. [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md)
+11. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
 
 Files under `archive/` are not current authority sources.
 Files under `working/` are not formal baselines.
@@ -39,6 +48,8 @@ Before modifying documents, read:
 - [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md)
 - The directly affected files
 - [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+
+Before implementation work, also read [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) and [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md).
 
 ## 4. Incremental Editing Rules
 

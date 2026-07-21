@@ -43,6 +43,21 @@ flowchart LR
     VS1 --> VS2 --> VS3 --> VS4
 ```
 
+Release 1A 仅实现 MVP 映射切片。原完整 Vertical Slices 保留为长期 Release 1 参考；当前实际实施顺序由 [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) 决定。
+
+Release 1A 映射：
+
+| MVP Slice | 名称 | 对应实施重点 |
+|---|---|---|
+| VS-1A | Product Workspace | Product、Product Version、Evidence |
+| VS-1B | Product Knowledge Baseline | Fact / Proof / Risk / Unknown、人工确认 |
+| VS-2A | Reference Workspace | Reference 保存、拆解、适配性判断 |
+| VS-3A | Creative Concept | Content Project、构想草稿、人工选择 |
+| VS-3B | Owned Content Production Pack | Script、Storyboard、Shot List、导出 |
+| VS-4A | Three-product Pilot | 车载吸尘器、电动泡沫喷壶、个人护理商品 |
+
+当前不实现完整 Gate / Priority / Experiment，也不实现非 OWNED_CONTENT 的完整 Route Pack。
+
 ---
 
 ## 3. VS-01：任务进入、商品知识与早期 Gate
