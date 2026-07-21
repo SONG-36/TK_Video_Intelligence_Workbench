@@ -1,11 +1,11 @@
 ---
 document_type: delivery_releases
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.1"
+baseline_version: "0.2"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 authority: LEVEL_1_GLOBAL
-last_updated: 2026-07-20
+last_updated: 2026-07-21
 change_policy: ADR_REQUIRED_AFTER_APPROVAL
 ---
 
@@ -15,7 +15,9 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 本文档定义长期能力如何被切成真正可交付、可验收的产品版本。
 
-Delivery Release 不等于完整业务链顺序。系统可以从最有现实价值的中段开始，再逐步补齐上下游。
+Delivery Release 不等于完整业务链顺序。系统可以从最有现实价值的中段开始，但必须接收上游必要决策输出。
+
+---
 
 ## 2. 交付版本总图
 
@@ -30,25 +32,38 @@ flowchart LR
     R1 --> R2 --> R3 --> R4 --> R5
 ```
 
-这里的顺序是当前规划，不代表不可调整。每个 Release 必须形成独立业务价值。
+---
 
 ## 3. Release 1：内容决策与前期制作
 
 ```mermaid
 flowchart LR
+    H[Selection-to-Content Handoff]
+    COC[Content Operating Context]
     A[商品事实与证据]
     B[市场与参考内容]
     C[内容方向与视频构想]
     D[剧本与拍摄设计]
 
-    A --> B --> C --> D
+    H --> COC --> A --> B --> C --> D
 ```
 
-**核心价值**：把一个已确定需要做内容的商品，转化为可交给拍摄或生产团队执行的完整输入包。
+Release 1 负责：
 
-**主要输出**：Product Knowledge Baseline、Reference Intelligence Pack、Approved Creative Concept、Script Version、Storyboard、Shot List、Production-ready Pack。
+- 人工录入或外部导入内容路径假设。
+- 人工录入或外部导入市场合规快照。
+- 人工录入或外部导入店铺健康快照。
+- 在内容决策中使用这些上下文。
+- 保存快照和版本。
 
-**不包含**：商品机会、商品立项、素材生产、视频生成、发布、数据回收和自动复盘。
+Release 1 不负责：
+
+- 自动生成 Selection Decision。
+- 全球政策自动采集。
+- 店铺实时监控。
+- 自动发布。
+
+---
 
 ## 4. Release 2：素材与视频生产
 
@@ -65,9 +80,14 @@ flowchart LR
     A --> B --> C --> D --> E --> F --> G
 ```
 
-**核心价值**：将前期设计转化为可审核的视频版本。
+继承：
 
-**主要能力**：Asset Requirement、Asset Library、Shooting Task、Generation Task、Editing Task、Video Version、Production Review、成本、异步、幂等和失败恢复。
+- Content Route。
+- Market Compliance Snapshot。
+- Store / Channel Context。
+- Production Constraints。
+
+---
 
 ## 5. Release 3：发布与表现反馈
 
@@ -76,14 +96,23 @@ flowchart LR
     A[Approved Video]
     B[Publish Task]
     C[Publication]
-    D[Performance Snapshot]
-    E[Postmortem]
-    F[Learning]
+    D[Store / Account Status]
+    E[Performance Snapshot]
+    F[Postmortem]
+    G[Learning]
 
-    A --> B --> C --> D --> E --> F
+    A --> B --> C --> D --> E --> F --> G
 ```
 
-**核心价值**：把发布结果准确关联回构想、剧本和视频版本，形成内容学习闭环。
+Release 3 正式接入：
+
+- Channel Account。
+- Store。
+- Store Health。
+- 发布权限与风控。
+- 平台表现数据。
+
+---
 
 ## 6. Release 4：商品机会与选品判断
 
@@ -95,11 +124,23 @@ flowchart LR
     D[Compliance]
     E[Commercial Assessment]
     F[Selection Decision]
+    G[Go-to-Market Hypothesis]
+    H[Content Route Hypothesis]
 
-    A --> B --> C --> D --> E --> F
+    A --> B --> C --> D --> E --> F --> G --> H
 ```
 
-**核心价值**：将市场信号和供应链信息转化为可追溯的选品与立项判断。
+Release 4 正式生成：
+
+- Selection Decision。
+- Go-to-Market Hypothesis。
+- Content Route Hypothesis。
+- Target Market Context。
+- Initial Investment Level。
+
+这些输出正式交接给 Release 1。
+
+---
 
 ## 7. Release 5：跨域智能编排
 
@@ -117,53 +158,45 @@ flowchart LR
     C --> D --> E --> F
 ```
 
-**核心价值**：在稳定业务流程、真实运行数据和评估体系基础上，增加受控的动态编排能力。
-
-Release 5 不是第一次引入 AI 或 Agent，而是升级为跨域、反馈感知和成本质量平衡。
+---
 
 ## 8. Release 之间的接口
 
 ```mermaid
 flowchart TB
-    U[上游人工 / 飞书 / 导入]
+    EXT[人工 / 飞书 / 外部系统]
     R1[Release 1<br/>内容决策与前期制作]
     R2[Release 2<br/>素材与视频生产]
     R3[Release 3<br/>发布与反馈]
     R4[Release 4<br/>商品机会与选品]
     R5[Release 5<br/>跨域智能编排]
 
-    U -->|已确定商品与资料| R1
+    EXT -->|临时 Handoff 与 Context| R1
+    R4 -->|正式 Selection-to-Content Handoff| R1
     R1 -->|Production-ready Pack| R2
     R2 -->|Approved Video Version| R3
-    R3 -->|Performance & Learning| R1
+    R3 -->|Performance / Store Health / Learning| R1
     R3 -->|Commercial Evidence| R4
-    R4 -->|Approved Product| R1
     R1 --> R5
     R2 --> R5
     R3 --> R5
     R4 --> R5
 ```
 
-## 9. Release 冻结规则
+---
 
-当前可冻结：
+## 9. 冻结规则
+
+当前冻结：
 
 - Release 1～5 的高层边界。
 - Release 1 为当前优先交付。
-- Release 2～5 只保留输入、输出和业务价值。
+- Release 1 临时人工接收上游交接包。
+- Release 3 正式接入店铺与账号状态。
+- Release 4 正式生成选品到内容交接包。
 
-当前不可冻结：
+当前不冻结：
 
 - Release 2～5 的字段、页面、状态机、API 和技术实现。
 - Release 5 是否采用多 Agent。
 - 各 Release 的具体日期。
-
-## 10. 变更规则
-
-以下变更需要 ADR：
-
-- 调整 Release 1 终点。
-- 将新能力加入当前 Release。
-- 改变 Release 间的正式接口。
-- 将后续能力提前实现。
-- 将当前明确排除项重新纳入。

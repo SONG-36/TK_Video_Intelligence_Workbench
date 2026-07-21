@@ -1,11 +1,11 @@
 ---
 document_type: capability_roadmap
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.1"
+baseline_version: "0.2"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 authority: LEVEL_1_GLOBAL
-last_updated: 2026-07-20
+last_updated: 2026-07-21
 change_policy: ADR_REQUIRED_AFTER_APPROVAL
 ---
 
@@ -13,13 +13,18 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 ## 1. 文档职责
 
-本文档定义系统长期需要具备的业务能力。
+本文档定义系统长期需要具备的业务能力，并区分：
 
-它回答：
+- 纵向业务价值链。
+- 横向市场、合规、渠道和店铺运营能力。
 
-> 未来这套系统最终要覆盖哪些业务环节，以及每个环节的输入、输出和价值是什么？
+它不回答：
 
-它不回答什么时候开发、当前 Release 具体实现什么、页面字段、API 或技术选型。
+- 什么时候开发。
+- 当前 Release 具体实现什么。
+- 页面、字段、API 或技术选型。
+
+---
 
 ## 2. 长期能力总图
 
@@ -43,7 +48,57 @@ flowchart LR
     C11 -. 选品反馈 .-> C1
 ```
 
-## 3. 能力分区
+---
+
+## 3. 横向支撑能力
+
+```mermaid
+flowchart TB
+    MAIN[长期业务主链]
+    M[Market & Compliance Management]
+    S[Channel & Store Operations Context]
+    R[Go-to-Market & Content Route Hypothesis]
+
+    M --> MAIN
+    S --> MAIN
+    R --> MAIN
+```
+
+### 3.1 Market & Compliance Management
+
+长期需要：
+
+- Market。
+- Market Compliance Profile。
+- 类目、认证、Claims、广告和内容规则。
+- 规则生效时间和版本。
+- 合规检查与人工复核。
+
+### 3.2 Channel & Store Operations Context
+
+长期需要：
+
+- Channel Account。
+- Store。
+- Store Health Snapshot。
+- 店铺评分、违规、履约、退货、差评和流量限制。
+- 投入与发布策略联动。
+
+### 3.3 Go-to-Market & Content Route Hypothesis
+
+长期需要：
+
+- Creator-led。
+- Owned-content-led。
+- Paid-media-led。
+- Listing-search-led。
+- Live-led。
+- Hybrid。
+- Unknown。
+
+---
+
+## 4. 能力分区
 
 ```mermaid
 flowchart TB
@@ -75,119 +130,73 @@ flowchart TB
     FEEDBACK -.-> DISCOVERY
 ```
 
-## 4. 能力说明
+---
 
-### 4.1 商品机会
+## 5. 关键能力输出
 
-**目的**：发现值得进一步评估的商品、需求和市场信号。
+### 5.1 商品立项
 
-**输入**：市场趋势、搜索信号、竞品、用户需求、供应链线索。
+输出不再只是 Selection Decision，还包括：
 
-**输出**：Product Candidate、Opportunity Hypothesis、初步市场证据。
+```text
+Selection Decision
++
+Initial Go-to-Market Hypothesis
++
+Content Route Hypothesis
++
+Target Market Context
++
+Initial Investment Level
+```
 
-**当前状态**：不属于 Release 1。
+### 5.2 商品事实与证据
 
-### 4.2 商品立项
+输出：
 
-**目的**：判断候选商品是否值得进入样品、供应链、合规和内容测试。
+```text
+Global Product Knowledge
++
+Market-specific Compliance Overlay
++
+Product Proof
++
+Risks / Unknowns
+```
 
-**输入**：市场证据、供应商、成本利润、合规风险、团队资源。
+### 5.3 市场与参考内容
 
-**输出**：Selection Decision，以及已确定进入内容阶段的商品。
+输出：
 
-**当前状态**：不属于 Release 1，但 Release 1 接收其输出。
+```text
+Market-specific Reference Intelligence Pack
++
+Route-specific Reference Analysis
+```
 
-### 4.3 商品事实与证据
+### 5.4 内容方向与视频构想
 
-**目的**：建立内容生产可以信任的商品知识基线。
+输出：
 
-**输入**：供应商资料、实物观察、测试记录、图片、视频、说明书、人工判断和 AI 辅助分析。
+```text
+Approved Creative Concept
++
+绑定的 Content Operating Context Snapshot
+```
 
-**输出**：Product Knowledge Baseline、Evidence、Supplier Claims、Confirmed Facts、Product Proof、Risks、Unknowns。
+### 5.5 剧本与拍摄设计
 
-**当前状态**：属于 Release 1。
+输出：
 
-### 4.4 市场与参考内容
+```text
+Production-ready Pack
++
+Market / Route / Store Context Snapshot
+```
 
-**目的**：理解市场如何表达需求、痛点、场景和卖点，并形成可复用参考。
+---
 
-**输入**：TikTok 视频、竞品内容、评论、搜索结果和市场资料。
-
-**输出**：Reference Intelligence Pack、内容模式、Hook 模式、风险和不适配点。
-
-**当前状态**：属于 Release 1。
-
-### 4.5 内容方向与视频构想
-
-**目的**：决定这次为什么拍、为谁拍、拍什么和验证什么。
-
-**输入**：Product Knowledge Baseline、Reference Intelligence Pack、内容目标、账号定位、受众与市场。
-
-**输出**：Content Direction、Creative Concept Candidates、Experiment Hypothesis、Approved Creative Concept。
-
-**当前状态**：属于 Release 1。
-
-### 4.6 剧本与拍摄设计
-
-**目的**：把已批准构想变成可执行的拍摄与制作输入。
-
-**输入**：Approved Creative Concept、商品事实与证据、内容约束和拍摄资源。
-
-**输出**：Script Version、Storyboard、Shot List、Production Requirements、Production-ready Pack。
-
-**当前状态**：属于 Release 1。
-
-### 4.7 素材与视频生产
-
-**目的**：把前期制作方案转化为真实素材与视频版本。
-
-**输入**：Script & Shooting Pack、实拍素材、供应商素材和 AI 生成能力。
-
-**输出**：Asset、Production Task、Video Version、Production Review。
-
-**当前状态**：不属于 Release 1。
-
-### 4.8 审核与发布
-
-**目的**：确保内容、账号、商品和平台操作在发布前符合要求。
-
-**输入**：Video Version、Caption、账号、商品和合规规则。
-
-**输出**：Approved Publication、Publish Task、Publication Record。
-
-**当前状态**：不属于 Release 1。
-
-### 4.9 表现数据回收
-
-**目的**：把发布结果和商业表现关联回内容与实验。
-
-**输入**：平台数据、店铺数据、广告数据和人工标注。
-
-**输出**：Performance Snapshot、Commerce Metrics、Experiment Result。
-
-**当前状态**：不属于 Release 1。
-
-### 4.10 实验复盘与知识沉淀
-
-**目的**：将一次视频结果转化为可复用业务结论。
-
-**输入**：Performance Snapshot、Creative Concept、Script、Publication Context。
-
-**输出**：Postmortem、Learning、可复用模式和失败原因。
-
-**当前状态**：不属于 Release 1。
-
-### 4.11 反哺内容与选品
-
-**目的**：让历史结果真正影响下一次内容和商品判断。
-
-**输入**：Learning、多商品、多账号和多内容结果。
-
-**输出**：内容策略调整、商品知识更新、选品支持和实验建议。
-
-**当前状态**：后续能力。
-
-## 5. 当前能力覆盖
+## 6. 当前能力覆盖
 
 ```mermaid
 flowchart LR
@@ -206,12 +215,22 @@ flowchart LR
     classDef future fill:#f5f5f5,stroke:#8c8c8c,color:#434343;
 ```
 
-## 6. 冻结内容
+横向能力在 Release 1 中只做：
+
+- 人工录入或外部导入。
+- 保存快照。
+- 在内容决策中引用。
+- 不做自动采集平台。
+
+---
+
+## 7. 冻结内容
 
 本版本冻结：
 
 - 长期能力链顺序。
-- 四个能力分区。
+- 横向市场合规与店铺运营能力。
+- 商品立项必须输出内容路径假设。
 - Release 1 覆盖中间四段能力。
 - 上下游通过明确输入输出衔接。
 

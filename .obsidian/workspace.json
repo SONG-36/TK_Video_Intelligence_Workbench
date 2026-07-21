@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_DELIVERY_RELEASES.md",
+                "file": "05_RELEASE_1_VERTICAL_SLICES.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_DELIVERY_RELEASES"
+              "title": "05_RELEASE_1_VERTICAL_SLICES"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "02_DELIVERY_RELEASES.md",
+                "file": "05_RELEASE_1_VERTICAL_SLICES.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 02_DELIVERY_RELEASES"
+              "title": "Backlinks for 05_RELEASE_1_VERTICAL_SLICES"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "02_DELIVERY_RELEASES.md",
+                "file": "05_RELEASE_1_VERTICAL_SLICES.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 02_DELIVERY_RELEASES"
+              "title": "Outgoing links from 05_RELEASE_1_VERTICAL_SLICES"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "02_DELIVERY_RELEASES.md",
+                "file": "05_RELEASE_1_VERTICAL_SLICES.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 02_DELIVERY_RELEASES"
+              "title": "Outline of 05_RELEASE_1_VERTICAL_SLICES"
             }
           }
         ]
@@ -185,11 +185,13 @@
   },
   "active": "6ba3f2cb90c695b2",
   "lastOpenFiles": [
+    "04_RELEASE_1_BUSINESS_PROCESS.md",
     "03_RELEASE_1_SCOPE_AND_BOUNDARIES.md",
     "00_MASTER_DESIGN.md",
-    "00_MASTER_DESIGN_v0.4_PLATFORM_KERNEL.md",
+    "05_RELEASE_1_VERTICAL_SLICES.md",
     "02_DELIVERY_RELEASES.md",
     "01_CAPABILITY_ROADMAP.md",
+    "00_MASTER_DESIGN_v0.4_PLATFORM_KERNEL.md",
     "architecture/02_ARCHITECTURE_DECISIONS.md",
     "architecture/01_PLATFORM_ARCHITECTURE.md",
     "architecture",
@@ -209,8 +211,6 @@
     "docs/phases/phase_0_design_freeze/validation/ORAL_IRRIGATOR_WALKTHROUGH.md",
     "docs/phases/phase_0_design_freeze/validation/FOAM_SPRAYER_WALKTHROUGH.md",
     "docs/phases/phase_0_design_freeze/validation/CAR_VACUUM_WALKTHROUGH.md",
-    "docs/core/08_ARCHITECTURE_DECISIONS.md",
-    "docs/core/07_GLOSSARY_AND_TAXONOMY.md",
-    "docs/core/06_INTELLIGENCE_KERNEL.md"
+    "docs/core/08_ARCHITECTURE_DECISIONS.md"
   ]
 }
