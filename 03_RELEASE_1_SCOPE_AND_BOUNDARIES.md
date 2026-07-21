@@ -1,7 +1,7 @@
 ---
 document_type: release_scope
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.2"
+baseline_version: "0.3"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 authority: LEVEL_2_RELEASE
@@ -17,7 +17,14 @@ Release 1 是：
 
 > **内容决策与前期制作工作台**
 
-它接收一个已经确定需要制作内容的商品，以及这个商品进入内容阶段时的商业路径、市场、合规和店铺运营上下文，将商品资料、证据和市场参考转化为经过审核的构想、剧本、分镜和拍摄制作输入包。
+它不是默认把每个商品加工成剧本的流水线，而是帮助团队：
+
+- 判断是否值得继续。
+- 判断内容路线是否成立。
+- 判断是否需要补证据或改变路线。
+- 在多个项目之间决定当前优先级。
+- 定义准备验证的实验。
+- 根据路线生成不同交付包。
 
 ---
 
@@ -25,63 +32,72 @@ Release 1 是：
 
 ```mermaid
 flowchart LR
-    UP[上游输入<br/>已确定需要做内容的商品]
-    H[Selection-to-Content Handoff]
-    COC[Content Operating Context Snapshot]
-    A[商品知识与证据]
-    B[市场与参考研究]
-    C[内容方向与视频构想]
-    D[剧本与拍摄设计]
-    OUT[下游输出<br/>Production-ready Pack]
+    UP[商品与上游交接]
+    S0[运营上下文]
+    G0{Gate 0}
+    A[商品知识]
+    G1{Gate 1}
+    B[参考与路线验证]
+    G2{Gate 2}
+    C[构想与实验]
+    G3{Gate 3}
+    P[Priority Lite]
+    D[Route-specific Delivery Pack]
 
-    UP --> H --> COC --> A --> B --> C --> D --> OUT
+    UP --> S0 --> G0
+    G0 --> A --> G1
+    G1 --> B --> G2
+    G2 --> C --> G3
+    G3 --> P --> D
+```
+
+任一 Gate 均可输出：
+
+```text
+CONTINUE
+PAUSE
+STOP
+CHANGE_ROUTE
+REQUEST_MORE_EVIDENCE
+RECYCLE
 ```
 
 ---
 
 ## 3. 输入边界
 
-Release 1 的输入可以来自人工录入、飞书、文件上传或未来 API。
+### 3.1 商品与资料
 
-### 3.1 商品基础输入
-
-- 商品名称与内部标识。
-- SKU / 型号。
-- 商品图片和说明。
+- 商品身份。
+- SKU、型号和版本。
 - 供应商资料。
-- 已知参数与卖点。
-- 实物观察或测试记录。
-- 已有参考视频和市场资料。
+- 图片、视频、说明书。
+- 实物观察和测试。
+- 已有市场与参考资料。
 
 ### 3.2 Selection-to-Content Handoff
 
-至少包括：
-
 - 商品为什么进入内容阶段。
 - 初始 Go-to-Market Hypothesis。
-- Content Route Hypothesis。
-- 内容在商业路径中承担的作用。
+- 初始 Content Route Hypothesis。
+- 内容承担的作用。
 - 初始投入等级。
-- 当前要验证的假设。
+- 当前要验证的业务问题。
 - 决策人和日期。
-- 假设置信度。
 
-### 3.3 Content Operating Context Snapshot
-
-至少包括：
+### 3.3 Content Operating Context
 
 - Target Market。
 - Platform。
 - Product Category。
-- Market Compliance Profile Version。
+- Compliance Profile Snapshot。
 - Channel / Store / Account Context。
 - Store Health Snapshot。
-- 当前风险等级。
-- 当前发布和投入限制。
+- 当前资源与风险约束。
 
 ---
 
-## 4. Content Route 类型
+## 4. Content Route Hypothesis 边界
 
 首版支持：
 
@@ -95,139 +111,222 @@ HYBRID
 UNKNOWN
 ```
 
-`UNKNOWN` 是合法状态，不得伪造确定性。
+但每个 Route 不能只保存枚举值，还必须至少说明：
+
+- Rationale。
+- Supporting Evidence。
+- Contrary Evidence。
+- Assumptions。
+- Validation Plan。
+- Success Criteria。
+- Stop Conditions。
+- Owner。
+- Review Date。
 
 ---
 
-## 5. 业务范围
+## 5. Release 1 业务范围
 
 ### Stage 0：内容任务进入与运营上下文确认
 
 输出：
 
-```text
-Approved Content Operating Context
-```
+- Approved Content Operating Context。
+- Initial / Revised Content Route Hypothesis。
+- Gate 0 Decision。
 
-### Stage A：商品知识准备
-
-输出：
-
-```text
-Product Knowledge Baseline
-```
-
-### Stage B：参考内容研究
+### Stage A：商品事实与证据
 
 输出：
 
-```text
-Reference Intelligence Pack
-```
+- Product Knowledge Baseline。
+- Gate 1 Decision。
 
-### Stage C：内容方向与视频构想
-
-输出：
-
-```text
-Approved Creative Concept
-+
-Creative Brief
-```
-
-### Stage D：剧本与拍摄设计
+### Stage B：市场与参考、路线验证
 
 输出：
 
-```text
-Production-ready Script & Shooting Pack
-```
+- Reference Intelligence Pack。
+- Route Validation Assessment。
+- Gate 2 Decision。
+
+### Stage C：内容方向、构想与实验定义
+
+输出：
+
+- Approved Creative Direction。
+- Experiment Contract。
+- Gate 3 Decision。
+- Project Priority。
+
+### Stage D：路线化交付设计
+
+输出：
+
+- Route-specific Delivery Pack。
 
 ---
 
-## 6. 核心业务闭环
+## 6. Release 1 正式输出
 
-```mermaid
-flowchart TB
-    A[商品与上游交接]
-    B[Content Operating Context]
-    C[Product Knowledge Baseline]
-    D[Reference Intelligence Pack]
-    E[Creative Concept Candidates]
-    F{构想审核}
-    G[Approved Creative Concept]
-    H[Script Draft]
-    I{剧本审核}
-    J[Storyboard & Shot List]
-    K[Production-ready Pack]
+根据路线不同：
 
-    A --> B --> C --> D --> E --> F
-    F -- 退回 --> E
-    F -- 通过 --> G --> H --> I
-    I -- 退回 --> H
-    I -- 通过 --> J --> K
+### Creator-led
+
+```text
+Creator Enablement Pack
 ```
+
+### Owned-content-led
+
+```text
+Owned Content Production Pack
+```
+
+### Paid-media-led
+
+```text
+Paid Media Test Pack
+```
+
+### Listing-search-led
+
+```text
+Listing / Search Content Pack
+```
+
+### Live-led
+
+```text
+Live Content Pack
+```
+
+### Hybrid
+
+```text
+Hybrid Delivery Bundle
+```
+
+所有正式输出都必须绑定：
+
+- Approved Creative Direction。
+- Content Operating Context Snapshot。
+- Content Route Hypothesis Version。
+- Experiment Contract。
+- Evidence / Proof 引用。
+- 审批记录。
 
 ---
 
-## 7. 明确不做
+## 7. Priority Lite 边界
+
+首版只支持：
+
+```text
+MUST_DO
+NEXT
+EXPERIMENTAL
+HOLD
+STOPPED
+```
+
+Priority 是人工决策加简单辅助指标，不是自动综合评分。
+
+Priority 不替代 Gate：
+
+- Gate 判断项目是否具备继续条件。
+- Priority 判断项目在有限资源中何时执行。
+
+---
+
+## 8. Experiment Contract 边界
+
+Release 1 负责定义：
+
+- Business Question。
+- Hypothesis。
+- Variable Under Test。
+- Primary Metric。
+- Guardrail Metrics。
+- Comparison Baseline。
+- Observation Window。
+- Minimum Sample Expectation。
+- Success Rule。
+- Stop Rule。
+- Next Action。
+
+Release 1 不负责：
+
+- 实际发布。
+- 采集实验结果。
+- 统计显著性结论。
+- 自动证明因果关系。
+
+---
+
+## 9. 明确不做
 
 Release 1 不做：
 
 - 商品机会发现。
-- 商品商业立项。
-- 自动生成 Selection Decision。
-- 供应商选择和采购决策。
+- 正式商品商业立项。
+- 完整 Portfolio Management。
+- 自动项目优先级裁决。
+- 自动生成可信 Route 结论。
 - 全球政策自动采集。
 - 店铺实时监控。
-- 自动违规预测。
 - 素材生产。
 - AI 图片或视频生成。
-- 视频剪辑。
-- TikTok 发布。
-- 发布数据回收。
+- 剪辑。
+- 发布。
+- 表现数据回收。
 - 自动复盘。
-- 自动选品。
-- 跨域自适应 Agent。
-- 自由多 Agent 协商。
+- 自由多 Agent。
 - 通用工作流平台。
 
 ---
 
-## 8. 角色边界
+## 10. 角色边界
 
-| 角色 | 主要责任 |
+| 角色 | 责任 |
 |---|---|
-| 运营 | 录入 Handoff、Context、商品资料、参考和内容任务 |
-| 商品负责人 | 确认商品事实、风险和可用 Proof |
-| 内容负责人 | 审核内容路径、构想、剧本和拍摄设计 |
+| 运营 | 创建项目、录入上下文、整理资料和参考 |
+| 商品负责人 | 确认商品事实、Proof、风险和证据缺口 |
+| 内容负责人 | 审核 Route、Creative Direction 和交付包 |
 | 店铺 / 渠道负责人 | 确认 Store Health 和渠道限制 |
-| 合规负责人 | 确认目标市场规则和高风险 Claims |
-| AI / Skills | 分类、提取、分析、生成草稿和风险提醒 |
-| 系统 | 保存版本、状态、关系、审批与 Trace |
+| 合规负责人 | 确认市场规则和高风险 Claims |
+| 项目 / 业务负责人 | 做 Gate 和 Priority 最终决策 |
+| AI / Skills | 生成草稿、分析、检查和建议 |
+| 系统 | 保存版本、关系、Gate、Priority、Experiment 和 Trace |
+
+AI 不得：
+
+- 确认正式事实。
+- 自动通过 Gate。
+- 自动决定 Priority。
+- 自动批准 Route。
+- 自动证明实验成功。
 
 ---
 
-## 9. Release 1 完成标准
+## 11. Release 1 完成标准
 
-- 至少 3 个不同商品完整走通。
-- Content Route、Market、Compliance 和 Store Health 均可追溯。
-- 运营无需开发人员陪同即可完成任务。
-- 每个正式结论可追溯到来源、版本和确认人。
-- 每个 AI 输出都能识别为草稿。
-- 被拒绝的构想和剧本不能生成正式输出。
-- 历史导出包不可被后续资料变化静默覆盖。
-- 最终输出能直接交给拍摄或生产团队使用。
+- 至少 3 个商品完整走通。
+- 至少出现一次 Pause、Stop、Change Route 或 Request More Evidence。
+- 至少覆盖两种不同 Route-specific Pack。
+- Route Hypothesis 有验证计划和停止条件。
+- Experiment Contract 能被 Release 3 使用。
+- Priority 队列可以解释团队当前先做什么。
+- 正式输出可追溯到 Context、Evidence、Gate 和审批。
+- 运营无需开发人员修改数据库。
 
 ---
 
-## 10. 当前尚未冻结
+## 12. 当前尚未冻结
 
-- Product、Evidence、Fact、Claim、Proof 的最终对象边界。
-- Content Operating Context 是否独立成聚合根。
-- Content Project 的精确定义。
-- Store Health Snapshot 的最小字段。
-- Market Compliance Profile 的最小字段。
-- 构想和剧本的完整状态机。
-- 页面与交互。
-- 字段、Schema、API 和数据库。
+- Gate 0～3 的最终判断标准。
+- Route Hypothesis 最终 Schema。
+- Priority 辅助指标和排序方式。
+- 各 Delivery Pack 完整 Schema。
+- Experiment Contract 的统计要求。
+- 页面、API、数据库和代码实现。

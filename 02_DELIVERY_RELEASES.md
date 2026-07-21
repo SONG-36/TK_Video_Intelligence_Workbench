@@ -1,7 +1,7 @@
 ---
 document_type: delivery_releases
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.2"
+baseline_version: "0.3"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 authority: LEVEL_1_GLOBAL
@@ -13,9 +13,9 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 ## 1. 文档职责
 
-本文档定义长期能力如何被切成真正可交付、可验收的产品版本。
+本文档定义长期能力如何拆成可交付、可验收的产品版本。
 
-Delivery Release 不等于完整业务链顺序。系统可以从最有现实价值的中段开始，但必须接收上游必要决策输出。
+Release 顺序不等于业务链顺序。当前从中段开始，但不丢失上游决策输出。
 
 ---
 
@@ -25,7 +25,7 @@ Delivery Release 不等于完整业务链顺序。系统可以从最有现实价
 flowchart LR
     R1[Release 1<br/>内容决策与前期制作]
     R2[Release 2<br/>素材与视频生产]
-    R3[Release 3<br/>发布与表现反馈]
+    R3[Release 3<br/>发布、表现与实验反馈]
     R4[Release 4<br/>商品机会与选品判断]
     R5[Release 5<br/>跨域智能编排]
 
@@ -39,29 +39,40 @@ flowchart LR
 ```mermaid
 flowchart LR
     H[Selection-to-Content Handoff]
-    COC[Content Operating Context]
-    A[商品事实与证据]
-    B[市场与参考内容]
-    C[内容方向与视频构想]
-    D[剧本与拍摄设计]
+    C[Content Operating Context]
+    K[商品知识]
+    R[参考与路线验证]
+    D[构想与Gate决策]
+    P[Priority Lite]
+    E[Experiment Contract]
+    O[Route-specific Delivery Pack]
 
-    H --> COC --> A --> B --> C --> D
+    H --> C --> K --> R --> D
+    D --> P
+    D --> E
+    P --> O
+    E --> O
 ```
 
-Release 1 负责：
+### Release 1 负责
 
-- 人工录入或外部导入内容路径假设。
-- 人工录入或外部导入市场合规快照。
-- 人工录入或外部导入店铺健康快照。
-- 在内容决策中使用这些上下文。
-- 保存快照和版本。
+- 接收并保存上游 Handoff。
+- 创建或修订 Content Route Hypothesis。
+- 使用 Stage 0～3 Gate。
+- 允许 Stop、Pause、Change Route 和 Request More Evidence。
+- 进行轻量项目优先级判断。
+- 创建 Experiment Contract。
+- 生成 Route-specific Delivery Pack。
+- 保存 Context、版本、决策和 Trace。
 
-Release 1 不负责：
+### Release 1 不负责
 
-- 自动生成 Selection Decision。
-- 全球政策自动采集。
-- 店铺实时监控。
-- 自动发布。
+- 正式选品与商业立项。
+- 自动生成可靠的 Route 结论。
+- 完整 Portfolio Management。
+- 素材和视频生产。
+- 发布和表现数据回收。
+- 自动证明实验结果。
 
 ---
 
@@ -69,48 +80,43 @@ Release 1 不负责：
 
 ```mermaid
 flowchart LR
-    A[Production-ready Pack]
-    B[素材需求]
+    A[Route-specific Delivery Pack]
+    B[Production Planning]
     C[素材资产]
     D[实拍 / AI生成]
-    E[剪辑任务]
-    F[Video Version]
-    G[Production Review]
+    E[剪辑与版本]
+    F[Production Gate]
+    G[Approved Video / Asset Package]
 
     A --> B --> C --> D --> E --> F --> G
 ```
 
-继承：
-
-- Content Route。
-- Market Compliance Snapshot。
-- Store / Channel Context。
-- Production Constraints。
+Release 2 按不同 Route 执行不同生产流程，而不是把所有 Pack 转换成同一种视频。
 
 ---
 
-## 5. Release 3：发布与表现反馈
+## 5. Release 3：发布、表现与实验反馈
 
 ```mermaid
 flowchart LR
-    A[Approved Video]
-    B[Publish Task]
-    C[Publication]
-    D[Store / Account Status]
-    E[Performance Snapshot]
-    F[Postmortem]
-    G[Learning]
+    A[Approved Output]
+    B[Publish / Distribution]
+    C[Performance Snapshot]
+    D[Experiment Result]
+    E[Postmortem]
+    F[Learning]
+    G[Route Validation Result]
 
     A --> B --> C --> D --> E --> F --> G
 ```
 
-Release 3 正式接入：
+Release 3 负责：
 
-- Channel Account。
-- Store。
-- Store Health。
-- 发布权限与风控。
-- 平台表现数据。
+- 店铺、账号和发布接入。
+- 数据回收。
+- 将结果关联到 Experiment Contract。
+- 判断原始 Hypothesis 是 Supported、Rejected、Inconclusive 或 Invalid。
+- 触发后续 Route Review。
 
 ---
 
@@ -120,62 +126,44 @@ Release 3 正式接入：
 flowchart LR
     A[Market Signals]
     B[Product Candidate]
-    C[Supplier & Cost]
-    D[Compliance]
-    E[Commercial Assessment]
-    F[Selection Decision]
-    G[Go-to-Market Hypothesis]
-    H[Content Route Hypothesis]
+    C[Supplier / Cost / Compliance]
+    D[Commercial Assessment]
+    E[Selection Gate]
+    F[Go-to-Market Hypothesis]
+    G[Content Route Hypothesis]
+    H[Selection-to-Content Handoff]
 
     A --> B --> C --> D --> E --> F --> G --> H
 ```
 
-Release 4 正式生成：
-
-- Selection Decision。
-- Go-to-Market Hypothesis。
-- Content Route Hypothesis。
-- Target Market Context。
-- Initial Investment Level。
-
-这些输出正式交接给 Release 1。
+Release 4 正式生成当前 Release 1 临时人工录入的上游交接包。
 
 ---
 
 ## 7. Release 5：跨域智能编排
 
-```mermaid
-flowchart LR
-    A[历史Run与Trace]
-    B[业务Learning]
-    C[跨域规划]
-    D[Skill与模型路由]
-    E[半自动实验建议]
-    F[受控自适应]
+Release 5 在已有稳定数据、流程、Gate 和评估基础上增加受控动态编排。
 
-    A --> C
-    B --> C
-    C --> D --> E --> F
-```
+不等于首次引入 AI，也不默认采用多 Agent。
 
 ---
 
-## 8. Release 之间的接口
+## 8. Release 间闭环
 
 ```mermaid
 flowchart TB
     EXT[人工 / 飞书 / 外部系统]
-    R1[Release 1<br/>内容决策与前期制作]
-    R2[Release 2<br/>素材与视频生产]
-    R3[Release 3<br/>发布与反馈]
-    R4[Release 4<br/>商品机会与选品]
-    R5[Release 5<br/>跨域智能编排]
+    R1[Release 1<br/>决策与前期制作]
+    R2[Release 2<br/>生产]
+    R3[Release 3<br/>发布与实验反馈]
+    R4[Release 4<br/>选品]
+    R5[Release 5<br/>跨域编排]
 
-    EXT -->|临时 Handoff 与 Context| R1
-    R4 -->|正式 Selection-to-Content Handoff| R1
-    R1 -->|Production-ready Pack| R2
-    R2 -->|Approved Video Version| R3
-    R3 -->|Performance / Store Health / Learning| R1
+    EXT -->|临时 Handoff| R1
+    R4 -->|正式 Handoff| R1
+    R1 -->|Route-specific Pack + Experiment Contract| R2
+    R2 -->|Approved Output| R3
+    R3 -->|Experiment Result / Learning| R1
     R3 -->|Commercial Evidence| R4
     R1 --> R5
     R2 --> R5
@@ -189,14 +177,16 @@ flowchart TB
 
 当前冻结：
 
-- Release 1～5 的高层边界。
-- Release 1 为当前优先交付。
-- Release 1 临时人工接收上游交接包。
-- Release 3 正式接入店铺与账号状态。
-- Release 4 正式生成选品到内容交接包。
+- Release 1 创建 Experiment Contract。
+- Release 1 产生 Route-specific Delivery Pack。
+- Release 3 回收并解释实验结果。
+- Release 4 正式生成 Handoff 和 Route Hypothesis。
+- Release 1 只提供 Priority Lite。
 
 当前不冻结：
 
-- Release 2～5 的字段、页面、状态机、API 和技术实现。
-- Release 5 是否采用多 Agent。
-- 各 Release 的具体日期。
+- Release 2～5 的详细状态机。
+- 实验统计方法。
+- 自动 Priority 算法。
+- 多 Agent 方案。
+- 具体交付日期。

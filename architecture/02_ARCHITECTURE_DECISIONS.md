@@ -1,7 +1,7 @@
 ---
 document_type: architecture_decisions
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.2"
+baseline_version: "0.3"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 authority: LEVEL_2_ARCHITECTURE
@@ -13,261 +13,239 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 ## 1. 文档职责
 
-本文档记录已经形成的关键架构决定。
+本文档记录已形成的关键架构和业务架构决策。
 
-状态说明：
+状态：
 
-- `PROPOSED`
-- `ACCEPTED`
-- `SUPERSEDED`
-- `REJECTED`
+- PROPOSED。
+- ACCEPTED。
+- SUPERSEDED。
+- REJECTED。
 
-当前为基线候选。
+本版本中 ADR-016～ADR-020 已在原则层面接受，但字段和实现仍未冻结。
 
 ---
 
-## ADR 总览
+## 2. ADR 总览
 
 | ADR | 决策 | 状态 |
 |---|---|---|
-| ADR-001 | 使用模块化单体 | PROPOSED |
-| ADR-002 | Platform Kernel 仅保留五类机制 | PROPOSED |
-| ADR-003 | 业务语义放入 Domain Modules | PROPOSED |
-| ADR-004 | Agent 属于 Intelligence Plane | PROPOSED |
-| ADR-005 | Agent 框架通过 Runtime Adapter 隔离 | PROPOSED |
-| ADR-006 | Release 1 不强制 LangChain / LangGraph | PROPOSED |
-| ADR-007 | 固定 Workflow 优先于自由 Agent | PROPOSED |
-| ADR-008 | AI 默认只能产生草稿 | PROPOSED |
-| ADR-009 | 当前不自研通用 Agent OS | PROPOSED |
-| ADR-010 | Release 1 从业务链中段开始 | PROPOSED |
-| ADR-011 | Kernel Contract 先定义，Implementation 按需生长 | PROPOSED |
-| ADR-012 | 结构化关系优先于全量 RAG | PROPOSED |
-| ADR-013 | Release 1 必须接收 Selection-to-Content Handoff | PROPOSED |
-| ADR-014 | Market Compliance 与 Store Health 属于 Domain Context | PROPOSED |
-| ADR-015 | Content Project 必须绑定运营上下文快照 | PROPOSED |
+| ADR-001 | 使用模块化单体 | ACCEPTED |
+| ADR-002 | Kernel 仅保留五类机制 | ACCEPTED |
+| ADR-003 | 业务语义放入 Domain | ACCEPTED |
+| ADR-004 | Agent 属于 Intelligence Plane | ACCEPTED |
+| ADR-005 | Agent 框架通过 Adapter 隔离 | ACCEPTED |
+| ADR-006 | Release 1 不强制 LangChain / LangGraph | ACCEPTED |
+| ADR-007 | 固定 Workflow 优先于自由 Agent | ACCEPTED |
+| ADR-008 | AI 默认只能产生草稿 | ACCEPTED |
+| ADR-009 | 当前不自研通用 Agent OS | ACCEPTED |
+| ADR-010 | Release 1 从业务链中段开始 | ACCEPTED |
+| ADR-011 | Kernel Contract 先定义，Implementation 按需生长 | ACCEPTED |
+| ADR-012 | 结构化关系优先于全量 RAG | ACCEPTED |
+| ADR-013 | Release 1 必须接收 Selection-to-Content Handoff | ACCEPTED |
+| ADR-014 | Market Compliance 与 Store Health 属于 Domain Context | ACCEPTED |
+| ADR-015 | Content Project 必须绑定运营上下文快照 | ACCEPTED |
+| ADR-016 | 每个阶段必须有正式 Gate Decision | ACCEPTED |
+| ADR-017 | Content Route 必须建模为可验证假设 | ACCEPTED |
+| ADR-018 | 不同 Route 产生不同 Delivery Pack | ACCEPTED |
+| ADR-019 | Release 1 提供 Priority Lite | ACCEPTED |
+| ADR-020 | Experiment Contract 必须在 Release 1 创建 | ACCEPTED |
 
 ---
 
-## ADR-001：使用模块化单体
+## ADR-001～ADR-015
 
-**Decision**
+沿用 v0.2 已接受原则：
 
-采用模块化单体。
-
-**Reason**
-
-当前业务边界仍在验证，不需要微服务复杂度。
-
-**Consequences**
-
-未来按真实瓶颈拆分。
-
-**Status**
-
-PROPOSED
+- 模块化单体。
+- 五机制 Kernel。
+- Domain / Intelligence / Adapter 分层。
+- AI 草稿与人工审批分离。
+- Release 1 接收 Handoff、Market 和 Store Context。
+- 当前不自研通用 Agent OS。
 
 ---
 
-## ADR-002：Platform Kernel 仅保留五类机制
+## ADR-016：每个阶段必须有正式 Gate Decision
 
-**Decision**
+### Context
 
-Kernel 仅包含：
+原流程默认项目会一路走到剧本，缺少停止、暂停、补证据和改路线的正式出口。
 
-- Resource。
-- Capability。
-- Execution。
-- Policy。
-- Trace。
+### Decision
 
-**Status**
+Stage 0～C 后均设置 Gate。
 
-PROPOSED
-
----
-
-## ADR-003：业务语义放入 Domain Modules
-
-商品、证据、参考、构想、剧本、市场政策和店铺状态都属于 Domain。
-
-**Status**
-
-PROPOSED
-
----
-
-## ADR-004：Agent 属于 Intelligence Plane
-
-Agent 是受控运行角色，不是 Kernel。
-
-**Status**
-
-PROPOSED
-
----
-
-## ADR-005：Agent 框架通过 Runtime Adapter 隔离
-
-LangGraph、Agent SDK、Agent Harness 等不得污染 Domain Model。
-
-**Status**
-
-PROPOSED
-
----
-
-## ADR-006：Release 1 不强制 LangChain / LangGraph
-
-默认普通 Python Application Service、结构化模型调用和固定 Workflow。
-
-**Status**
-
-PROPOSED
-
----
-
-## ADR-007：固定 Workflow 优先于自由 Agent
-
-流程已知的任务优先使用确定性或半确定性 Workflow。
-
-**Status**
-
-PROPOSED
-
----
-
-## ADR-008：AI 默认只能产生草稿
+允许结果：
 
 ```text
-AI_GENERATED = true
-HUMAN_CONFIRMED = false
-STATUS = DRAFT
+CONTINUE
+PAUSE
+STOP
+CHANGE_ROUTE
+REQUEST_MORE_EVIDENCE
+RECYCLE
 ```
 
-**Status**
+### Consequences
 
-PROPOSED
+- 项目不再默认完成全流程。
+- Gate 决策必须记录责任人、依据和条件。
+- AI 可提供建议，但不能自动通过 Gate。
+- 需要 Override 和重新评估机制。
 
----
+### Status
 
-## ADR-009：当前不自研通用 Agent OS
-
-不建设通用 Agent Runtime、插件市场、自由多 Agent 通信和复杂记忆平台。
-
-**Status**
-
-PROPOSED
+ACCEPTED
 
 ---
 
-## ADR-010：Release 1 从业务链中段开始
+## ADR-017：Content Route 必须建模为可验证假设
+
+### Context
+
+单独保存 `CREATOR_LED` 等标签无法支持后续验证和复盘。
+
+### Decision
+
+Content Route Hypothesis 必须记录：
+
+- Rationale。
+- Supporting / Contrary Evidence。
+- Assumptions。
+- Validation Plan。
+- Success Criteria。
+- Stop Conditions。
+- Owner。
+- Review Date。
+
+### Consequences
+
+- Route 可以被推翻和修改。
+- Release 3 可以将表现结果关联回原始假设。
+- 当前不引入伪精确综合评分。
+
+### Status
+
+ACCEPTED
+
+---
+
+## ADR-018：不同 Route 产生不同 Delivery Pack
+
+### Context
+
+统一 Script、Storyboard、Shot List 隐性假设所有商品都走自营内容路线。
+
+### Decision
+
+按 Primary Route 生成：
+
+- Creator Enablement Pack。
+- Owned Content Production Pack。
+- Paid Media Test Pack。
+- Listing / Search Content Pack。
+- Live Content Pack。
+- Hybrid Delivery Bundle。
+
+### Consequences
+
+- Stage D 更名为“路线化内容交付设计”。
+- Script 仍是 Owned Content 的核心产物，但不再代表 Release 1 唯一终点。
+- 需要 Route-specific Capability 和审核标准。
+
+### Status
+
+ACCEPTED
+
+---
+
+## ADR-019：Release 1 提供 Priority Lite
+
+### Context
+
+单个项目可行不等于当前应该优先投入。
+
+### Decision
+
+Release 1 增加轻量 Priority：
 
 ```text
-商品事实与证据
-→ 市场与参考内容
-→ 内容方向与视频构想
-→ 剧本与拍摄设计
+MUST_DO
+NEXT
+EXPERIMENTAL
+HOLD
+STOPPED
 ```
 
-**Status**
+采用：
 
-PROPOSED
+```text
+硬性Gate
++
+人工优先级
++
+简单辅助指标
++
+明确决策理由
+```
 
----
+### Consequences
 
-## ADR-011：Kernel Contract 先定义，Implementation 按需生长
+- 不建设完整 Portfolio Optimization 平台。
+- 不使用自动综合分数替代人类决策。
+- Gate 与 Priority 分开。
 
-只实现当前垂直切片需要的 Kernel Lite。
+### Status
 
-**Status**
-
-PROPOSED
-
----
-
-## ADR-012：结构化关系优先于全量 RAG
-
-事实、状态、版本和对象关系使用关系数据库和显式关联。
-
-**Status**
-
-PROPOSED
+ACCEPTED
 
 ---
 
-## ADR-013：Release 1 必须接收 Selection-to-Content Handoff
+## ADR-020：Experiment Contract 必须在 Release 1 创建
 
-**Context**
+### Context
 
-不能把选品输出简化为 Product ID。
+没有预先定义假设和成功标准，后续数据容易被事后解释。
 
-**Decision**
+### Decision
 
-Release 1 的入口必须包括：
+Approved Creative Direction 在投入生产前必须绑定 Experiment Contract。
 
-- Go-to-Market Hypothesis。
-- Content Route Hypothesis。
-- Target Market。
-- Initial Investment Level。
-- Test Hypothesis。
+至少定义：
 
-**Consequences**
+- Business Question。
+- Hypothesis。
+- Variable Under Test。
+- Metrics。
+- Baseline。
+- Observation Window。
+- Success / Stop Rule。
+- Next Action。
 
-完整选品模块可以后置，但上游关键决策不能丢失。
+### Consequences
 
-**Status**
+- Release 1 负责定义，不负责收集结果。
+- Release 3 负责回收数据和形成 Experiment Result。
+- Skill Evaluation 与 Business Outcome 必须分开。
 
-PROPOSED
+### Status
 
----
-
-## ADR-014：Market Compliance 与 Store Health 属于 Domain Context
-
-**Decision**
-
-- Market Compliance Profile 属于 Market & Compliance Domain。
-- Store Health Snapshot 属于 Channel & Store Operations Domain。
-- Kernel Policy 只执行规则，不拥有规则内容。
-
-**Status**
-
-PROPOSED
+ACCEPTED
 
 ---
 
-## ADR-015：Content Project 必须绑定运营上下文快照
-
-**Decision**
-
-Content Project 至少绑定：
-
-- Content Route Hypothesis。
-- Target Market。
-- Compliance Profile Version。
-- Store Health Snapshot。
-- Channel Account Context。
-
-**Reason**
-
-保证后续能解释当时为什么选择该内容路线。
-
-**Status**
-
-PROPOSED
-
----
-
-## ADR 变更流程
+## 3. ADR 变更流程
 
 ```mermaid
 flowchart LR
-    A[发现现有决策不适用]
-    B[描述真实问题与证据]
+    A[发现决策不适用]
+    B[提供真实业务证据]
     C[提出替代方案]
-    D[评估业务与技术影响]
+    D[评估影响]
     E{批准?}
     F[新增ADR并标记旧ADR为SUPERSEDED]
-    G[保持现有决策]
+    G[保持原决策]
 
     A --> B --> C --> D --> E
     E -- 是 --> F

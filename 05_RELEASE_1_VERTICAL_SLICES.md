@@ -1,7 +1,7 @@
 ---
 document_type: release_vertical_slices
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.2"
+baseline_version: "0.3"
 status: DRAFT_FOR_DISCUSSION
 implementation_allowed: false
 authority: LEVEL_2_RELEASE
@@ -13,7 +13,21 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 ## 1. 文档职责
 
-本文档把 Release 1 的完整业务流程拆成可独立开发、测试和验收的垂直切片。
+本文档将 Release 1 业务流程拆为可独立开发、测试和验收的垂直切片。
+
+每个切片必须贯穿：
+
+```text
+用户任务
+→ 前端
+→ API
+→ 领域规则
+→ 数据
+→ AI辅助
+→ Gate / Policy
+→ Trace
+→ 可验收输出
+```
 
 ---
 
@@ -21,64 +35,60 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 ```mermaid
 flowchart LR
-    VS1[VS-01<br/>商品进入、运营上下文与知识基线]
-    VS2[VS-02<br/>参考研究与构想决策]
-    VS3[VS-03<br/>剧本与拍摄设计]
-    VS4[VS-04<br/>端到端集成与真实试运行]
+    VS1[VS-01<br/>任务进入、商品知识与早期Gate]
+    VS2[VS-02<br/>路线验证、构想、实验与Priority]
+    VS3[VS-03<br/>路线化交付设计]
+    VS4[VS-04<br/>端到端试运行]
 
     VS1 --> VS2 --> VS3 --> VS4
 ```
 
 ---
 
-# 3. VS-01：商品进入、运营上下文与知识基线
+# 3. VS-01：任务进入、商品知识与早期 Gate
 
 ## 3.1 业务目标
 
-让运营能够把：
+将：
 
 ```text
-Selection-to-Content Handoff
-+
-Content Operating Context
-+
-商品原始资料
+商品 + Handoff + Operating Context + 原始资料
 ```
 
 转化为：
 
 ```text
 Approved Content Operating Context
-+
+Content Route Hypothesis v1
 Product Knowledge Baseline
+Gate 0 Decision
+Gate 1 Decision
 ```
 
-## 3.2 用户主流程
+## 3.2 用户流程
 
 ```mermaid
 flowchart TB
-    A[创建内容入口]
-    B[登记商品进入原因]
-    C[选择 Content Route]
-    D[绑定 Target Market / Platform]
-    E[录入 Compliance Snapshot]
-    F[录入 Store Health Snapshot]
-    G[确认投入与测试假设]
-    H[上传商品资料]
-    I[分类 Evidence]
-    J[人工确认 Fact / Proof / Risk]
-    K[生成 Knowledge Baseline]
+    A[创建内容任务]
+    B[建立 Context 与 Route Hypothesis]
+    C[Gate 0]
+    D[上传商品资料]
+    E[分类 Evidence]
+    F[确认 Fact / Proof / Risk]
+    G[生成 Knowledge Baseline]
+    H[Gate 1]
 
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K
+    A --> B --> C --> D --> E --> F --> G --> H
 ```
 
 ## 3.3 候选领域对象
 
 - Product。
+- Product Version。
 - Selection-to-Content Handoff。
 - Content Operating Context。
-- Market Compliance Profile Snapshot。
-- Channel Account Context。
+- Content Route Hypothesis。
+- Market Compliance Snapshot。
 - Store Health Snapshot。
 - Evidence。
 - Supplier Claim。
@@ -86,18 +96,19 @@ flowchart TB
 - Confirmed Fact。
 - Product Proof。
 - Product Risk。
+- Gate Decision。
 - Review。
 
-## 3.4 最小页面范围
+## 3.4 最小页面
 
-- 商品列表。
-- 内容入口创建。
-- Handoff 与 Context 表单。
-- Market / Store Snapshot 视图。
-- 商品资料与来源。
+- 商品与内容任务列表。
+- Handoff / Context 表单。
+- Route Hypothesis 编辑。
+- Gate 0 决策页。
 - Evidence 工作区。
-- Fact / Proof / Risk 审核。
-- Product Knowledge Baseline 只读视图。
+- Fact / Proof / Risk 审核页。
+- Product Knowledge Baseline。
+- Gate 1 决策页。
 
 ## 3.5 最小 Capability
 
@@ -108,87 +119,68 @@ claim_candidate_extractor
 evidence_conflict_detector
 market_policy_context_checker
 store_health_context_summarizer
+route_hypothesis_draft_builder
 knowledge_baseline_summarizer
+gate_readiness_checker
 ```
 
-## 3.6 最小 Kernel 需求
+## 3.6 Kernel Lite
 
-### Resource Lite
-
-- ID。
-- 版本。
-- 来源。
-- 对象关系。
-- 状态。
-
-### Policy Lite
-
-- AI 不能确认事实。
-- 店铺与合规上下文由授权人员确认。
-- 已批准版本修改时创建新版本。
-
-### Trace Lite
-
-- 谁录入 Handoff。
-- 谁确认 Context。
-- 谁确认 Fact / Proof。
-- 使用过哪些 Skill。
-
-### Execution Lite
-
-- AI 运行记录。
-- 成功 / 失败。
-- 输入输出引用。
-- 简单重试。
-- 模型与成本。
+- Resource：ID、版本、来源、关系、状态。
+- Execution：AI Run、失败、重试、成本。
+- Policy：AI 不得确认 Fact 或通过 Gate。
+- Trace：Context、Fact、Gate 和审批追踪。
 
 ## 3.7 验收场景
 
-- Content Route 为 `UNKNOWN` 仍可进入，但系统明确风险。
-- 店铺评分较低时，能记录“限制投入”结论。
-- 合规 Profile 版本可追溯。
-- 供应商参数与实物标签冲突时不自动选择一方。
-- 商品资料更新后旧 Baseline 仍可追溯。
+- Route 为 UNKNOWN，但有验证计划，Gate 0 可条件通过。
+- 明显禁售或店铺严重受限，Gate 0 可 Stop。
+- 没有可信 Product Proof，Gate 1 可 Request More Evidence。
+- 商品版本变化后旧 Baseline 保留。
+- AI 错误分类可被人工纠正。
 
 ## 3.8 明确不做
 
 - 自动选品。
 - 自动政策采集。
 - 店铺实时同步。
-- 自动合规结论。
-- 大规模 RAG。
-- 完整知识图谱。
+- 自动 Gate 通过。
+- 完整 Route 评分。
 
 ---
 
-# 4. VS-02：参考研究与构想决策
+# 4. VS-02：路线验证、构想、实验与 Priority
 
 ## 4.1 业务目标
 
-把商品知识、内容路径、市场与店铺上下文转化为多个候选构想，并完成人工决策。
+将 Product Knowledge Baseline 和 Route Hypothesis 转化为：
 
-## 4.2 用户主流程
+```text
+Reference Intelligence Pack
+Revised Route Hypothesis
+Gate 2 Decision
+Approved Creative Direction
+Experiment Contract
+Project Priority
+Gate 3 Decision
+```
+
+## 4.2 用户流程
 
 ```mermaid
 flowchart TB
-    A[创建 Content Project]
-    B[绑定 Content Operating Context]
-    C[添加 Route-specific References]
-    D[分析市场与适配度]
-    E[形成 Reference Intelligence Pack]
-    F[生成多个构想]
-    G[关联 Evidence / Reference / Context]
-    H[风险与适配检查]
-    I[人工审核]
-    J{结果}
-    K[Approved Creative Concept]
-    L[退回修改]
-    M[拒绝]
+    A[定义 Route-specific Research]
+    B[添加参考]
+    C[记录 Supporting / Contrary Evidence]
+    D[更新 Route Hypothesis]
+    E[Gate 2]
+    F[创建 Creative Concepts]
+    G[选择 Creative Direction]
+    H[创建 Experiment Contract]
+    I[Portfolio Priority 比较]
+    J[Gate 3]
 
     A --> B --> C --> D --> E --> F --> G --> H --> I --> J
-    J -- 通过 --> K
-    J -- 修改 --> L --> F
-    J -- 拒绝 --> M
 ```
 
 ## 4.3 候选领域对象
@@ -196,228 +188,236 @@ flowchart TB
 - Reference。
 - Reference Analysis。
 - Market Signal。
+- Route Validation Assessment。
 - Content Project。
-- Content Direction。
 - Creative Concept。
-- Experiment Hypothesis。
-- Creative Brief。
+- Approved Creative Direction。
+- Experiment Contract。
+- Project Priority。
+- Gate Decision。
 - Evidence Citation。
 - Reference Citation。
-- Review。
 
-## 4.4 最小 Capability
+## 4.4 最小页面
+
+- Reference 工作区。
+- Route Evidence 对比页。
+- Gate 2 决策页。
+- Creative Concept 看板。
+- Creative Direction 审核页。
+- Experiment Contract 编辑页。
+- Priority 队列。
+- Gate 3 决策页。
+
+## 4.5 最小 Capability
 
 ```text
 reference_content_analyzer
 reference_fit_evaluator
-route_fit_evaluator
-market_policy_compliance_reviewer
-store_context_impact_analyzer
+route_supporting_evidence_extractor
+route_contrary_evidence_extractor
+route_hypothesis_reviewer
 creative_concept_generator
 creative_concept_reviewer
-creative_brief_builder
-duplicate_concept_detector
+experiment_contract_draft_builder
+priority_context_summarizer
+gate_readiness_checker
 ```
 
-## 4.5 最小 Kernel 增量
+## 4.6 Kernel 增量
 
-### Capability
-
-- Skill 输入输出。
-- Skill 版本。
-- 权限和风险。
-- 实现引用。
-
-### Execution
-
-- Run。
+- Capability Registry。
 - 父子 Run。
-- 失败原因。
-- 简单重试。
-- 成本。
 - 结构化输出校验。
+- Gate Policy。
+- Context 和 Citation Trace。
+- 人工 Override 记录。
 
-### Policy
+## 4.7 验收场景
 
-- AI 只能写构想草稿。
-- 内容负责人批准构想。
-- 没有引用可信商品事实的构想不得批准。
-- 不符合市场或店铺限制的构想不得批准。
+- Creator-led 假设被参考研究否定，Gate 2 输出 CHANGE_ROUTE。
+- 同一商品在 US 与 JP 下产生不同 Creative Direction。
+- 两个可行项目争夺资源，一个进入 MUST_DO，一个进入 HOLD。
+- Experiment Contract 缺少成功规则时，Gate 3 不通过。
+- 被拒绝构想不能进入 VS-03。
 
-### Trace
+## 4.8 明确不做
 
-- 构想使用哪些 Evidence。
-- 参考哪些 Reference。
-- 继承哪个 Context Snapshot。
-- 使用哪个 Skill、Prompt 和模型版本。
-
-## 4.6 验收场景
-
-- 同一商品针对 Creator-led 和 Owned-content-led 产生不同构想。
-- 同一商品针对 US 和 JP 产生不同市场表达。
-- 店铺状态不适合放大流量时，构想能降低投入或改变目标。
-- 不适配参考被排除并保留原因。
-- 被拒绝构想不能进入剧本。
+- 自动决定 Route。
+- 自动 Portfolio 优化。
+- 精确收入预测。
+- 自动证明视频销量归因。
+- 多 Agent 自由讨论。
 
 ---
 
-# 5. VS-03：剧本与拍摄设计
+# 5. VS-03：路线化交付设计
 
 ## 5.1 业务目标
 
-把 Approved Creative Concept 转化为可拍、可审核、可导出的生产输入包。
+根据 Approved Creative Direction 和 Primary Route 生成正确的交付包，而不是统一 Script Pack。
 
-## 5.2 用户主流程
+## 5.2 用户流程
 
 ```mermaid
 flowchart TB
-    A[读取 Approved Concept]
-    B[继承 Context Snapshot]
-    C[创建 Script Draft]
-    D[编辑结构、旁白和节奏]
-    E[拆分 Storyboard 与 Shot]
-    F[标记 Proof 与素材需求]
-    G[事实 / 合规 / 店铺 / 可拍性检查]
-    H[人工审核]
-    I{结果}
-    J[Approved Script]
-    K[退回修改]
-    L[冻结依赖版本]
-    M[导出 Production-ready Pack]
+    A[读取 Approved Creative Direction]
+    B[读取 Primary Route]
+    C{Route}
+    D[Creator Pack Workflow]
+    E[Owned Content Workflow]
+    F[Paid Media Workflow]
+    G[Listing / Search Workflow]
+    H[Live Workflow]
+    I[Hybrid Bundle Workflow]
+    J[审核与版本冻结]
+    K[Route-specific Delivery Pack]
 
-    A --> B --> C --> D --> E --> F --> G --> H --> I
-    I -- 通过 --> J --> L --> M
-    I -- 退回 --> K --> C
+    A --> B --> C
+    C --> D
+    C --> E
+    C --> F
+    C --> G
+    C --> H
+    C --> I
+    D --> J
+    E --> J
+    F --> J
+    G --> J
+    H --> J
+    I --> J
+    J --> K
 ```
 
 ## 5.3 候选领域对象
 
+- Delivery Pack。
+- Creator Brief。
 - Script Version。
-- Script Section。
 - Storyboard。
 - Shot。
-- Voiceover / Dialogue。
-- On-screen Text。
-- Production Requirement。
+- Hook Variant。
+- CTA Variant。
+- Proof Module。
+- Listing Content Module。
+- Live Talking Point。
 - Asset Requirement。
-- Script Review。
+- Production Requirement。
 - Export Snapshot。
 
-## 5.4 最小 Capability
+## 5.4 最小页面
+
+- Route 交付模板选择。
+- Pack 编辑器。
+- Evidence / Proof 引用。
+- Claims 与可执行性检查。
+- 版本历史。
+- 审核与导出。
+
+## 5.5 最小 Capability
 
 ```text
+creator_enablement_pack_builder
 script_generator
-script_structure_reviewer
-factuality_reviewer
-claim_risk_reviewer
-market_policy_compliance_reviewer
-store_context_impact_analyzer
 storyboard_generator
 shot_list_builder
+paid_media_variant_builder
+listing_content_pack_builder
+live_content_pack_builder
+hybrid_bundle_planner
+factuality_reviewer
+claim_risk_reviewer
 shootability_reviewer
-production_pack_builder
+delivery_pack_builder
 ```
 
-## 5.5 最小 Kernel 增量
+## 5.6 Kernel 增量
 
-### Resource
-
-- 正式版本。
-- 历史版本。
-- 依赖版本引用。
-- Export Snapshot。
-
-### Execution
-
+- Route-specific Capability。
 - 父子 Run。
-- 阶段性失败。
-- 简单恢复。
-- 重试。
-- 成本累计。
+- 版本依赖。
+- Export Snapshot。
+- NEEDS_REVIEW。
+- Pack 审批 Policy。
+- Pack 构成 Trace。
 
-### Policy
+## 5.7 验收场景
 
-- 只有 Approved Concept 能生成正式剧本。
-- AI 不能批准剧本。
-- 正式导出前必须审核。
-- 上游 Context 重大变化时进入 `NEEDS_REVIEW`。
-
-### Trace
-
-- 剧本来自哪个构想版本。
-- 使用哪些 Fact / Proof。
-- 继承哪个 Market / Store Snapshot。
-- 导出包由哪些版本组成。
-
-## 5.6 是否需要 LangGraph
-
-默认不需要。
-
-只有出现以下真实问题后再做 Spike：
-
-- 流程分支明显增多。
-- 多步骤中断后恢复困难。
-- 人工审批后需要继续同一个长任务。
-- 普通 Application Service 难以维护状态。
-- 需要稳定 Checkpoint。
+- Creator-led 项目不被强制生成完整 Storyboard。
+- Owned-content 项目可生成 Script、Storyboard 和 Shot List。
+- Paid-media 项目生成多 Hook / CTA 变体和测试矩阵。
+- Hybrid 项目明确主次路线和资源比例。
+- Product Proof 撤销后相关 Pack 进入 NEEDS_REVIEW。
 
 ---
 
-# 6. VS-04：端到端集成与真实试运行
+# 6. VS-04：端到端试运行
 
-## 6.1 主流程
+## 6.1 业务目标
+
+验证前三个切片共同形成真实决策闭环。
+
+## 6.2 主流程
 
 ```mermaid
 flowchart LR
-    A[真实商品与上游交接]
-    B[Content Operating Context]
+    A[商品与Handoff]
+    B[Gate 0]
     C[Knowledge Baseline]
-    D[Reference Pack]
-    E[Approved Concept]
-    F[Approved Script]
-    G[Storyboard / Shot List]
-    H[Production-ready Pack]
-    I[业务复盘]
+    D[Gate 1]
+    E[Route Validation]
+    F[Gate 2]
+    G[Creative + Experiment + Priority]
+    H[Gate 3]
+    I[Route-specific Pack]
+    J[Pilot Review]
 
-    A --> B --> C --> D --> E --> F --> G --> H --> I
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J
 ```
 
-## 6.2 测试商品
+## 6.3 测试要求
+
+至少使用：
 
 - 车载吸尘器。
 - 电动泡沫喷壶。
 - 无线直发梳或其他个人护理产品。
 
-## 6.3 集成验收指标
+至少覆盖：
+
+- 两种不同 Content Route。
+- 一次 CHANGE_ROUTE。
+- 一次 REQUEST_MORE_EVIDENCE。
+- 一个 HOLD 或 STOP 项目。
+- 一个完整 Experiment Contract。
+- 一个非 Script 类型 Delivery Pack。
+
+## 6.4 验收指标
 
 - 端到端完成率。
 - 运营独立操作率。
-- Context 追溯完整率。
-- 事实追溯完整率。
-- AI 草稿人工修订率。
-- 构想与剧本退回原因。
-- 单任务耗时。
-- 单任务模型成本。
-- 导出包可用性评分。
-- 多余字段和步骤。
+- Gate 决策可解释性。
+- Route Hypothesis 可验证性。
+- Priority 队列可用性。
+- Experiment Contract 完整度。
+- Pack 对实际执行团队的可用性。
+- 单任务时间与模型成本。
+- 多余步骤和字段。
 
 ---
 
-# 7. 切片与 Kernel 的演进关系
+# 7. 切片与 Kernel 演进
 
 ```mermaid
 flowchart TB
     VS1[VS-01]
-    K1[Resource Lite<br/>Policy Lite<br/>Trace Lite<br/>Execution Lite]
-
+    K1[Resource / Execution / Policy / Trace Lite]
     VS2[VS-02]
-    K2[Capability Registry<br/>Run与成本<br/>上下文与引用追踪]
-
+    K2[Capability / Gate / Citation / Override]
     VS3[VS-03]
-    K3[版本依赖<br/>父子Run<br/>Export Snapshot<br/>NEEDS_REVIEW]
-
+    K3[版本依赖 / Route Pack / Export Snapshot]
     VS4[VS-04]
-    K4[验证Kernel抽象<br/>删除过度设计<br/>补齐真实缺口]
+    K4[验证抽象并删除过度设计]
 
     VS1 --> K1
     VS2 --> K2
@@ -425,36 +425,19 @@ flowchart TB
     VS4 --> K4
 ```
 
-原则：
-
-> Kernel 不是独立先完成的产品；它由垂直切片拉动实现，并被后续切片不断验证。
+Kernel 仍由真实切片拉动，不单独先建完整平台。
 
 ---
 
-# 8. 当前待讨论问题
+## 8. 当前待讨论问题
 
-1. VS-01 是否过大，是否需把 Stage 0 作为子里程碑。
-2. Store Health Snapshot 首版字段。
-3. Market Compliance Snapshot 首版字段。
-4. Content Route 是否允许主次多选。
-5. Reference 是否按 Route 分池。
-6. Content Project 是否绑定单一店铺与市场。
-7. 同一 Approved Concept 是否允许派生多个渠道版本。
-8. VS-03 是否一次完成 Script、Storyboard 和 Shot List。
-9. VS-04 是正式开发切片还是 Pilot Gate。
-10. Release 1 是否必须支持飞书导入。
-
----
-
-## 9. 下一步
-
-当前只讨论并冻结：
-
-- 三个主切片是否合理。
-- 每个切片的起点和终点。
-- VS-01 是否足以产生独立业务价值。
-- VS-02 是否将参考研究和构想决策合并。
-- VS-03 是否完整止于 Production-ready Pack。
-- VS-04 是否作为强制 Pilot Gate。
-
-在这些问题确认前，不进入数据库、API 和代码实现。
+1. Gate 0 和 Gate 1 是否都属于 VS-01。
+2. Gate 2 与 Gate 3 是否应在同一切片。
+3. Priority Lite 是 Gate 3 的组成部分还是独立动作。
+4. Experiment Contract 是否允许在 Gate 3 后补全。
+5. 首版必须支持哪些 Route。
+6. 是否暂缓 Live 和 Listing Route 的完整实现。
+7. Hybrid 是否在首版支持。
+8. Creator Pack 与 Owned Pack 的最小交付边界。
+9. VS-04 是否作为强制 Release Gate。
+10. 首版是否需要飞书导入。

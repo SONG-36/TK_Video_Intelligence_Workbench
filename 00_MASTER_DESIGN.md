@@ -1,7 +1,7 @@
 ---
 document_type: master_design
 project: "TikTok Video Intelligence Workbench"
-baseline_version: "0.2"
+baseline_version: "0.3"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
 authority: LEVEL_1_GLOBAL
@@ -13,42 +13,47 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 ## 1. 文档职责
 
-本文档是项目一级总纲，只冻结系统级方向：
+本文档是项目一级总纲，冻结系统长期方向、当前交付边界和最高层架构原则。
 
-- 项目为什么存在。
-- 长期业务价值链。
-- 当前从完整价值链中截取哪一段。
-- Capability Roadmap 与 Delivery Releases 的区别。
-- Platform Kernel、Domain Modules、Intelligence Plane、Adapters 的高层关系。
-- 当前交付版本的边界。
-- 上游业务可以被跳过，但上游决策输出不能丢失。
-- 市场合规、渠道与店铺状态如何作为横向上下文进入当前系统。
-- 全局设计原则与禁止项。
+本文档回答：
+
+- 这个系统为什么存在。
+- 长期业务价值链是什么。
+- Release 1 从完整链路中截取哪一段。
+- 上游选品决策如何交接给内容系统。
+- 市场、合规、渠道和店铺状态如何影响内容决策。
+- 为什么系统不能是一条默认走到剧本的直线流水线。
+- Platform Kernel、Domain Modules、Intelligence Plane 与 Adapters 的关系。
 - 下层文档的权威关系。
 
 本文档不冻结：
 
-- 详细业务步骤。
-- 领域对象最终字段。
-- 数据库表、API 和代码目录。
+- 数据库字段与表结构。
+- API 和代码目录。
 - 页面布局。
-- Prompt、Skill 和 Tool 实现。
-- LangChain、LangGraph、MCP 或具体模型选型。
+- Prompt、Skill 和 Agent 实现。
+- LangChain、LangGraph、MCP 或模型供应商选型。
+- Gate、Route Hypothesis、Priority 和 Experiment Contract 的最终字段。
 
 ---
 
-## 2. 项目背景
+## 2. 系统定位
 
-当前 TikTok 商品内容生产的核心问题，不是缺少一个会写脚本或生成视频的模型，而是缺少一条稳定、可追溯、可复用的业务链：
+本系统不是“输入商品后自动生成视频脚本”的工具。
 
-- 商品事实、供应商宣称、实物观察和 AI 推断容易混杂。
-- 参考视频与自有构想之间缺少证据关系。
-- 构想、剧本、拍摄设计和后续生产难以追溯。
-- 选品阶段对“这个商品未来靠什么路径销售”的判断，容易在进入内容系统时丢失。
-- 店铺健康、地区政策和渠道状态经常被当作临时经验，而不是正式上下文。
-- 业务流程经常被单个工具或 Agent 框架反向塑造。
-- AI 输出容易被误当成正式业务事实。
-- 技术架构扩张速度快于真实业务验证速度。
+本系统的长期定位是：
+
+> 围绕商品、市场、渠道和经营约束，持续判断应该做什么内容、是否值得继续投入、应走哪条内容路线、如何形成可执行交付物，并通过后续表现数据验证或推翻原始假设。
+
+当前 Release 1 聚焦：
+
+```text
+商品进入内容阶段
+→ 商品事实与证据
+→ 市场与参考内容
+→ 内容方向与构想
+→ 路线化交付设计
+```
 
 ---
 
@@ -60,12 +65,12 @@ flowchart LR
     B --> C[商品事实与证据]
     C --> D[市场与参考内容]
     D --> E[内容方向与视频构想]
-    E --> F[剧本与拍摄设计]
+    E --> F[路线化内容交付设计]
     F --> G[素材与视频生产]
     G --> H[审核与发布]
     H --> I[表现数据回收]
     I --> J[实验复盘与知识沉淀]
-    J --> K[反哺内容决策]
+    J --> K[反哺内容路线]
     J --> L[反哺商品认知]
     J --> M[反哺选品判断]
     K --> E
@@ -73,133 +78,194 @@ flowchart LR
     M --> A
 ```
 
-这张图是长期业务全景，不代表当前必须按顺序开发全部环节。
+这张图是业务全景，不等于实现顺序。
 
 ---
 
-## 4. 当前交付焦点
+## 4. Release 1 入口
 
-当前先截取完整价值链中的中段：
+Release 1 不能只接收一个 Product ID。
+
+它至少接收：
 
 ```mermaid
 flowchart LR
-    U[上游输入<br/>已确定需要做内容的商品]
+    P[已确定进入内容阶段的商品]
     H[Selection-to-Content Handoff]
-    COC[Content Operating Context]
-    A[商品事实与证据]
-    B[市场与参考内容]
-    C[内容方向与视频构想]
-    D[剧本与拍摄设计]
-    O[下游输出<br/>Production-ready Pack]
+    C[Content Operating Context]
+    R[Content Route Hypothesis]
+    R1[Release 1]
 
-    U --> H --> COC --> A --> B --> C --> D --> O
+    P --> R1
+    H --> R1
+    C --> R1
+    R --> R1
 ```
 
-当前产品暂定名称：
+### 4.1 Selection-to-Content Handoff
 
-> **Release 1：内容决策与前期制作工作台**
-
-系统可以从业务链中段开始，但不能把上游选品输出简化成一个 Product ID。
-
-Release 1 至少接收：
+说明：
 
 - 为什么这个商品进入内容阶段。
-- 初始商业化路径假设。
-- 内容路径假设。
-- 目标市场。
-- 地区合规上下文。
-- 渠道、店铺和账号上下文。
-- 店铺健康状态快照。
-- 当前内容投入等级与测试假设。
+- 初始商业化路径是什么。
+- 内容承担什么作用。
+- 当前需要验证什么。
+- 初始投入等级和责任人。
+
+### 4.2 Content Operating Context
+
+包括：
+
+- Target Market。
+- Platform。
+- Product Category。
+- Market Compliance Profile Snapshot。
+- Channel / Store / Account Context。
+- Store Health Snapshot。
+- 当前风险与投入限制。
+
+### 4.3 Content Route Hypothesis
+
+不是一个分类标签，而是一条可被验证、推翻和修改的业务假设。
 
 ---
 
-## 5. 两类横向业务上下文
+## 5. 系统不是直线流水线
+
+原始的错误隐含逻辑：
+
+```text
+商品进入系统
+→ 整理资料
+→ 找参考
+→ 生成构想
+→ 写剧本
+```
+
+正确逻辑是阶段工作与决策闸门交替：
+
+```mermaid
+flowchart LR
+    S0[运营上下文] --> G0{Gate 0}
+    G0 -- CONTINUE --> A[商品事实与证据]
+    A --> G1{Gate 1}
+    G1 -- CONTINUE --> B[市场与参考]
+    B --> G2{Gate 2}
+    G2 -- ROUTE VALID --> C[内容方向与构想]
+    C --> G3{Gate 3}
+    G3 -- INVEST --> D[路线化交付设计]
+
+    G0 -- STOP / PAUSE --> X[停止或暂缓]
+    G1 -- MORE EVIDENCE --> X
+    G2 -- CHANGE ROUTE --> S0
+    G3 -- HOLD / RECYCLE --> X
+```
+
+统一 Gate 结果：
+
+```text
+CONTINUE
+PAUSE
+STOP
+CHANGE_ROUTE
+REQUEST_MORE_EVIDENCE
+RECYCLE
+```
+
+---
+
+## 6. 五条新增系统级原则
+
+### 6.1 阶段必须允许退出
+
+项目进入 Release 1，不代表一定要产出正式剧本或交付包。
+
+### 6.2 Content Route 必须可验证
+
+必须记录依据、反向证据、验证计划、成功标准、停止条件、负责人和复核时间。
+
+### 6.3 不同路线输出不同交付物
 
 ```mermaid
 flowchart TB
-    MAIN[Release 1 主业务链]
-    M[Market & Compliance Context<br/>地区、政策、类目、Claims规则]
-    S[Channel & Store Context<br/>店铺评分、账号健康、履约与违规]
-    R[Content Route Hypothesis<br/>达人、自营内容、广告、货架、直播或混合]
+    A[Approved Creative Direction]
+    R{Primary Content Route}
+    C[Creator Enablement Pack]
+    O[Owned Content Production Pack]
+    P[Paid Media Test Pack]
+    L[Listing / Search Content Pack]
+    V[Live Content Pack]
+    H[Hybrid Delivery Bundle]
+
+    A --> R
+    R --> C
+    R --> O
+    R --> P
+    R --> L
+    R --> V
+    R --> H
+```
+
+### 6.4 单项目可行不等于当前优先
+
+项目通过 Gate 后，还需要进入轻量级 Portfolio Priority 队列，与其他项目争夺有限资源。
+
+### 6.5 实验必须在生产前定义
+
+Release 1 创建 Experiment Contract；Release 3 回收数据并验证原始假设。
+
+---
+
+## 7. 两类横向上下文
+
+```mermaid
+flowchart TB
+    MAIN[Release 1 决策主链]
+    M[Market & Compliance Context]
+    S[Channel & Store Operations Context]
+    P[Portfolio & Resource Context]
 
     M --> MAIN
     S --> MAIN
-    R --> MAIN
+    P --> MAIN
 ```
 
-### 5.1 Market & Compliance Context
+### Market & Compliance Context
 
-负责表达：
+表达地区、平台、类目、Claims、认证和内容规则。
 
-- 目标市场。
-- 平台与类目规则。
-- 禁售、限售和认证要求。
-- Claims 与广告表达规则。
-- 生效日期和规则版本。
-- 必要免责声明和风险。
+### Channel & Store Operations Context
 
-### 5.2 Channel & Store Context
+表达店铺评分、账号健康、违规、履约、退货、差评和流量限制。
 
-负责表达：
+### Portfolio & Resource Context
 
-- 店铺与账号。
-- 店铺评分和账号健康。
-- 违规、履约、退货与差评状态。
-- 当前是否适合放大流量。
-- 发布和投入限制。
+表达团队当前人力、预算、拍摄产能、WIP 和项目优先级。
 
-### 5.3 Content Route Hypothesis
-
-负责表达：
-
-- 商品主要依赖达人、自营内容、广告、货架、直播或混合路径。
-- 内容在商业路径中承担什么作用。
-- 当前要验证什么假设。
-- 预期投入强度。
+这些都属于 Domain Context，不属于 Platform Kernel。
 
 ---
 
-## 6. Capability Roadmap 与 Delivery Releases
+## 8. 系统总体结构
 
 ```mermaid
 flowchart TB
-    CR[Capability Roadmap<br/>长期需要具备什么能力]
-    DR[Delivery Releases<br/>分几次真正交付]
-    R1[Release 1<br/>当前具体做什么]
-    BP[Business Process<br/>人如何完成任务]
-    DEV[Implementation<br/>软件如何实现]
-
-    CR --> DR --> R1 --> BP --> DEV
-```
-
-- Capability Roadmap 是长期能力地图，不是时间表。
-- Delivery Releases 是产品交付切片，不要求和完整业务链顺序一致。
-- 当前只详细设计 Release 1。
-- 后续 Release 只冻结边界，不提前展开字段、页面和代码。
-
----
-
-## 7. 系统总体结构
-
-```mermaid
-flowchart TB
-    U[用户与业务触发器]
-
     subgraph UX[Experience Layer]
-        UI1[商品工作区]
-        UI2[内容项目工作区]
-        UI3[审核与导出]
+        U1[商品与任务入口]
+        U2[证据与参考工作区]
+        U3[构想与Gate决策]
+        U4[路线化交付设计]
+        U5[Priority与审核]
     end
 
     subgraph DOMAIN[Domain Modules]
         D1[商品知识与证据]
         D2[市场与参考]
-        D3[内容方向与构想]
-        D4[剧本与拍摄设计]
+        D3[内容路线与构想]
+        D4[路线化交付]
         D5[市场与合规]
         D6[渠道与店铺运营]
-        D7[未来业务模块]
+        D7[项目组合与实验]
     end
 
     subgraph INTEL[Intelligence Plane]
@@ -221,13 +287,12 @@ flowchart TB
     subgraph ADAPTERS[Adapters / Drivers]
         A1[模型供应商]
         A2[飞书]
-        A3[TikTok 数据源]
-        A4[存储与素材库]
+        A3[TikTok与第三方数据]
+        A4[对象存储]
         A5[生成与发布服务]
         A6[Agent Runtime / MCP]
     end
 
-    U --> UX
     UX --> DOMAIN
     UX --> INTEL
     DOMAIN --> KERNEL
@@ -237,68 +302,70 @@ flowchart TB
 
 ---
 
-## 8. Platform Kernel
+## 9. Platform Kernel
 
-Kernel 只提供五种高度抽象的稳定机制：
+Kernel 仍只包含五种机制：
 
-- Resource：资源身份、关系、版本和生命周期。
-- Capability：可执行能力的输入输出契约。
-- Execution：运行、状态、重试、暂停、恢复和幂等。
-- Policy：权限、风险、成本和人工闸门。
-- Trace：运行、版本、成本、审批和审计追踪。
+- Resource。
+- Capability。
+- Execution。
+- Policy。
+- Trace。
 
-Kernel 不认识：
+以下新增概念仍属于 Domain，不进入 Kernel：
 
-- Product。
-- TikTok。
-- Script。
-- Store Rating。
-- US Policy。
-- LangGraph。
-- OpenAI。
+- Gate Decision。
+- Content Route Hypothesis。
+- Project Priority。
+- Experiment Contract。
+- Route-specific Delivery Pack。
+- Store Health Snapshot。
+- Market Compliance Profile。
 
-市场政策和店铺状态属于 Domain Context；Kernel Policy 只负责执行允许、拒绝和审批。
-
----
-
-## 9. 全局设计原则
-
-1. **业务先于技术。**
-2. **Release 可以跳过上游模块，但不能丢失上游决策输出。**
-3. **Kernel Contract 先定义，Kernel Implementation 按需生长。**
-4. **固定 Workflow 优先于自由 Agent。**
-5. **AI 输出默认是草稿。**
-6. **高风险、高成本、不可逆和对外动作必须进入 Policy 与人工闸门。**
-7. **市场政策与店铺状态必须版本化或快照化。**
-8. **结构化关系优先于把所有资料塞进 RAG。**
-9. **模块化单体优先。**
-10. **技术框架通过 Adapter 隔离。**
-11. **所有智能运行必须可追踪和可评估。**
-12. **每个 Release 必须形成可独立验收的业务闭环。**
+Kernel Policy 只负责执行允许、拒绝、审批和 Override，不拥有业务规则内容。
 
 ---
 
-## 10. 当前禁止项
+## 10. 全局设计原则
+
+1. 业务先于技术。
+2. Release 可以跳过上游模块，但不能丢失上游决策输出。
+3. 每个阶段必须有明确退出与回退路径。
+4. 假设必须可被验证和推翻。
+5. 不同商业路线不能被强制压成同一种交付物。
+6. 单项目 Gate 与跨项目 Priority 必须分开。
+7. 实验定义先于数据回收。
+8. Kernel Contract 先定义，Implementation 按需生长。
+9. 固定 Workflow 优先于自由 Agent。
+10. AI 输出默认是草稿。
+11. 高风险、高成本、不可逆动作必须经过 Policy。
+12. 市场政策和运营状态必须版本化或快照化。
+13. 结构化关系优先于全量 RAG。
+14. 模块化单体优先。
+15. 技术框架通过 Adapter 隔离。
+
+---
+
+## 11. 当前禁止项
 
 当前不做：
 
+- 完整选品平台。
+- 完整 Portfolio Management 平台。
+- 全球政策自动采集平台。
+- 店铺实时监控中心。
+- 自动违规裁决。
+- 自动项目优先级裁决。
+- 精确但缺乏依据的 AI 综合评分。
 - 完整通用 Agent OS。
 - 自由多 Agent 协商。
 - 微服务拆分。
-- Kubernetes。
-- 复杂事件总线。
-- 全球政策自动采集平台。
-- 店铺实时监控中心。
-- 自动违规预测。
-- 复杂长期记忆系统。
-- Agent 直接访问数据库。
-- LangGraph State 直接作为业务主数据。
-- 为未来阶段提前实现全部 Kernel 能力。
-- 未经真实业务验证就冻结字段、页面和 API。
+- 为未来阶段提前实现完整 Kernel。
+- 把所有 Content Route 都强制生成完整剧本。
 
 ---
 
-## 11. 文档权威关系
+## 12. 文档权威关系
 
 ```mermaid
 flowchart TB
@@ -322,11 +389,14 @@ flowchart TB
 
 ---
 
-## 12. 当前状态
+## 13. 当前状态
 
 ```yaml
-baseline_version: "0.2"
+baseline_version: "0.3"
 status: BASELINE_CANDIDATE
 implementation_allowed: false
-next_step: "评审并逐步讨论 04 与 05"
+next_focus:
+  - Gate 0 至 Gate 3 的输入、判断标准和输出
+  - Content Route Hypothesis 的最小业务契约
+  - 不同 Route 的交付包边界
 ```
