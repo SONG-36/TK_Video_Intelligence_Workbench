@@ -83,6 +83,13 @@ depends_on:
 - Existing System Mapping。
 - 首个 Pilot 数据准备。
 
+Phase I0 输出文档：
+
+- [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md)。
+- [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md)。
+- [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md)。
+- [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md)。
+
 在 I0 完成前，不允许一次性生成所有业务代码。
 
 ### Phase I1：Product Workspace Skeleton

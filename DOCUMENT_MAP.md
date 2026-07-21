@@ -17,8 +17,12 @@ Archived Master drafts are not current authority sources.
 7. [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md)
 8. [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md)
 9. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
-10. [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md)
-11. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+10. [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md)
+11. [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md)
+12. [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md)
+13. [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md)
+14. [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md)
+15. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
 
 ## 3. What Each Document Answers
 
@@ -33,6 +37,10 @@ Archived Master drafts are not current authority sources.
 | [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) | BASELINE_CANDIDATE | What Release 1A MVP is allowed to implement. |
 | [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) | DRAFT_FOR_REVIEW | How Release 1A implementation preparation and staged delivery should proceed. |
 | [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) | BASELINE_CANDIDATE | Which long-term mechanisms are deferred and what triggers their redesign. |
+| [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md) | BASELINE_CANDIDATE | Which existing tools were found and how they may be reused or wrapped. |
+| [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md) | DRAFT_FOR_REVIEW | Which minimal technical stack, code boundary, local dev scheme, and adapter boundary should guide I1. |
+| [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md) | DRAFT_FOR_REVIEW | Which domain concepts are required for I1 and which are deferred. |
+| [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md) | DRAFT_FOR_REVIEW | What the first Product Workspace implementation slice should include and exclude. |
 | [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md) | BASELINE_CANDIDATE | How the platform architecture supports the business design. |
 | [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md) | BASELINE_CANDIDATE | Which architecture and business-architecture decisions have been accepted or proposed. |
 
@@ -48,15 +56,23 @@ For Release 1 work, read:
 4. [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
 5. [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md)
 6. [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md)
-7. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
-8. [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md)
-9. [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md)
-10. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+7. [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md)
+8. [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md)
+9. [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md)
+10. [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md)
+11. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
+12. [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md)
+13. [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md)
+14. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
 
 In the current dual-track model:
 
 - [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) defines what to implement now.
 - [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) defines how implementation preparation and staged delivery should proceed.
+- [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md) defines what existing tools were found and how they should be handled.
+- [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md) defines the minimal technical baseline.
+- [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md) defines the I1 domain model boundary.
+- [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md) defines the first implementation slice.
 - [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) records what to improve later and when to revisit it.
 
 ## 5. Document Dependencies
@@ -72,6 +88,10 @@ flowchart TB
     S[06_RELEASE_1A_MVP_SCOPE.md]
     I[07_RELEASE_1A_IMPLEMENTATION_PLAN.md]
     E[08_LONG_TERM_EVOLUTION_BACKLOG.md]
+    X[09_EXISTING_SYSTEM_MAPPING.md]
+    T[10_RELEASE_1A_TECHNICAL_BASELINE.md]
+    L[11_RELEASE_1A_DOMAIN_MODEL_LITE.md]
+    P1[12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md]
     PA[architecture/01_PLATFORM_ARCHITECTURE.md]
     ADR[architecture/02_ARCHITECTURE_DECISIONS.md]
 
@@ -80,6 +100,12 @@ flowchart TB
     D --> R
     R --> S
     S --> I
+    I --> X
+    I --> T
+    S --> L
+    T --> L
+    L --> P1
+    T --> P1
     M --> E
     C --> E
     D --> E
@@ -97,6 +123,8 @@ flowchart TB
 | Release sequence or responsibility | [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md), [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md), [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md) |
 | Release 1 boundary | [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md), [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md), [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md) |
 | Release 1A implementation scope | [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md), [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md), [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) |
+| Existing system reuse | [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md), [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md), [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) |
+| Product Workspace implementation | [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md), [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md), [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md), [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) |
 | Release 1 process | [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md), [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md), [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md) |
 | Vertical slice | [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md), [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md), [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md) |
 | Architecture decision | [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md), [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md), [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md) |
@@ -111,8 +139,8 @@ flowchart TB
 
 The next design focus areas are:
 
-- Phase I0 -- Release 1A Implementation Preparation.
-- Existing System Mapping.
-- Minimal code directory design.
-- Data and test baseline.
-- First vertical slice implementation plan.
+- Phase I1 -- Product Workspace Skeleton.
+- Product / ProductVersion / Evidence schema.
+- Local code directory creation.
+- Database migration and tests.
+- Minimal Product Workspace frontend flow.

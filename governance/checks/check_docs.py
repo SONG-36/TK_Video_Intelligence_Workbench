@@ -21,6 +21,10 @@ FORMAL_DOCS = [
     "06_RELEASE_1A_MVP_SCOPE.md",
     "07_RELEASE_1A_IMPLEMENTATION_PLAN.md",
     "08_LONG_TERM_EVOLUTION_BACKLOG.md",
+    "09_EXISTING_SYSTEM_MAPPING.md",
+    "10_RELEASE_1A_TECHNICAL_BASELINE.md",
+    "11_RELEASE_1A_DOMAIN_MODEL_LITE.md",
+    "12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md",
     "architecture/01_PLATFORM_ARCHITECTURE.md",
     "architecture/02_ARCHITECTURE_DECISIONS.md",
 ]
@@ -171,6 +175,13 @@ def check_frontmatter(path: Path, text: str) -> None:
     if implementation_allowed == "false":
         if rel_str == "08_LONG_TERM_EVOLUTION_BACKLOG.md":
             report_pass(f"{rel} is a non-implementation backlog")
+        elif rel_str in {
+            "09_EXISTING_SYSTEM_MAPPING.md",
+            "10_RELEASE_1A_TECHNICAL_BASELINE.md",
+            "11_RELEASE_1A_DOMAIN_MODEL_LITE.md",
+            "12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md",
+        }:
+            report_pass(f"{rel} is implementation preparation only")
         else:
             report_pass(f"{rel} implementation_allowed is false")
     elif implementation_allowed == "true":
