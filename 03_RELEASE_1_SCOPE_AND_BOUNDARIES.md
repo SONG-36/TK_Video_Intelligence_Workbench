@@ -11,7 +11,15 @@ change_policy: ADR_REQUIRED_AFTER_APPROVAL
 
 # 03_RELEASE_1_SCOPE_AND_BOUNDARIES
 
-## 1. Release 1 定位
+## 1. 文档职责
+
+本文档定义 Release 1 的业务范围、输入边界、正式输出、角色边界和完成标准。
+
+本文档不冻结数据库、API、页面、Prompt、Agent Runtime 或最终字段。
+
+---
+
+## 2. Release 1 定位
 
 Release 1 是：
 
@@ -28,7 +36,7 @@ Release 1 是：
 
 ---
 
-## 2. Release 1 边界总图
+## 3. Release 1 边界总图
 
 ```mermaid
 flowchart LR
@@ -64,7 +72,7 @@ RECYCLE
 
 ---
 
-## 3. 输入边界
+## 4. 输入边界
 
 ### 3.1 商品与资料
 
@@ -97,7 +105,7 @@ RECYCLE
 
 ---
 
-## 4. Content Route Hypothesis 边界
+## 5. Content Route Hypothesis 边界
 
 首版支持：
 
@@ -125,7 +133,7 @@ UNKNOWN
 
 ---
 
-## 5. Release 1 业务范围
+## 6. Release 1 业务范围
 
 ### Stage 0：内容任务进入与运营上下文确认
 
@@ -167,7 +175,7 @@ UNKNOWN
 
 ---
 
-## 6. Release 1 正式输出
+## 7. Release 1 正式输出
 
 根据路线不同：
 
@@ -218,7 +226,7 @@ Hybrid Delivery Bundle
 
 ---
 
-## 7. Priority Lite 边界
+## 8. Priority Lite 边界
 
 首版只支持：
 
@@ -239,7 +247,7 @@ Priority 不替代 Gate：
 
 ---
 
-## 8. Experiment Contract 边界
+## 9. Experiment Contract 边界
 
 Release 1 负责定义：
 
@@ -264,7 +272,7 @@ Release 1 不负责：
 
 ---
 
-## 9. 明确不做
+## 10. 明确不做
 
 Release 1 不做：
 
@@ -286,7 +294,7 @@ Release 1 不做：
 
 ---
 
-## 10. 角色边界
+## 11. 角色边界
 
 | 角色 | 责任 |
 |---|---|
@@ -309,7 +317,7 @@ AI 不得：
 
 ---
 
-## 11. Release 1 完成标准
+## 12. Release 1 完成标准
 
 - 至少 3 个商品完整走通。
 - 至少出现一次 Pause、Stop、Change Route 或 Request More Evidence。
@@ -322,7 +330,7 @@ AI 不得：
 
 ---
 
-## 12. 当前尚未冻结
+## 13. 当前尚未冻结
 
 - Gate 0～3 的最终判断标准。
 - Route Hypothesis 最终 Schema。

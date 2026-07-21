@@ -45,7 +45,7 @@ flowchart LR
 
 ---
 
-# 3. VS-01：任务进入、商品知识与早期 Gate
+## 3. VS-01：任务进入、商品知识与早期 Gate
 
 ## 3.1 业务目标
 
@@ -149,7 +149,7 @@ gate_readiness_checker
 
 ---
 
-# 4. VS-02：路线验证、构想、实验与 Priority
+## 4. VS-02：路线验证、构想、实验与 Priority
 
 ## 4.1 业务目标
 
@@ -251,7 +251,7 @@ gate_readiness_checker
 
 ---
 
-# 5. VS-03：路线化交付设计
+## 5. VS-03：路线化交付设计
 
 ## 5.1 业务目标
 
@@ -351,7 +351,7 @@ delivery_pack_builder
 
 ---
 
-# 6. VS-04：端到端试运行
+## 6. VS-04：端到端试运行
 
 ## 6.1 业务目标
 
@@ -406,7 +406,7 @@ flowchart LR
 
 ---
 
-# 7. 切片与 Kernel 演进
+## 7. 切片与 Kernel 演进
 
 ```mermaid
 flowchart TB
