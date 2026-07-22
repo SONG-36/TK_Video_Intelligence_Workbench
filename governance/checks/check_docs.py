@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Documentation checks for the consolidated canonical document set."""
+"""Documentation checks for the consolidated docs/ document set."""
 
 from __future__ import annotations
 
@@ -12,6 +12,16 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[2]
 
 FORMAL_DOCS = [
+    "docs/00_PRODUCT_SYSTEM_OVERVIEW.md",
+    "docs/01_MVP_WALKING_SKELETON.md",
+    "docs/02_DOMAIN_MODEL.md",
+    "docs/03_TECHNICAL_ARCHITECTURE.md",
+    "docs/04_EVOLUTION_BACKLOG.md",
+    "docs/05_EXISTING_SYSTEM_MAPPING.md",
+    "docs/architecture/ADR_LOG.md",
+]
+
+ROOT_OLD_PATHS = [
     "00_PRODUCT_SYSTEM_OVERVIEW.md",
     "01_MVP_WALKING_SKELETON.md",
     "02_DOMAIN_MODEL.md",
@@ -19,6 +29,9 @@ FORMAL_DOCS = [
     "04_EVOLUTION_BACKLOG.md",
     "05_EXISTING_SYSTEM_MAPPING.md",
     "architecture/ADR_LOG.md",
+    "working/README.md",
+    "working/CURRENT_IMPLEMENTATION_AUDIT.md",
+    "archive",
 ]
 
 OLD_FORMAL_DOCS = [
@@ -61,31 +74,36 @@ ALLOWED_STATUS = {
 
 REQUIRED_ENTRYPOINT_REFS = {
     "README.md": [
-        "00_PRODUCT_SYSTEM_OVERVIEW.md",
-        "01_MVP_WALKING_SKELETON.md",
-        "02_DOMAIN_MODEL.md",
-        "03_TECHNICAL_ARCHITECTURE.md",
-        "04_EVOLUTION_BACKLOG.md",
-        "05_EXISTING_SYSTEM_MAPPING.md",
-        "architecture/ADR_LOG.md",
+        "docs/00_PRODUCT_SYSTEM_OVERVIEW.md",
+        "docs/01_MVP_WALKING_SKELETON.md",
+        "docs/02_DOMAIN_MODEL.md",
+        "docs/03_TECHNICAL_ARCHITECTURE.md",
+        "docs/04_EVOLUTION_BACKLOG.md",
+        "docs/05_EXISTING_SYSTEM_MAPPING.md",
+        "docs/architecture/ADR_LOG.md",
+        "docs/working/CURRENT_IMPLEMENTATION_AUDIT.md",
     ],
     "AGENTS.md": [
-        "00_PRODUCT_SYSTEM_OVERVIEW.md",
-        "01_MVP_WALKING_SKELETON.md",
-        "02_DOMAIN_MODEL.md",
-        "03_TECHNICAL_ARCHITECTURE.md",
-        "04_EVOLUTION_BACKLOG.md",
-        "05_EXISTING_SYSTEM_MAPPING.md",
-        "architecture/ADR_LOG.md",
+        "docs/00_PRODUCT_SYSTEM_OVERVIEW.md",
+        "docs/01_MVP_WALKING_SKELETON.md",
+        "docs/02_DOMAIN_MODEL.md",
+        "docs/03_TECHNICAL_ARCHITECTURE.md",
+        "docs/04_EVOLUTION_BACKLOG.md",
+        "docs/05_EXISTING_SYSTEM_MAPPING.md",
+        "docs/architecture/ADR_LOG.md",
+        "docs/working/ACTIVE_ITERATION.md",
+        "docs/archive/",
     ],
     "DOCUMENT_MAP.md": [
-        "00_PRODUCT_SYSTEM_OVERVIEW.md",
-        "01_MVP_WALKING_SKELETON.md",
-        "02_DOMAIN_MODEL.md",
-        "03_TECHNICAL_ARCHITECTURE.md",
-        "04_EVOLUTION_BACKLOG.md",
-        "05_EXISTING_SYSTEM_MAPPING.md",
-        "architecture/ADR_LOG.md",
+        "docs/00_PRODUCT_SYSTEM_OVERVIEW.md",
+        "docs/01_MVP_WALKING_SKELETON.md",
+        "docs/02_DOMAIN_MODEL.md",
+        "docs/03_TECHNICAL_ARCHITECTURE.md",
+        "docs/04_EVOLUTION_BACKLOG.md",
+        "docs/05_EXISTING_SYSTEM_MAPPING.md",
+        "docs/architecture/ADR_LOG.md",
+        "docs/working/CURRENT_IMPLEMENTATION_AUDIT.md",
+        "docs/archive/",
     ],
 }
 
@@ -130,15 +148,17 @@ def parse_frontmatter(text: str) -> dict[str, str]:
     return {}
 
 
-def is_under(path: Path, dirname: str) -> bool:
-    return dirname in path.relative_to(ROOT).parts
+def is_archive(path: Path) -> bool:
+    return path.relative_to(ROOT).parts[:2] == ("docs", "archive")
 
 
 def markdown_files() -> list[Path]:
     paths: list[Path] = []
     for path in ROOT.rglob("*.md"):
         rel_parts = path.relative_to(ROOT).parts
-        if ".git" in rel_parts or "archive" in rel_parts:
+        if ".git" in rel_parts:
+            continue
+        if is_archive(path):
             continue
         paths.append(path)
     return sorted(paths)
@@ -153,27 +173,37 @@ def check_formal_set() -> None:
     if missing:
         report_fail(f"formal documents missing: {', '.join(missing)}")
     else:
-        report_pass("all formal documents exist")
+        report_pass("all formal documents exist under docs/")
 
-    active_numbered = sorted(
+    docs_numbered = sorted(
         str(path.relative_to(ROOT))
-        for path in ROOT.glob("[0-9][0-9]_*.md")
+        for path in (ROOT / "docs").glob("[0-9][0-9]_*.md")
         if path.is_file()
     )
-    expected_root = sorted(doc for doc in FORMAL_DOCS if "/" not in doc)
-    if active_numbered == expected_root:
-        report_pass("root formal numbered documents are exactly 00-05")
+    expected_docs = sorted(doc for doc in FORMAL_DOCS if doc.startswith("docs/0"))
+    if docs_numbered == expected_docs:
+        report_pass("docs root numbered formal documents are exactly 00-05")
     else:
         report_fail(
-            "unexpected root formal numbered documents: "
-            + ", ".join(active_numbered)
+            "unexpected docs root numbered formal documents: "
+            + ", ".join(docs_numbered)
         )
 
-    architecture_md = sorted(
-        str(path.relative_to(ROOT)) for path in (ROOT / "architecture").glob("*.md")
+    root_numbered = sorted(
+        str(path.relative_to(ROOT))
+        for path in ROOT.glob("[0-9]*_*.md")
+        if path.is_file()
     )
-    if architecture_md == ["architecture/ADR_LOG.md"]:
-        report_pass("architecture formal documents are exactly ADR_LOG")
+    if root_numbered:
+        report_fail("root numbered documents found: " + ", ".join(root_numbered))
+    else:
+        report_pass("no root numbered product documents found")
+
+    architecture_md = sorted(
+        str(path.relative_to(ROOT)) for path in (ROOT / "docs" / "architecture").glob("*.md")
+    )
+    if architecture_md == ["docs/architecture/ADR_LOG.md"]:
+        report_pass("architecture formal documents are exactly docs/architecture/ADR_LOG.md")
     else:
         report_fail(
             "unexpected architecture documents: "
@@ -181,22 +211,49 @@ def check_formal_set() -> None:
         )
 
 
-def check_old_docs_absent() -> None:
-    present = [doc for doc in OLD_FORMAL_DOCS if (ROOT / doc).exists()]
+def check_old_paths_absent() -> None:
+    present = [path for path in ROOT_OLD_PATHS if (ROOT / path).exists()]
     if present:
-        report_fail(f"old formal documents still present: {', '.join(present)}")
+        report_fail(f"old root paths still present: {', '.join(present)}")
     else:
-        report_pass("old formal documents are absent from active tree")
+        report_pass("old root document paths are absent")
 
     disallowed = sorted(
         str(path.relative_to(ROOT))
         for pattern in ("06_*.md", "07_*.md", "08_*.md", "09_*.md", "10_*.md", "11_*.md", "12_*.md")
-        for path in ROOT.glob(pattern)
+        for path in (ROOT / "docs").glob(pattern)
     )
     if disallowed:
-        report_fail("disallowed numbered formal files found: " + ", ".join(disallowed))
+        report_fail("disallowed docs numbered formal files found: " + ", ".join(disallowed))
     else:
-        report_pass("no disallowed numbered formal files found")
+        report_pass("no disallowed docs numbered formal files found")
+
+    forbidden_dirs = [
+        "docs/product",
+        "docs/mvp",
+        "docs/domain",
+        "docs/technical",
+        "docs/evolution",
+        "docs/integration",
+    ]
+    present_dirs = [path for path in forbidden_dirs if (ROOT / path).exists()]
+    if present_dirs:
+        report_fail("forbidden docs category directories found: " + ", ".join(present_dirs))
+    else:
+        report_pass("no forbidden docs category directories found")
+
+    if (ROOT / "docs" / "README.md").exists():
+        report_fail("docs/README.md must not exist")
+    else:
+        report_pass("docs/README.md does not exist")
+
+
+def check_old_formal_docs_absent() -> None:
+    present = [doc for doc in OLD_FORMAL_DOCS if (ROOT / doc).exists()]
+    if present:
+        report_fail(f"old formal documents still present at old paths: {', '.join(present)}")
+    else:
+        report_pass("old formal documents are absent from old active paths")
 
 
 def check_h1(path: Path, text: str) -> None:
@@ -296,7 +353,7 @@ def check_old_references() -> None:
 
     for path in markdown_files():
         rel = str(path.relative_to(ROOT))
-        if rel == "architecture/ADR_LOG.md":
+        if rel == "docs/architecture/ADR_LOG.md":
             continue
         text = read_text(path)
         for pattern in patterns:
@@ -310,9 +367,9 @@ def check_old_references() -> None:
 
 
 def check_active_iteration_count() -> None:
-    active = sorted(ROOT.glob("working/ACTIVE_ITERATION*.md"))
+    active = sorted((ROOT / "docs" / "working").glob("ACTIVE_ITERATION*.md"))
     if len(active) <= 1:
-        report_pass("at most one ACTIVE_ITERATION file exists")
+        report_pass("at most one docs/working ACTIVE_ITERATION file exists")
     else:
         report_fail(
             "multiple ACTIVE_ITERATION files found: "
@@ -352,9 +409,9 @@ def check_entrypoints() -> None:
         text = read_text(path)
         missing = [ref for ref in required_refs if ref not in text]
         if missing:
-            report_fail(f"{rel} missing new canonical refs: {', '.join(missing)}")
+            report_fail(f"{rel} missing docs refs: {', '.join(missing)}")
         else:
-            report_pass(f"{rel} points to new canonical documents")
+            report_pass(f"{rel} points to docs document structure")
 
 
 def check_no_implementation_true() -> None:
@@ -363,7 +420,7 @@ def check_no_implementation_true() -> None:
         if "implementation_allowed: true" in read_text(path):
             offenders.append(str(path.relative_to(ROOT)))
     if offenders:
-        report_fail("implementation_allowed true found in markdown: " + ", ".join(offenders))
+        report_fail("implementation_allowed true found in active markdown: " + ", ".join(offenders))
     else:
         report_pass("no implementation_allowed true in active markdown")
 
@@ -373,7 +430,8 @@ def main() -> int:
     print("====================")
 
     check_formal_set()
-    check_old_docs_absent()
+    check_old_paths_absent()
+    check_old_formal_docs_absent()
 
     for doc in FORMAL_DOCS:
         path = ROOT / doc

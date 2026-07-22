@@ -1,20 +1,78 @@
 # DOCUMENT_STANDARD
 
-## 1. Formal Document Set
+## 1. Document Areas
 
-Formal numbered product and architecture documents are limited to:
+Repository Entry:
 
-- [../00_PRODUCT_SYSTEM_OVERVIEW.md](../00_PRODUCT_SYSTEM_OVERVIEW.md)
-- [../01_MVP_WALKING_SKELETON.md](../01_MVP_WALKING_SKELETON.md)
-- [../02_DOMAIN_MODEL.md](../02_DOMAIN_MODEL.md)
-- [../03_TECHNICAL_ARCHITECTURE.md](../03_TECHNICAL_ARCHITECTURE.md)
-- [../04_EVOLUTION_BACKLOG.md](../04_EVOLUTION_BACKLOG.md)
-- [../05_EXISTING_SYSTEM_MAPPING.md](../05_EXISTING_SYSTEM_MAPPING.md)
-- [../architecture/ADR_LOG.md](../architecture/ADR_LOG.md)
+- [../README.md](../README.md)
+- [../AGENTS.md](../AGENTS.md)
+- [../DOCUMENT_MAP.md](../DOCUMENT_MAP.md)
 
-Do not create duplicate Scope, Phase, Slice, Plan, or Roadmap documents as new formal numbered documents.
+Canonical Product Documents:
 
-## 2. Frontmatter
+- [../docs/00_PRODUCT_SYSTEM_OVERVIEW.md](../docs/00_PRODUCT_SYSTEM_OVERVIEW.md)
+- [../docs/01_MVP_WALKING_SKELETON.md](../docs/01_MVP_WALKING_SKELETON.md)
+- [../docs/02_DOMAIN_MODEL.md](../docs/02_DOMAIN_MODEL.md)
+- [../docs/03_TECHNICAL_ARCHITECTURE.md](../docs/03_TECHNICAL_ARCHITECTURE.md)
+- [../docs/04_EVOLUTION_BACKLOG.md](../docs/04_EVOLUTION_BACKLOG.md)
+- [../docs/05_EXISTING_SYSTEM_MAPPING.md](../docs/05_EXISTING_SYSTEM_MAPPING.md)
+
+Architecture Decisions:
+
+- [../docs/architecture/ADR_LOG.md](../docs/architecture/ADR_LOG.md)
+
+Working Documents:
+
+- [../docs/working/](../docs/working/)
+
+Historical Documents:
+
+- [../docs/archive/](../docs/archive/)
+
+Governance Tools:
+
+- [../governance/](../governance/)
+
+## 2. Directory Rules
+
+`docs/` is the product documentation root.
+
+Root directory must not contain formal numbered product documents.
+
+Formal numbered documents are limited to:
+
+```text
+docs/00_PRODUCT_SYSTEM_OVERVIEW.md
+docs/01_MVP_WALKING_SKELETON.md
+docs/02_DOMAIN_MODEL.md
+docs/03_TECHNICAL_ARCHITECTURE.md
+docs/04_EVOLUTION_BACKLOG.md
+docs/05_EXISTING_SYSTEM_MAPPING.md
+```
+
+Architecture decisions must go into:
+
+```text
+docs/architecture/ADR_LOG.md
+```
+
+Temporary working documents must go into:
+
+```text
+docs/working/
+```
+
+Historical documents must go into:
+
+```text
+docs/archive/
+```
+
+Do not create duplicate product document trees, including separate English/Chinese document trees.
+
+Do not create `docs/product/`, `docs/mvp/`, `docs/domain/`, `docs/technical/`, `docs/evolution/`, or `docs/integration/` for the current six-document set.
+
+## 3. Frontmatter
 
 Formal design documents need these frontmatter fields:
 
@@ -34,13 +92,13 @@ Optional fields:
 - `canonical`
 - `implementation_scope`
 
-Current post-consolidation rule:
+Current rule:
 
 - No formal product or architecture document may set `implementation_allowed` to `true`.
 - Any future change that sets `implementation_allowed` to `true` requires explicit human approval and a clear `implementation_scope`.
 - Long-term backlog documents never constitute implementation authorization.
 
-## 3. Status Enum
+## 4. Status Enum
 
 Allowed document status values:
 
@@ -53,7 +111,7 @@ Allowed document status values:
 
 Current formal documents are `DRAFT_FOR_REVIEW` until human review completes.
 
-## 4. Authority Rules
+## 5. Authority Rules
 
 - Product position is detailed in the product overview.
 - MVP flow is detailed in the Walking Skeleton document.
@@ -63,28 +121,29 @@ Current formal documents are `DRAFT_FOR_REVIEW` until human review completes.
 - Existing system reuse is detailed in existing system mapping.
 - Architecture decisions are recorded in ADR Log.
 - Working files do not use formal authority.
-- Git history is the default document history.
+- Archive files are not active design authority.
+- Git history is the default modification history.
 
-## 5. Change Rules
+## 6. Change Rules
 
 | Change Type | Update First |
 |---|---|
-| Product position or role boundary | [../00_PRODUCT_SYSTEM_OVERVIEW.md](../00_PRODUCT_SYSTEM_OVERVIEW.md) |
-| Current MVP flow or acceptance | [../01_MVP_WALKING_SKELETON.md](../01_MVP_WALKING_SKELETON.md) |
-| Domain object or boundary | [../02_DOMAIN_MODEL.md](../02_DOMAIN_MODEL.md) |
-| Technical architecture or adapter boundary | [../03_TECHNICAL_ARCHITECTURE.md](../03_TECHNICAL_ARCHITECTURE.md) |
-| Deferred capability | [../04_EVOLUTION_BACKLOG.md](../04_EVOLUTION_BACKLOG.md) |
-| Existing system reuse | [../05_EXISTING_SYSTEM_MAPPING.md](../05_EXISTING_SYSTEM_MAPPING.md) |
-| Major architecture decision | [../architecture/ADR_LOG.md](../architecture/ADR_LOG.md) |
+| Product position or role boundary | [../docs/00_PRODUCT_SYSTEM_OVERVIEW.md](../docs/00_PRODUCT_SYSTEM_OVERVIEW.md) |
+| Current MVP flow or acceptance | [../docs/01_MVP_WALKING_SKELETON.md](../docs/01_MVP_WALKING_SKELETON.md) |
+| Domain object or boundary | [../docs/02_DOMAIN_MODEL.md](../docs/02_DOMAIN_MODEL.md) |
+| Technical architecture or adapter boundary | [../docs/03_TECHNICAL_ARCHITECTURE.md](../docs/03_TECHNICAL_ARCHITECTURE.md) |
+| Deferred capability | [../docs/04_EVOLUTION_BACKLOG.md](../docs/04_EVOLUTION_BACKLOG.md) |
+| Existing system reuse | [../docs/05_EXISTING_SYSTEM_MAPPING.md](../docs/05_EXISTING_SYSTEM_MAPPING.md) |
+| Major architecture decision | [../docs/architecture/ADR_LOG.md](../docs/architecture/ADR_LOG.md) |
 
-## 6. Implementation Authorization
+## 7. Implementation Authorization
 
 Implementation changes are not allowed while formal documents set `implementation_allowed: false`.
 
 Before any future implementation change:
 
 - Human review must approve the relevant MVP boundary.
-- A single `working/ACTIVE_ITERATION.md` must exist.
+- A single `docs/working/ACTIVE_ITERATION.md` must exist.
 - The active iteration must define implementation scope.
 - The active iteration must define allowed file and directory creation.
 - The active iteration must define validation commands.

@@ -1,62 +1,69 @@
 # DOCUMENT_MAP
 
-## 1. Canonical Authority Order
+## 1. 权威文档顺序
 
-Formal product and architecture authority is fixed to:
+正式产品与架构权威固定为：
 
-1. [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
-2. [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
-3. [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
-4. [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
-5. [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)
-6. [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)
-7. [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
+1. [docs/00_PRODUCT_SYSTEM_OVERVIEW.md](docs/00_PRODUCT_SYSTEM_OVERVIEW.md)
+2. [docs/01_MVP_WALKING_SKELETON.md](docs/01_MVP_WALKING_SKELETON.md)
+3. [docs/02_DOMAIN_MODEL.md](docs/02_DOMAIN_MODEL.md)
+4. [docs/03_TECHNICAL_ARCHITECTURE.md](docs/03_TECHNICAL_ARCHITECTURE.md)
+5. [docs/04_EVOLUTION_BACKLOG.md](docs/04_EVOLUTION_BACKLOG.md)
+6. [docs/05_EXISTING_SYSTEM_MAPPING.md](docs/05_EXISTING_SYSTEM_MAPPING.md)
+7. [docs/architecture/ADR_LOG.md](docs/architecture/ADR_LOG.md)
 
-Working files are not authority sources. Archive files are historical only.
+Working 文件不是权威来源。Archive 文件只保留历史。
 
-## 2. What Each Document Answers
+## 2. 文档职责
 
-| Document | Responsibility |
+| 文档 | 职责 |
 |---|---|
-| [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md) | Product position, role boundary, value chain, current MVP boundary, dual-track model, non-goals, principles. |
-| [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) | Current MVP chain, capability classification, first pilot, acceptance questions, iteration sequence. |
-| [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md) | Current Walking Skeleton domain objects, boundaries, minimal relationships, future-only object list. |
-| [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md) | Technical stack, modular monolith, adapter boundary, AI boundary, Platform Core extraction rule. |
-| [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md) | Deferred long-term capability groups and revisit triggers. |
-| [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md) | Evidence-based mapping of external/sibling systems and adapter reuse boundaries. |
-| [architecture/ADR_LOG.md](architecture/ADR_LOG.md) | Architecture and product-architecture decision history. |
-| [working/CURRENT_IMPLEMENTATION_AUDIT.md](working/CURRENT_IMPLEMENTATION_AUDIT.md) | Current implementation facts from audit; retained as evidence, not formal authority. |
+| [docs/00_PRODUCT_SYSTEM_OVERVIEW.md](docs/00_PRODUCT_SYSTEM_OVERVIEW.md) | 产品定位、角色边界、价值链、当前 MVP 边界、双轨模型、明确不做事项、原则。 |
+| [docs/01_MVP_WALKING_SKELETON.md](docs/01_MVP_WALKING_SKELETON.md) | 当前 MVP 链路、能力分类、首个 Pilot、验收问题、迭代顺序。 |
+| [docs/02_DOMAIN_MODEL.md](docs/02_DOMAIN_MODEL.md) | 当前 Walking Skeleton 领域对象、边界、最小关系和 future-only 对象。 |
+| [docs/03_TECHNICAL_ARCHITECTURE.md](docs/03_TECHNICAL_ARCHITECTURE.md) | 技术栈、Modular Monolith、Adapter 边界、AI 边界、Platform Core 抽取规则。 |
+| [docs/04_EVOLUTION_BACKLOG.md](docs/04_EVOLUTION_BACKLOG.md) | 延期的长期能力组和重新评审触发条件。 |
+| [docs/05_EXISTING_SYSTEM_MAPPING.md](docs/05_EXISTING_SYSTEM_MAPPING.md) | 既有系统复用证据和 Adapter 边界。 |
+| [docs/architecture/ADR_LOG.md](docs/architecture/ADR_LOG.md) | 架构和产品架构决策历史。 |
+| [docs/working/CURRENT_IMPLEMENTATION_AUDIT.md](docs/working/CURRENT_IMPLEMENTATION_AUDIT.md) | 当前实现事实审计；作为证据保留，不是正式权威。 |
 
-## 3. Reading Order
+## 3. 推荐阅读顺序
 
-Use the authority order above.
+1. [docs/00_PRODUCT_SYSTEM_OVERVIEW.md](docs/00_PRODUCT_SYSTEM_OVERVIEW.md)
+2. [docs/01_MVP_WALKING_SKELETON.md](docs/01_MVP_WALKING_SKELETON.md)
+3. [docs/02_DOMAIN_MODEL.md](docs/02_DOMAIN_MODEL.md)
+4. [docs/03_TECHNICAL_ARCHITECTURE.md](docs/03_TECHNICAL_ARCHITECTURE.md)
+5. [docs/04_EVOLUTION_BACKLOG.md](docs/04_EVOLUTION_BACKLOG.md)
+6. [docs/05_EXISTING_SYSTEM_MAPPING.md](docs/05_EXISTING_SYSTEM_MAPPING.md)
+7. [docs/architecture/ADR_LOG.md](docs/architecture/ADR_LOG.md)
 
-For current MVP review, read:
+既有系统复用评审时，重点阅读 [docs/05_EXISTING_SYSTEM_MAPPING.md](docs/05_EXISTING_SYSTEM_MAPPING.md)。
 
-1. [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
-2. [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
-3. [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
-4. [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
-5. [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
+延期能力评审时，重点阅读 [docs/04_EVOLUTION_BACKLOG.md](docs/04_EVOLUTION_BACKLOG.md)。
 
-For existing system reuse, also read [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md).
+## 4. 变更检查矩阵
 
-For deferred capabilities, read [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md).
-
-## 4. Change Check Matrix
-
-| Change Type | Update First |
+| 变更类型 | 优先更新 |
 |---|---|
-| Product position or role boundary | [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md) |
-| Current MVP flow or acceptance | [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) |
-| Domain object or boundary | [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md) |
-| Technical stack, adapters, AI, Platform Core rule | [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md) |
-| Deferred long-term capability | [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md) |
-| External/sibling reuse decision | [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md) |
-| Major decision or supersession | [architecture/ADR_LOG.md](architecture/ADR_LOG.md) |
+| 产品定位或角色边界 | [docs/00_PRODUCT_SYSTEM_OVERVIEW.md](docs/00_PRODUCT_SYSTEM_OVERVIEW.md) |
+| 当前 MVP 流程或验收 | [docs/01_MVP_WALKING_SKELETON.md](docs/01_MVP_WALKING_SKELETON.md) |
+| 领域对象或边界 | [docs/02_DOMAIN_MODEL.md](docs/02_DOMAIN_MODEL.md) |
+| 技术栈、Adapter、AI、Platform Core 规则 | [docs/03_TECHNICAL_ARCHITECTURE.md](docs/03_TECHNICAL_ARCHITECTURE.md) |
+| 延期长期能力 | [docs/04_EVOLUTION_BACKLOG.md](docs/04_EVOLUTION_BACKLOG.md) |
+| 外部或兄弟仓库复用决策 | [docs/05_EXISTING_SYSTEM_MAPPING.md](docs/05_EXISTING_SYSTEM_MAPPING.md) |
+| 重大决策或决策替换 | [docs/architecture/ADR_LOG.md](docs/architecture/ADR_LOG.md) |
 
-## 5. Documentation Growth Rule
+## 5. 目录规则
 
-Do not create new formal numbered product or architecture documents without explicit human approval.
+根目录只保留仓库入口、操作规则和运行时配置。
 
-Phase, slice, and iteration planning belongs in `working/ACTIVE_ITERATION.md` when coding is approved. At most one active iteration file may exist at a time.
+`docs/` 是产品、架构、工作记录和历史文档根目录：
+
+- `docs/00` 到 `docs/05` 是正式产品文档。
+- `docs/architecture/ADR_LOG.md` 是架构决策日志。
+- `docs/working/` 是临时工作材料。
+- `docs/archive/` 是历史文档。
+
+未经明确人工批准，不得创建新的正式编号产品或架构文档。
+
+Phase、Slice 和 Iteration 计划在编码被批准时写入 `docs/working/ACTIVE_ITERATION.md`。同一时间最多只能有一份 active iteration 文件。

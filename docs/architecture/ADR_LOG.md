@@ -341,7 +341,7 @@ Decision:
 
 Adopt a thin but real end-to-end Walking Skeleton. Implement high-migration-cost boundaries with production intent. Keep unvalidated business depth lightweight. The first value endpoint is Generation-ready Owned Content Production Pack.
 
-The next active iteration target is WS-0 + WS-1 thin end-to-end output, not Product Workspace CRUD alone. This remains a planning direction and does not authorize code until `working/ACTIVE_ITERATION.md` is approved.
+The next active iteration target is WS-0 + WS-1 thin end-to-end output, not Product Workspace CRUD alone. This remains a planning direction and does not authorize code until `../working/ACTIVE_ITERATION.md` is approved.
 
 Status:
 
