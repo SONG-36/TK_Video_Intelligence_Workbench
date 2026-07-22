@@ -15,19 +15,19 @@ depends_on:
   - architecture/ADR_LOG.md
 ---
 
-# Technical Architecture
+# 技术架构
 
-## 1. Document Responsibility
+## 1. 文档职责
 
-This document defines the technical architecture direction for the current Walking Skeleton.
+本文档定义当前 Walking Skeleton 的技术架构方向。
 
-It is not a low-level design, final directory layout, dependency manifest, deployment plan, database schema, or API contract.
+本文档不是 Low-level Design、最终目录结构、依赖清单、部署计划、数据库 Schema 或 API 契约。
 
-## 2. Technical Stack
+## 2. 技术栈
 
-Current stack direction:
+当前技术栈方向：
 
-| Area | Choice |
+| 领域 | 选择 |
 |---|---|
 | Backend | Python 3.12 |
 | API | FastAPI |
@@ -40,13 +40,13 @@ Current stack direction:
 | Frontend language | TypeScript |
 | Frontend tooling | Vite |
 | Frontend tests | Vitest |
-| Local infrastructure | Docker when explicitly authorized by an active iteration |
+| Local infrastructure | 只有被 active iteration 明确授权时才使用 Docker |
 
-This consolidation does not install dependencies or create code directories.
+本次文档本地化不安装依赖，也不创建代码目录。
 
-## 3. Architecture Style
+## 3. 架构风格
 
-Adopt:
+采用：
 
 ```text
 Modular Monolith
@@ -60,59 +60,67 @@ Provider Adapter
 Human Review
 ```
 
-Implications:
+中文含义：
 
-- Build the first real chain thinly end to end.
-- Keep stable IDs, provenance, versions, review, migration, and adapter boundaries serious from the start.
-- Do not create a generic workflow platform before repeated use proves the need.
-- Keep external providers behind adapters.
-- AI output remains draft until human review.
+- Modular Monolith：模块化单体。
+- Production-intent Walking Skeleton：生产意图型最小贯通骨架。
+- Fixed Workflow First：先固定 Workflow，再考虑动态编排。
+- Provider Adapter：通过服务提供方适配器隔离外部能力。
+- Human Review：正式内容必须人工审核。
 
-## 4. Suggested Modules
+影响：
 
-Conceptual modules may include:
+- 第一条真实业务链要薄但端到端。
+- 从第一版开始认真处理稳定 ID、来源可追溯性、版本、审核、迁移和 Adapter 边界。
+- 在真实重复证明必要前，不创建通用 Workflow 平台。
+- 外部 Provider 必须通过 Adapter 隔离。
+- AI 输出在 Human Review 前始终是 Draft。
 
-- `product`.
-- `reference`.
-- `content`.
-- `delivery`.
+## 4. 建议模块
 
-These are not directory creation instructions.
+概念上可以包含：
 
-Only create code directories when an approved active iteration needs them. Do not create empty modules for future capabilities.
+- `product`。
+- `reference`。
+- `content`。
+- `delivery`。
 
-## 5. Platform Boundary
+这些不是目录创建指令。
 
-The previous platform observations remain useful:
+只有被批准的 active iteration 实际需要时，才创建代码目录。不要为未来能力创建空模块。
 
-- Resource.
-- Capability.
-- Execution.
-- Policy.
-- Trace.
+## 5. 平台边界
 
-They are long-term platform observation dimensions, not a requirement to implement a Kernel Framework now.
+此前的平台观察维度仍然有用：
 
-Current work must not implement:
+- Resource。
+- Capability。
+- Execution。
+- Policy。
+- Trace。
 
-- Resource Framework.
-- Capability Registry.
-- Execution Engine.
-- Policy DSL.
-- Trace Service.
-- Agent Runtime.
+它们是长期平台观察维度，不是当前实现 Kernel Framework 的要求。
 
-Future terminology should prefer:
+当前工作不得实现：
+
+- Resource Framework。
+- Capability Registry。
+- Execution Engine。
+- Policy DSL。
+- Trace Service。
+- Agent Runtime。
+
+未来术语优先使用：
 
 ```text
 Platform Core
 ```
 
-Do not inflate the current architecture into a Linux-kernel-style platform.
+不要把当前架构夸大成 Linux-kernel-style 平台。
 
-## 6. Platform Core Extraction Rule
+## 6. Platform Core 抽取规则
 
-A shared mechanism may be considered for Platform Core only after:
+只有满足以下条件时，才考虑把共享机制抽取为 Platform Core：
 
 ```text
 The same mechanism repeats in at least two real business modules
@@ -120,94 +128,94 @@ The same mechanism repeats in at least two real business modules
 three real product pilots validate the need
 ```
 
-Until then, use direct application logic inside the Walking Skeleton.
+在此之前，优先在 Walking Skeleton 内使用直接的 application logic。
 
-## 7. AI Boundary
+## 7. AI 边界
 
-Rules:
+规则：
 
-- AI output is draft by default.
-- Use structured outputs for AI-generated business artifacts.
-- Prompt and Knowledge Pack versions must be traceable.
-- Run records must preserve input versions, model/provider, output version, cost, and errors.
-- External models are accessed through adapters.
-- Current workflow is fixed and human-triggered.
-- Do not implement multi-agent runtime.
+- AI 输出默认是 Draft。
+- AI 生成的业务产物使用 structured outputs。
+- Prompt 和 Knowledge Pack version 必须可追溯。
+- Run 记录必须保留 input versions、model/provider、output version、cost 和 errors。
+- 外部模型通过 Adapter 访问。
+- 当前 workflow 是固定且人工触发的。
+- 不实现 multi-agent runtime。
 
-First implementation requirement:
+首轮实现要求：
 
-- Use a real, versioned Knowledge Pack v0.1.
-- The pack may be represented as Markdown / YAML in an approved active iteration.
-- It must include Script Rules, Pattern Cards, Hook Guidance, Claims Guardrails, Review Rubric, and Market Style Notes.
-- AI Run records must include the Knowledge Pack version used.
-- Do not build knowledge UI, search, tags, or management platform in the current MVP.
-- This documentation alignment does not create a `knowledge/` directory or files.
+- 使用真实、版本化的 Knowledge Pack v0.1。
+- 该 pack 可以在已批准的 active iteration 中用 Markdown / YAML 表达。
+- 必须包含 Script Rules、Pattern Cards、Hook Guidance、Claims Guardrails、Review Rubric 和 Market Style Notes。
+- AI Run 记录必须包含所用 Knowledge Pack version。
+- 当前 MVP 不建设知识库 UI、搜索、标签或管理平台。
+- 本次文档本地化不创建 `knowledge/` 目录或文件。
 
-## 8. Existing System Integration
+## 8. 既有系统集成
 
-Existing sibling repositories and tools may inform future implementation, but they are not current system code.
+既有兄弟仓库和工具可以为未来实现提供参考，但它们不是当前系统代码。
 
-Integration rule:
+集成规则：
 
-- TikTok search through future `TikTokSearchAdapter`.
-- Video breakdown through future reference media adapter.
-- Generation Lab through isolated generation adapters or lab tooling.
-- No direct copy of sibling repository code.
-- No live external API call without explicit authorization.
+- TikTok search 通过未来 `TikTokSearchAdapter`。
+- Video breakdown 通过未来 reference media adapter。
+- Generation Lab 通过独立 generation adapters 或 lab tooling。
+- 不直接复制兄弟仓库代码。
+- 未经明确授权，不调用 live external API。
 
-Detailed evidence is in [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md).
+详细证据见 [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)。
 
-## 9. Generation Boundary
+## 9. Generation 边界
 
-Current main-system boundary:
+当前主系统边界：
 
 ```text
 Generation-ready Production Pack
 → Future Generation Adapter Boundary
 ```
 
-The current MVP does not model or implement:
+当前 MVP 不建模或实现：
 
-- GenerationPlan.
-- RenderBatch.
-- RenderJob.
-- Worker.
-- Queue.
-- Provider routing.
-- Automatic batch costing.
-- ComfyUI / Seedance / Kling orchestration.
+- GenerationPlan。
+- RenderBatch。
+- RenderJob。
+- Worker。
+- Queue。
+- Provider routing。
+- Automatic batch costing。
+- ComfyUI / Seedance / Kling orchestration。
 
-Detailed generation orchestration is deferred to [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md).
+详细 Generation Orchestration 延期到 [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)。
 
-## 10. Non-functional Baseline
+## 10. 非功能基线
 
-Current baseline:
+当前基线：
 
-- Stable ID.
-- Provenance.
-- Versioning.
-- Human Approval.
-- Migration.
-- Error Visibility.
-- Testability.
-- Local Reproducibility.
+- Stable ID。
+- Provenance。
+- Versioning。
+- Human Approval。
+- Migration。
+- Error Visibility。
+- Testability。
+- Local Reproducibility。
 
-Out of current scope:
+当前范围之外：
 
-- Enterprise high availability.
-- Multi-tenant SaaS infrastructure.
-- Kubernetes.
-- Microservices.
-- Generic distributed workflow orchestration.
+- Enterprise high availability。
+- Multi-tenant SaaS infrastructure。
+- Kubernetes。
+- Microservices。
+- Generic distributed workflow orchestration。
 
-## 11. Local Development Direction
+## 11. 本地开发方向
 
-Future active iterations may create backend, frontend, database, and Docker files only when explicitly authorized.
+未来 active iteration 只有在明确授权时，才可以创建 backend、frontend、database 和 Docker 文件。
 
-Until then:
+在此之前：
 
-- Keep repository documentation-first.
-- Do not install dependencies.
-- Do not start Docker.
-- Do not create `.env` files.
-- Do not read secrets.
+- 保持仓库 documentation-first。
+- 不安装依赖。
+- 不启动 Docker。
+- 不创建 `.env` 文件。
+- 不读取密钥。

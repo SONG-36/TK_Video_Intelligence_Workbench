@@ -11,36 +11,38 @@ depends_on:
   - 00_PRODUCT_SYSTEM_OVERVIEW.md
 ---
 
-# MVP Walking Skeleton
+# MVP 最小贯通骨架
 
-## 1. Document Responsibility
+## 1. 文档职责
 
-This is the only current MVP scope and business flow document.
+本文档是当前 MVP 唯一的范围与业务流程文档。
 
-It defines the Production-intent Walking Skeleton, current capability classification, first pilot, acceptance questions, and iteration sequence.
+本文档定义生产意图型最小贯通骨架（Production-intent Walking Skeleton）、当前能力分类、首个 Pilot、验收问题和迭代顺序。
 
-It does not freeze full database fields, final API URLs, UI layout, prompt files, workflow files, or future generation schemas.
+本文档不冻结完整数据库字段、最终 API URL、UI 布局、Prompt 文件、Workflow 文件或未来生成 Schema。
 
-## 2. MVP Problem Statement
+## 2. MVP 问题陈述
 
-The first version helps operators answer:
+第一版帮助运营回答：
 
 ```text
 Given a selected product and business context, what owned content should we create, why, based on which evidence and references, and is the output ready to hand to shooting or generation work?
 ```
 
-The MVP must produce an explainable, human-reviewed, generation-ready Owned Content Production Pack.
+即：面对一个已选商品和业务上下文，我们应该做什么自有内容、为什么做、依据哪些 Evidence 和 Reference，以及输出是否可以交给拍摄或生成团队。
 
-## 3. Target Users
+MVP 必须产出可解释、经过人工审核、生成就绪的自有内容生产包（Generation-ready Owned Content Production Pack）。
 
-- Project owner.
-- TikTok operator.
-- Product owner.
-- Content review owner.
+## 3. 目标用户
 
-## 4. Production-intent Walking Skeleton
+- 项目负责人。
+- TikTok 运营。
+- 商品负责人。
+- 内容审核负责人。
 
-Definition:
+## 4. 生产意图型最小贯通骨架
+
+定义：
 
 ```text
 Use the thinnest real end-to-end business chain to validate product value.
@@ -48,267 +50,273 @@ Keep production-intent standards for high-migration-cost boundaries such as stab
 Keep unvalidated fields, rules, gates, routes, and automation lightweight.
 ```
 
-The adopted flow:
+中文含义：
+
+- 用最薄但真实的端到端业务链验证产品价值。
+- 对稳定 ID、来源可追溯性、审核、版本、迁移和 Adapter 等高迁移成本边界保持生产意图。
+- 对尚未验证的字段、规则、Gate、Route 和自动化保持轻量。
+
+采用的业务链路：
 
 ```text
-Create Content Project
+创建 ContentProject
 ↓
-Enter Selection-to-Content Handoff
+录入 Selection-to-Content Handoff
 ↓
-Bind Product / ProductVersion
+绑定 Product / ProductVersion
 ↓
-Add minimal Evidence
+添加最小 Evidence
 ↓
-Load versioned Content Knowledge Pack
+加载版本化 Content Knowledge Pack
 ↓
-Manually add 3-5 References
+手工添加 3-5 条 Reference
 ↓
-Generate 3 Creative Concept Drafts
+生成 3 个 Creative Concept Draft
 ↓
-Human selects or edits one Concept
+人工选择或修改一个 Concept
 ↓
-Generate Script / Storyboard / Shot List
+生成 Script / Storyboard / Shot List
 ↓
 Human Review
 ↓
-Export Markdown / JSON
+导出 Markdown / JSON
 ↓
-Form Generation-ready Owned Content Production Pack
+形成 Generation-ready Owned Content Production Pack
 ```
 
-Rejected approaches:
+拒绝的做法：
 
-- Build a complete Product Workspace first, then Knowledge, then Reference, and only much later reach Script Pack.
-- Build a Streamlit-style single page with hard-coded prompts and AI output treated as final.
+- 先建设完整 Product Workspace，再建设 Knowledge，再建设 Reference，很久以后才到 ScriptPack。
+- 做成 Streamlit 风格单页、Prompt 写死、AI 输出直接当正式结果。
 
-## 4.1 ProductVersion Lite Boundary
+## 4.1 ProductVersion Lite 边界
 
-WS-0 must include ProductVersion Lite.
+WS-0 必须包含 ProductVersion Lite。
 
-ProductVersion Lite means the first implementation keeps the minimum version boundary required for stable version identity and Evidence applicability. Evidence must be bound through ProductVersion and must not bypass ProductVersion by attaching directly to Product.
+ProductVersion Lite 表示第一轮实现只保留稳定版本身份和 Evidence 适用范围所需的最小版本边界。Evidence 必须通过 ProductVersion 绑定，不得绕过 ProductVersion 直接挂到 Product。
 
-ProductVersion depth remains `LIGHTWEIGHT` because the first pass only implements the minimum version boundary. It does not mean ProductVersion is absent from the first pass.
+`ProductVersion depth` 仍为 `LIGHTWEIGHT`，因为第一轮只实现最小版本边界。这不表示第一轮不实现 ProductVersion。
 
-WS-2 deepens ProductVersion into supplier, sample, packaging, file Evidence, fact/proof/risk/unknown, and product knowledge governance. This document does not freeze final database fields.
+WS-2 才深化 ProductVersion 的供应商、样品、包装、文件 Evidence、Fact / Proof / Risk / Unknown 和商品知识治理。本文档不冻结最终数据库字段。
 
 ## 5. Selection-to-Content Handoff
 
-The MVP does not build a complete selection system.
+MVP 不建设完整选品系统。
 
-Every Content Project must receive a Selection-to-Content Handoff. Version 1 is manually entered by operators.
+每个 ContentProject 都必须接收 Selection-to-Content Handoff（选品到内容的交接快照）。Version 1 由运营人工录入。
 
-Minimum fields:
+最小字段：
 
-| Field | Meaning |
+| 字段 | 含义 |
 |---|---|
-| `selection_rationale` | Why this product enters content work. |
-| `target_market` | Target market for this content project. |
-| `platform` | Target platform. |
-| `content_objective` | What this content round should achieve. |
-| `initial_route_hypothesis` | Initial route; may be `UNKNOWN`. |
-| `test_question` | What this content round intends to validate. |
-| `project_owner` | Person accountable for the result. |
-| `store_account_context` | Optional store or account context. |
+| `selection_rationale` | 为什么这个商品进入内容阶段。 |
+| `target_market` | 当前内容项目的目标市场。 |
+| `platform` | 目标平台。 |
+| `content_objective` | 本轮内容要达成什么。 |
+| `initial_route_hypothesis` | 初始路线，可为 `UNKNOWN`。 |
+| `test_question` | 本轮内容准备验证什么。 |
+| `project_owner` | 对结果负责的人。 |
+| `store_account_context` | 可选的店铺或账号上下文。 |
 
-This is an upstream context snapshot, not a full selection approval workflow.
+这是上游上下文快照，不是完整选品审批流程。
 
 ## 6. Content Knowledge Pack
 
-The MVP cannot operate with no script knowledge foundation.
+MVP 不能没有剧本知识底座。
 
-It uses a logical object:
+当前使用一个逻辑对象：
 
 ```text
 Versioned Content Knowledge Pack
 ```
 
-The first implementation must include a real, versioned Knowledge Pack v0.1. It may be represented as Markdown / YAML in a future approved active iteration.
+首轮实现必须包含一份真实、版本化的 Knowledge Pack v0.1。它可以在未来已批准的 active iteration 中采用 Markdown / YAML 表达。
 
-Knowledge Pack v0.1 must contain at least:
+Knowledge Pack v0.1 至少包含：
 
-- Script Rules.
-- Pattern Cards.
-- Hook Guidance.
-- Claims Guardrails.
-- Review Rubric.
-- Market Style Notes.
+- Script Rules。
+- Pattern Cards。
+- Hook Guidance。
+- Claims Guardrails。
+- Review Rubric。
+- Market Style Notes。
 
-Current document scope only defines:
+当前文档范围只定义：
 
-- Business responsibility.
-- Minimal components.
-- Version requirement.
-- AI Run reference to Knowledge Pack Version.
+- 业务职责。
+- 最小组成。
+- 版本要求。
+- AI Run 对 Knowledge Pack Version 的引用。
 
-Every AI Run that uses the Knowledge Pack must record the exact Knowledge Pack version.
+每个使用 Knowledge Pack 的 AI Run 都必须记录准确的 Knowledge Pack version。
 
-This task does not create a `knowledge/` directory or prompt files.
+本任务不创建 `knowledge/` 目录或 Prompt 文件。
 
-Upgrade to a full knowledge platform only when UI management, search, tags, approval, market/category classification, performance feedback, or automatic recommendation becomes necessary.
+只有在需要 UI 管理、搜索、标签、审批、市场/类目分类、表现反馈或自动推荐时，才升级为完整知识库平台。
 
 ## 7. Manual Reference
 
-WS-1 may use manually entered references.
+WS-1 可以使用手工录入的 Reference。
 
-Reference version 1 must preserve:
+Reference version 1 必须保留：
 
-- Source URL or source description.
-- Platform.
-- Creator/account when known.
-- Hook or scene note.
-- Why it is relevant.
-- Which concept or script element used it.
+- Source URL 或来源说明。
+- Platform。
+- Creator/account，若已知。
+- Hook 或场景备注。
+- 为什么相关。
+- 哪个 Concept 或 Script 元素使用了它。
 
-Automatic TikTok search is deferred to WS-3.
+自动 TikTok search 延期到 WS-3。
 
-## 8. Generation-ready Output
+## 8. Generation-ready 输出
 
-The MVP does not implement batch video production.
+MVP 不实现批量视频生产。
 
-The current output contract is:
+当前输出契约是：
 
 ```text
 Generation-ready Owned Content Production Pack
 ```
 
-Minimum output:
+最小输出：
 
-| Field | Meaning |
+| 字段 | 含义 |
 |---|---|
-| `script` | Approved script text. |
-| `storyboard` | Scene-level production design. |
-| `shots` | Shot list. |
-| `shot_duration` | Expected duration per shot or segment. |
-| `aspect_ratio` | Target output aspect ratio. |
-| `visual_requirement` | Visual requirements for shooting or generation. |
-| `asset_requirement` | Required product, image, video, audio, or design assets. |
-| `recommended_production_mode` | `REAL_SHOOT`, `AI_IMAGE`, `AI_VIDEO`, `MIXED`, or `UNDECIDED`. |
-| `generation_notes` | Notes for downstream generation or production teams. |
-| `evidence_references` | Evidence citations used by the pack. |
-| `reference_references` | Reference citations used by the pack. |
-| `risk_notes` | Claims, proof, compliance, or production risks. |
-| `review_status` | Draft, approved, rework, hold, or stopped. |
+| `script` | 已批准的脚本文本。 |
+| `storyboard` | 场景级生产设计。 |
+| `shots` | Shot list。 |
+| `shot_duration` | 每个 shot 或片段的预计时长。 |
+| `aspect_ratio` | 目标画幅比例。 |
+| `visual_requirement` | 拍摄或生成所需的视觉要求。 |
+| `asset_requirement` | 所需商品、图片、视频、音频或设计素材。 |
+| `recommended_production_mode` | `REAL_SHOOT`、`AI_IMAGE`、`AI_VIDEO`、`MIXED` 或 `UNDECIDED`。 |
+| `generation_notes` | 给下游生成或生产团队的说明。 |
+| `evidence_references` | 内容包使用的 Evidence 引用。 |
+| `reference_references` | 内容包使用的 Reference 引用。 |
+| `risk_notes` | Claims、Proof、合规或生产风险。 |
+| `review_status` | Draft、approved、rework、hold 或 stopped。 |
 
-The main system only owns this output contract. It does not implement GenerationPlan, RenderBatch, RenderJob, ComfyUI Adapter, Seedance Adapter, worker, queue, provider routing, or automatic batch costing.
+主系统当前只拥有该输出契约。它不实现 GenerationPlan、RenderBatch、RenderJob、ComfyUI Adapter、Seedance Adapter、worker、queue、provider routing 或自动批量计费。
 
-## 9. MVP Capability Classification
+## 9. MVP 能力分类
 
-| Capability | Classification | Note |
+| 能力 | 分类 | 说明 |
 |---|---|---|
-| Content Project | MUST_HAVE | Work container for the chain. |
-| Selection Handoff | MUST_HAVE | Required upstream snapshot. |
-| Product Lite | MUST_HAVE | Stable product identity. |
-| Evidence Lite | MUST_HAVE | Minimal source records. |
-| Knowledge Pack Version | MUST_HAVE | Version referenced by AI Runs. |
-| Manual Reference | MUST_HAVE | 3-5 references entered by user. |
-| Creative Concept Draft | MUST_HAVE | Generate three drafts. |
-| ScriptPack | MUST_HAVE | Script, storyboard, shots, generation notes. |
-| Human Review | MUST_HAVE | AI output cannot approve itself. |
-| Markdown / JSON Export | MUST_HAVE | Handoff to production or generation work. |
-| ProductVersion depth | LIGHTWEIGHT | First pass implements minimum version boundary, not Sample/Batch depth. |
-| File Evidence | LIGHTWEIGHT | May start as link/text if file upload is not in the first coding iteration. |
-| Automatic TikTok Search | DEFERRED | Revisit in WS-3. |
-| Full Knowledge Platform | DEFERRED | Current Knowledge Pack is versioned content, not a platform. |
-| Gate Engine | DEFERRED | Use human review/status first. |
-| Priority Algorithm | DEFERRED | Manual priority only if needed. |
-| Experiment Platform | DEFERRED | Store the test question only. |
-| Generation Orchestration | DEFERRED | Output contract only. |
-| ComfyUI / Seedance Lab | PARALLEL_LAB | Independent validation, not main-system model pollution. |
+| Content Project | MUST_HAVE | 当前业务链的工作容器。 |
+| Selection Handoff | MUST_HAVE | 必需的上游快照。 |
+| Product Lite | MUST_HAVE | 稳定商品身份。 |
+| Evidence Lite | MUST_HAVE | 最小来源记录。 |
+| Knowledge Pack Version | MUST_HAVE | AI Run 引用的版本。 |
+| Manual Reference | MUST_HAVE | 用户手工录入 3-5 条 Reference。 |
+| Creative Concept Draft | MUST_HAVE | 生成三个 Draft。 |
+| ScriptPack | MUST_HAVE | Script、storyboard、shots、generation notes。 |
+| Human Review | MUST_HAVE | AI 输出不能自我批准。 |
+| Markdown / JSON Export | MUST_HAVE | 交给 production 或 generation 工作。 |
+| ProductVersion depth | LIGHTWEIGHT | 第一轮实现最小版本边界，不实现 Sample/Batch 深度。 |
+| File Evidence | LIGHTWEIGHT | 如果首个编码 iteration 不含文件上传，可先从 link/text 开始。 |
+| Automatic TikTok Search | DEFERRED | WS-3 重新评审。 |
+| Full Knowledge Platform | DEFERRED | 当前 Knowledge Pack 是版本化内容，不是平台。 |
+| Gate Engine | DEFERRED | 先使用 human review/status。 |
+| Priority Algorithm | DEFERRED | 需要时只做人工 priority。 |
+| Experiment Platform | DEFERRED | 当前只记录 test question。 |
+| Generation Orchestration | DEFERRED | 当前只定义输出契约。 |
+| ComfyUI / Seedance Lab | PARALLEL_LAB | 独立验证，不污染主系统模型。 |
 
-## 10. First Pilot
+## 10. 首个 Pilot
 
-First pilot product:
+首个 Pilot 商品：
 
 ```text
 车载吸尘器
 ```
 
-The pilot must produce:
+Pilot 必须产出：
 
-- Product context.
-- Real Evidence.
-- Manual References.
-- Three Creative Concepts.
-- One Approved Concept.
-- English Script.
-- Storyboard.
-- Shot List.
-- Evidence references.
-- Reference references.
-- Generation Notes.
-- Markdown export.
-- JSON export.
+- Product context。
+- 真实 Evidence。
+- Manual References。
+- 三个 Creative Concepts。
+- 一个 Approved Concept。
+- 英文 Script。
+- Storyboard。
+- Shot List。
+- Evidence references。
+- Reference references。
+- Generation Notes。
+- Markdown export。
+- JSON export。
 
-## 11. MVP Acceptance Questions
+## 11. MVP 验收问题
 
-Operators must be able to answer:
+运营必须能够回答：
 
-- Why are we doing this product?
-- What is this content round testing?
-- Which Evidence was used?
-- Which References were borrowed from?
-- Why was this Concept selected?
-- Which content was AI generated?
-- Which content was human approved?
-- Can this Production Pack be handed to a shooting or generation team?
+- 为什么做这个商品？
+- 本轮内容准备验证什么？
+- 使用了哪些 Evidence？
+- 借鉴了哪些 Reference？
+- 为什么选择这个 Concept？
+- 哪些内容由 AI 生成？
+- 哪些内容经过人工批准？
+- 这个 Production Pack 是否可以交给拍摄或生成团队？
 
-## 12. Iteration Sequence
+## 12. 迭代顺序
 
-### WS-0: Project and Context Entry
+### WS-0：项目与上下文录入
 
-- Content Project.
-- Selection Handoff.
-- Product Lite.
-- ProductVersion Lite.
-- Evidence Lite.
+- Content Project。
+- Selection Handoff。
+- Product Lite。
+- ProductVersion Lite。
+- Evidence Lite。
 
-### WS-1: Thin End-to-End Chain
+### WS-1：薄端到端链路
 
-- Knowledge Pack Version.
-- Manual Reference.
-- Concept Draft.
-- ScriptPack Draft.
-- Review.
-- Export.
+- Knowledge Pack Version。
+- Manual Reference。
+- Concept Draft。
+- ScriptPack Draft。
+- Review。
+- Export。
 
-### WS-2: Product and Evidence Deepening
+### WS-2：Product 与 Evidence 深化
 
-- ProductVersion.
-- File Evidence.
-- Fact / Proof / Risk / Unknown.
-- Product Knowledge Baseline.
+- ProductVersion。
+- File Evidence。
+- Fact / Proof / Risk / Unknown。
+- Product Knowledge Baseline。
 
-### WS-3: Reference Integration
+### WS-3：Reference 集成
 
-- TikTokSearchAdapter.
-- Video breakdown.
-- Reference Pack.
+- TikTokSearchAdapter。
+- Video breakdown。
+- Reference Pack。
 
-### WS-4: Script and Delivery Deepening
+### WS-4：Script 与交付深化
 
-- Concept Version.
-- Storyboard.
-- Shot.
-- Delivery Pack deepening.
+- Concept Version。
+- Storyboard。
+- Shot。
+- Delivery Pack deepening。
 
-### WS-5: Three-product Pilot
+### WS-5：三商品 Pilot
 
-- 车载吸尘器.
-- 电动泡沫喷壶.
-- One personal-care product.
+- 车载吸尘器。
+- 电动泡沫喷壶。
+- 一个个人护理商品。
 
-### WS-6: Architecture Review
+### WS-6：架构评审
 
-Decide which real repetitions justify extraction into Platform Core.
+判断哪些真实重复值得抽取为 Platform Core。
 
-## 13. First Active Iteration Boundary
+## 13. 第一份 Active Iteration 边界
 
-The first future `working/ACTIVE_ITERATION.md` must use WS-0 + WS-1 thin end-to-end output as its acceptance endpoint.
+未来第一份 `working/ACTIVE_ITERATION.md` 必须以 WS-0 + WS-1 的薄端到端输出作为验收终点。
 
-It may split the work into multiple coding steps inside one iteration, but it must not declare the Walking Skeleton complete after only Product/Evidence CRUD.
+它可以在一个 iteration 内拆成多个 coding steps，但不能只完成 Product/Evidence CRUD 就宣称 Walking Skeleton 完成。
 
-## 14. Implementation Authorization
+## 14. 实施授权
 
-This document is a draft for human review.
+本文档处于人工评审草稿状态。
 
-It does not authorize business code. After approval, the first coding task must be defined in a single `working/ACTIVE_ITERATION.md`.
+本文档不授权业务代码。通过审批后，首个编码任务必须定义在唯一的 `working/ACTIVE_ITERATION.md` 中。

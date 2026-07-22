@@ -14,15 +14,15 @@ depends_on:
   - 03_TECHNICAL_ARCHITECTURE.md
 ---
 
-# Evolution Backlog
+# 长期演进 Backlog
 
-## 1. Document Responsibility
+## 1. 文档职责
 
-This document captures long-term capabilities that are valid but deferred.
+本文档记录有效但延期的长期能力。
 
-It does not authorize implementation. It does not define future schemas. It records problem groups, current MVP handling, observed evidence, revisit triggers, possible direction, and status.
+本文档不授权实施，也不定义未来 Schema。本文档只记录问题组、MVP 当前处理方式、已观察到的证据、重新评审触发条件、可能的演进方向和状态。
 
-Allowed status:
+允许状态：
 
 ```text
 CAPTURED
@@ -32,240 +32,240 @@ PARALLEL_LAB
 REJECTED
 ```
 
-## 2. Backlog Groups
+## 2. Backlog 分组
 
-### EV-A: Selection and Operating Context
+### EV-A：Selection and Operating Context
 
-Problem:
+问题：
 
-Full selection, portfolio, priority, and automatic Selection-to-Content Handoff are not part of the current MVP, but the content system must not lose upstream business context.
+完整选品、Portfolio、Priority 和自动 Selection-to-Content Handoff 不属于当前 MVP，但内容系统不能丢失上游业务上下文。
 
-MVP Handling:
+MVP 当前处理方式：
 
-Operators manually enter Selection-to-Content Handoff and optional store/account context.
+运营人工录入 Selection-to-Content Handoff 和可选 store/account context。
 
-Observed Evidence:
+已观察到的证据：
 
-Repository currently has documentation only. No product pilots have run.
+仓库当前只有文档，没有商品 Pilot 运行记录。
 
-Revisit Triggers:
+重新评审触发条件：
 
-- Multiple products compete for the same content resources.
-- Operators repeatedly ask the system to decide which product should enter content work.
-- Manual handoff becomes inconsistent or incomplete across pilots.
+- 多个商品竞争相同内容资源。
+- 运营反复要求系统决定哪个商品应进入内容阶段。
+- 人工 handoff 在多个 Pilot 中反复不一致或不完整。
 
-Possible Direction:
+可能的演进方向：
 
-Build selection workflow, portfolio review, priority support, and automatic handoff generation after real content pilots expose repeated needs.
+在真实内容 Pilot 暴露重复需求后，再建设 selection workflow、portfolio review、priority support 和 automatic handoff generation。
 
-Status:
-
-CAPTURED
-
-### EV-B: Decision Governance
-
-Problem:
-
-Gate, route hypothesis, override, decision authority, and experiment contract are important, but full governance can overwhelm the Walking Skeleton.
-
-MVP Handling:
-
-Use human review, status, decision note, route hypothesis text, and `test_question`.
-
-Observed Evidence:
-
-No current implementation. Prior design identified Gate and Route as important but unvalidated at field depth.
-
-Revisit Triggers:
-
-- Projects repeatedly stop or rework for the same reason.
-- Reviewers disagree on approval authority.
-- `UNKNOWN` route or route changes become common.
-- Content goes live and requires comparison against a pre-declared experiment question.
-
-Possible Direction:
-
-Evolve from Review records into Gate, Route Hypothesis, Override, and Experiment Contract models only after repeated pilot evidence.
-
-Status:
+状态：
 
 CAPTURED
 
-### EV-C: Product Knowledge and Evidence Governance
+### EV-B：Decision Governance
 
-Problem:
+问题：
 
-Product version, sample, batch, snapshot freshness, evidence correction, invalidation, and downstream review can become complex.
+Gate、route hypothesis、override、decision authority 和 experiment contract 很重要，但完整治理机制会压垮当前 Walking Skeleton。
 
-MVP Handling:
+MVP 当前处理方式：
 
-Use Product, ProductVersion, Evidence Lite, provenance, and human review. Do not split Sample or Batch until needed.
+使用 human review、status、decision note、route hypothesis text 和 `test_question`。
 
-Observed Evidence:
+已观察到的证据：
 
-Current audit confirms no Product or Evidence code exists yet.
+当前没有实现。此前设计确认 Gate 和 Route 重要，但字段深度尚未通过真实使用验证。
 
-Revisit Triggers:
+重新评审触发条件：
 
-- Evidence conflicts across supplier versions.
-- A script cites a fact later corrected.
-- Packaging, batch, or sample differences affect claims.
-- Operators cannot tell whether a source applies to the content being produced.
+- 项目因相同原因反复停止或返工。
+- Reviewer 对批准权限产生分歧。
+- `UNKNOWN` route 或 route change 频繁出现。
+- 内容上线后需要对照预先声明的 experiment question。
 
-Possible Direction:
+可能的演进方向：
 
-Introduce Sample, Batch, Evidence Scope, correction workflow, and downstream impact review.
+在反复出现 Pilot 证据后，从 Review records 演进出 Gate、Route Hypothesis、Override 和 Experiment Contract 模型。
 
-Status:
-
-CAPTURED
-
-### EV-D: Market, Compliance and Store Context
-
-Problem:
-
-Market policy, platform rules, store health, channel context, and rule precedence affect content decisions.
-
-MVP Handling:
-
-Use target market, platform, optional store/account context, claims guardrails, and risk notes.
-
-Observed Evidence:
-
-No store, compliance, or channel integration exists in the current repository.
-
-Revisit Triggers:
-
-- Claims risk repeatedly blocks approval.
-- Store or account health changes project feasibility.
-- Multiple markets need different scripts or claims.
-- Manual risk notes fail to prevent unsafe output.
-
-Possible Direction:
-
-Introduce ComplianceProfile, StoreHealthSnapshot, Channel Context, rule precedence, and manual rule library before any automatic enforcement.
-
-Status:
+状态：
 
 CAPTURED
 
-### EV-E: Content Knowledge and Script Intelligence
+### EV-C：Product Knowledge and Evidence Governance
 
-Problem:
+问题：
 
-A complete knowledge platform may eventually be needed for hooks, patterns, rubrics, prompt evaluation, and performance-informed script intelligence.
+Product version、sample、batch、snapshot freshness、evidence correction、invalidation 和 downstream review 可能变复杂。
 
-MVP Handling:
+MVP 当前处理方式：
 
-Use Versioned Content Knowledge Pack as a lightweight logical object.
+使用 Product、ProductVersion、Evidence Lite、provenance 和 human review。不到必要时不拆分 Sample 或 Batch。
 
-Observed Evidence:
+已观察到的证据：
 
-No knowledge directory, UI, search, tags, or approval flow exists.
+当前 audit 确认还没有 Product 或 Evidence 代码。
 
-Revisit Triggers:
+重新评审触发条件：
 
-- Operators need to search or compare rules.
-- Knowledge updates affect many Runs.
-- Prompt quality varies because knowledge versions are unclear.
-- Performance feedback identifies reusable script patterns.
+- Evidence 在不同供应商版本之间发生冲突。
+- Script 引用了后来被更正的 fact。
+- 包装、批次或样品差异影响 claims。
+- 运营无法判断某个来源是否适用于当前内容。
 
-Possible Direction:
+可能的演进方向：
 
-Build knowledge management UI, search, tags, approval, market/category classification, prompt evaluation, and feedback linkage.
+引入 Sample、Batch、Evidence Scope、correction workflow 和 downstream impact review。
 
-Status:
-
-CAPTURED
-
-### EV-F: Reference Intelligence
-
-Problem:
-
-TikTok search, video breakdown, reference scoring, and freshness can improve content decisions, but automatic reference intelligence is not required for WS-1.
-
-MVP Handling:
-
-Use manual references with source, notes, relevance, and citations.
-
-Observed Evidence:
-
-Existing system mapping confirms external tools for TikTok search and video analysis, but no current repository integration.
-
-Revisit Triggers:
-
-- Manual reference entry is too slow.
-- Operators repeatedly use the same search workflow.
-- Reference quality or freshness becomes hard to judge.
-- Content decisions need structured breakdown of hooks, scenes, proof, and format.
-
-Possible Direction:
-
-Add TikTokSearchAdapter, reference media adapter, video breakdown, reference scoring, and freshness tracking.
-
-Status:
+状态：
 
 CAPTURED
 
-### EV-G: Generation Orchestration
+### EV-D：Market, Compliance and Store Context
 
-Problem:
+问题：
 
-Full generation requires plans, batches, jobs, provider adapters, workers, queues, cost control, review, and artifacts. This is outside the main MVP but valuable to validate independently.
+市场政策、平台规则、店铺健康、渠道上下文和规则优先级会影响内容决策。
 
-MVP Handling:
+MVP 当前处理方式：
 
-Main system exports Generation-ready Owned Content Production Pack only.
+使用 target market、platform、可选 store/account context、claims guardrails 和 risk notes。
 
-Observed Evidence:
+已观察到的证据：
 
-External Seedance and video creation experiments exist, but current repository has no generation implementation.
+当前仓库没有 store、compliance 或 channel integration。
 
-Revisit Triggers:
+重新评审触发条件：
 
-- Production team can repeatedly consume exported packs.
-- Manual handoff to generation becomes the bottleneck.
-- Parallel Lab proves provider speed, cost, success rate, and output quality.
-- Human review needs to compare rendered artifacts with approved packs.
+- Claims risk 反复阻塞批准。
+- Store 或 account health 改变项目可行性。
+- 多市场需要不同 script 或 claims。
+- 人工 risk notes 无法阻止不安全输出。
 
-Possible Direction:
+可能的演进方向：
 
-Run an isolated Generation Lab for ComfyUI Workflow, API Workflow JSON, Binding Manifest, single-task submission, result collection, Seedance validation, speed, success rate, and resource cost. Later consider GenerationPlan, RenderBatch, RenderJob, Worker, Queue, Provider Adapter, and Artifact models.
+先引入 ComplianceProfile、StoreHealthSnapshot、Channel Context、rule precedence 和 manual rule library，再考虑自动执行。
 
-Status:
+状态：
+
+CAPTURED
+
+### EV-E：Content Knowledge and Script Intelligence
+
+问题：
+
+未来可能需要完整知识平台来管理 hooks、patterns、rubrics、prompt evaluation 和基于表现反馈的 script intelligence。
+
+MVP 当前处理方式：
+
+使用 Versioned Content Knowledge Pack 作为轻量逻辑对象。
+
+已观察到的证据：
+
+当前没有 knowledge directory、UI、search、tags 或 approval flow。
+
+重新评审触发条件：
+
+- 运营需要搜索或比较规则。
+- Knowledge 更新影响多个 Run。
+- Knowledge version 不清导致 Prompt 质量不稳定。
+- 表现反馈识别出可复用的 script patterns。
+
+可能的演进方向：
+
+建设 knowledge management UI、search、tags、approval、market/category classification、prompt evaluation 和 feedback linkage。
+
+状态：
+
+CAPTURED
+
+### EV-F：Reference Intelligence
+
+问题：
+
+TikTok search、video breakdown、reference scoring 和 freshness 可以提升内容决策，但 WS-1 不需要自动 Reference Intelligence。
+
+MVP 当前处理方式：
+
+使用带来源、备注、相关性和引用的 manual references。
+
+已观察到的证据：
+
+Existing system mapping 确认外部工具具备 TikTok search 和 video analysis 能力，但当前仓库没有集成。
+
+重新评审触发条件：
+
+- 手工录入 Reference 太慢。
+- 运营反复使用同一套搜索流程。
+- Reference 质量或 freshness 难以判断。
+- 内容决策需要结构化拆解 hook、scene、proof 和 format。
+
+可能的演进方向：
+
+增加 TikTokSearchAdapter、reference media adapter、video breakdown、reference scoring 和 freshness tracking。
+
+状态：
+
+CAPTURED
+
+### EV-G：Generation Orchestration
+
+问题：
+
+完整生成需要 plans、batches、jobs、provider adapters、workers、queues、cost control、review 和 artifacts。它不属于主 MVP，但值得独立验证。
+
+MVP 当前处理方式：
+
+主系统只导出 Generation-ready Owned Content Production Pack。
+
+已观察到的证据：
+
+外部 Seedance 和 video creation 实验存在，但当前仓库没有 generation implementation。
+
+重新评审触发条件：
+
+- Production team 可以反复消费导出的 packs。
+- 手工交接给 generation 成为瓶颈。
+- Parallel Lab 证明 provider speed、cost、success rate 和 output quality。
+- Human review 需要比较 rendered artifacts 与 approved packs。
+
+可能的演进方向：
+
+运行独立 Generation Lab，验证 ComfyUI Workflow、API Workflow JSON、Binding Manifest、single-task submission、result collection、Seedance validation、speed、success rate 和 resource cost。之后再考虑 GenerationPlan、RenderBatch、RenderJob、Worker、Queue、Provider Adapter 和 Artifact 模型。
+
+状态：
 
 PARALLEL_LAB
 
-### EV-H: Feedback, Learning and Automation
+### EV-H：Feedback, Learning and Automation
 
-Problem:
+问题：
 
-Publication, performance feedback, business experiment learning, route learning, agent assistance, and Platform Core extraction belong after real repeated use.
+Publication、performance feedback、business experiment learning、route learning、agent assistance 和 Platform Core extraction 应在真实重复使用之后再进入。
 
-MVP Handling:
+MVP 当前处理方式：
 
-Record the test question, approved output, citations, and review status. Do not implement publishing, analytics, agent runtime, or Platform Core.
+记录 test question、approved output、citations 和 review status。不实现 publishing、analytics、agent runtime 或 Platform Core。
 
-Observed Evidence:
+已观察到的证据：
 
-No publishing, feedback, agent, or Platform Core code exists.
+当前没有 publishing、feedback、agent 或 Platform Core 代码。
 
-Revisit Triggers:
+重新评审触发条件：
 
-- Approved packs are published and performance data becomes available.
-- Operators need to compare concept outcomes.
-- Fixed workflows become repetitive enough for reliable automation.
-- The same mechanism repeats in at least two real modules and three product pilots.
+- Approved packs 被发布，且 performance data 可用。
+- 运营需要比较 concept outcomes。
+- Fixed workflows 重复到足以可靠自动化。
+- 同一机制至少在两个真实模块中重复，并经过三个商品 Pilot 验证。
 
-Possible Direction:
+可能的演进方向：
 
-Add performance snapshots, business learning, route learning, controlled automation, and eventually Platform Core extracted from validated repetition.
+增加 performance snapshots、business learning、route learning、controlled automation，并最终从已验证重复中抽取 Platform Core。
 
-Status:
+状态：
 
 CAPTURED
 
-## 3. Historical EV Mapping
+## 3. 历史 EV 映射
 
 | Prior EV | New Group |
 |---|---|
@@ -289,10 +289,10 @@ CAPTURED
 | EV-018 Snapshot and Evidence Correction | EV-C |
 | EV-019 Business Rule Discovery from Real Usage | EV-H |
 
-## 4. Backlog Use Rules
+## 4. Backlog 使用规则
 
-- Do not create code because a backlog item exists.
-- Do not create empty directories for future capabilities.
-- Revisit Trigger must be supported by real cases.
-- First collect evidence, then update the relevant authority document or ADR.
-- Do not write complete future schemas in the backlog.
+- 不因为 backlog item 存在就创建代码。
+- 不为未来能力创建空目录。
+- Revisit Trigger 必须由真实案例支撑。
+- 先收集证据，再更新相关权威文档或 ADR。
+- 不在 Backlog 中编写完整未来 Schema。

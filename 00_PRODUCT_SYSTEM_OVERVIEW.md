@@ -9,71 +9,73 @@ last_updated: 2026-07-22
 change_policy: ADR_REQUIRED_AFTER_APPROVAL
 ---
 
-# Product System Overview
+# 产品与系统总览
 
-## 1. Document Responsibility
+## 1. 文档职责
 
-This is the single product and system overview for TikTok Video Intelligence Workbench.
+本文档是 TikTok Video Intelligence Workbench 唯一的产品与系统总览。
 
-It defines product position, role boundaries, full business value chain, current MVP boundary, dual-track operating model, non-goals, and product principles.
+本文档定义产品定位、角色边界、完整业务价值链、当前 MVP 边界、双轨推进模型、明确不做的事项和产品原则。
 
-It does not define detailed domain fields, database schema, API routes, page layouts, prompts, workflows, or future capability schemas. Those belong to:
+本文档不定义详细领域字段、数据库 Schema、API 路由、页面布局、Prompt、Workflow 或未来能力 Schema。相关内容分别由以下文档承载：
 
-- [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) for the current MVP chain.
-- [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md) for current domain concepts.
-- [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md) for technical architecture.
-- [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md) for deferred long-term capabilities.
-- [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md) for reuse evidence.
-- [architecture/ADR_LOG.md](architecture/ADR_LOG.md) for decision history.
+- [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)：当前 MVP 业务链。
+- [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)：当前领域概念。
+- [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)：技术架构。
+- [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)：延期的长期能力。
+- [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)：既有系统复用证据。
+- [architecture/ADR_LOG.md](architecture/ADR_LOG.md)：决策历史。
 
-## 2. Product Position
+## 2. 产品定位
 
-Product name:
+产品名称：
 
 ```text
 TikTok Video Intelligence Workbench
 ```
 
-Formal product position:
+正式产品定位：
 
 ```text
 AI-assisted Content Decision Workspace
 AI 辅助内容决策与剧本工作台
 ```
 
-The product helps operators transform upstream product and business context, product evidence, content knowledge, and reference content into an explainable, human-reviewed, executable content production package.
+本产品帮助运营人员将上游商品与业务上下文、商品 Evidence、内容知识和 Reference 转换成可解释、经过 Human Review（人工审核）、可执行的内容生产包。
 
-The current MVP value endpoint is:
+当前 MVP 的价值终点是：
 
 ```text
 Generation-ready Owned Content Production Pack
 ```
 
-Current users:
+即生成就绪的自有内容生产包，可继续交给实拍或后续生成环节。
 
-- Project owner.
-- TikTok operator.
-- Product owner.
-- Content review owner.
+当前用户：
 
-Current business pain:
+- 项目负责人。
+- TikTok 运营。
+- 商品负责人。
+- 内容审核负责人。
 
-- Product, evidence, reference, script knowledge, and generation handoff are scattered.
-- Operators can generate drafts, but cannot reliably explain why a concept was selected.
-- AI outputs often lack source traceability and human approval boundaries.
-- Product owners can be misled into thinking they must first design or build a complete platform before validating end-to-end value.
+当前业务痛点：
 
-Current product value:
+- 商品、Evidence、Reference、剧本知识和生成交接分散在不同位置。
+- 运营可以生成草稿，但难以解释为什么选择某个 Creative Concept。
+- AI 输出经常缺少来源可追溯性和人工批准边界。
+- 项目负责人容易误以为必须先设计或实现完整平台，才能验证端到端价值。
 
-- Convert one product and one operating context into content decisions that can be reviewed.
-- Preserve the reason why a product entered content work.
-- Keep evidence and reference citations visible.
-- Treat AI output as draft until human approval.
-- Export a package that can continue into real shooting or future generation work.
+当前产品价值：
 
-## 3. Role Boundary
+- 将一个商品和一个运营上下文转换成可审核的内容决策。
+- 保留商品进入内容阶段的原因。
+- 显示 Evidence 和 Reference 引用。
+- AI 输出默认是 Draft（草稿），必须经过人工批准。
+- 导出可继续进入实拍或未来生成工作的内容生产包。
 
-The project owner's current role is:
+## 3. 角色边界
+
+项目负责人当前角色是：
 
 ```text
 AI Product Manager
@@ -81,41 +83,43 @@ AI Product Manager
 Business System Designer
 ```
 
-Core responsibilities:
+即 AI 产品经理 + 业务系统设计者。
 
-- Understand the real business.
-- Define the business problem.
-- Clarify inputs, outputs, and human judgment points.
-- Express business knowledge as explainable and verifiable system behavior.
-- Define acceptance examples.
-- Validate with real products.
-- Decide the next priority after review.
+核心职责：
 
-The project owner does not need to personally complete:
+- 理解真实业务。
+- 定义业务问题。
+- 明确输入、输出和人工判断点。
+- 将业务认知表达成可解释、可验证的系统行为。
+- 定义验收样例。
+- 使用真实商品验证。
+- 在评审后决定下一轮优先级。
 
-- A generic platform core.
-- All backend and frontend code.
-- All AI workflows.
-- A complete video generation platform.
-- A global compliance platform.
-- A selection platform.
-- Publication and performance feedback systems.
+项目负责人不需要独自完成：
 
-Developers are responsible for:
+- 通用平台核心。
+- 全部后端和前端代码。
+- 全部 AI Workflow。
+- 完整视频生成平台。
+- 全球合规平台。
+- 选品平台。
+- 发布和表现反馈系统。
 
-- Schema.
-- API.
-- UI.
-- Migration.
-- Adapter.
-- Test.
-- Deployment.
+开发者负责：
 
-Architecture review happens by real slice. It does not require complete abstraction before the first product pilot.
+- Schema。
+- API。
+- UI。
+- Migration。
+- Adapter。
+- Test。
+- Deployment。
 
-## 4. Full Business Value Chain
+架构评审按真实切片进行，不要求在第一个商品 Pilot 前完成所有抽象。
 
-Long-term business chain:
+## 4. 完整业务价值链
+
+长期业务链：
 
 ```text
 商品机会
@@ -131,11 +135,11 @@ Long-term business chain:
 → Business Learning
 ```
 
-This chain is the business map, not the implementation order.
+这条链是业务地图，不是实施顺序。
 
-## 5. Current MVP Boundary
+## 5. 当前 MVP 边界
 
-The current MVP boundary is:
+当前 MVP 边界是：
 
 ```text
 Selection-to-Content Handoff
@@ -151,104 +155,104 @@ Selection-to-Content Handoff
 → Generation-ready Owned Content Production Pack
 ```
 
-The repository is currently in product and architecture redesign. It is not an iteration of an existing application.
+当前仓库处于产品与架构重构阶段，不是已有应用的迭代阶段。
 
-Confirmed current facts:
+已确认的当前事实：
 
-- No business code exists in this repository.
-- No backend exists.
-- No frontend exists.
-- No database exists.
-- No Product Workspace exists.
-- No Reference Workspace exists.
-- No Creative / Script module exists.
-- No Generation module exists.
-- No Platform Core code exists.
+- 本仓库没有业务代码。
+- 没有 backend。
+- 没有 frontend。
+- 没有 database。
+- 没有 Product Workspace。
+- 没有 Reference Workspace。
+- 没有 Creative / Script 模块。
+- 没有 Generation 模块。
+- 没有 Platform Core 代码。
 
-The current implementation fact source is [working/CURRENT_IMPLEMENTATION_AUDIT.md](working/CURRENT_IMPLEMENTATION_AUDIT.md). Working files are not formal authority, but this audit is retained as evidence of repository state.
+当前实现事实来源是 [working/CURRENT_IMPLEMENTATION_AUDIT.md](working/CURRENT_IMPLEMENTATION_AUDIT.md)。Working 文件不是正式权威来源，但该审计文件作为仓库状态证据保留。
 
-## 6. Dual-track Model
+## 6. 双轨模型
 
-Track A:
+Track A：
 
 ```text
 Walking Skeleton MVP
 ```
 
-Track A validates the thinnest real end-to-end chain from upstream handoff to generation-ready package.
+Track A 验证从上游交接到生成就绪内容包的最薄真实端到端链路。
 
-Track B:
+Track B：
 
 ```text
 Evolution Backlog / Parallel Lab
 ```
 
-Track B captures long-term capabilities and independent generation experiments. Track B does not constitute current implementation authorization.
+Track B 记录长期能力和独立生成实验。Track B 不构成当前实施授权。
 
-The current Walking Skeleton is defined in [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md). Deferred capabilities are defined in [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md).
+当前最小贯通骨架定义在 [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)。延期能力定义在 [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)。
 
-## 7. Explicit Non-goals
+## 7. 明确不做的事项
 
-The current MVP is not:
+当前 MVP 不是：
 
-- A complete selection platform.
-- A pure product knowledge base.
-- Agent OS.
-- A generic workflow platform.
-- A Linux-kernel-style platform.
-- A video batch generation platform.
-- An automatic publishing platform.
-- A complete growth feedback loop.
-- A multi-tenant SaaS product.
+- 完整选品平台。
+- 纯商品知识库。
+- Agent OS。
+- 通用 Workflow 平台。
+- Linux-kernel-style 平台。
+- 视频批量生成平台。
+- 自动发布平台。
+- 完整增长反馈闭环。
+- 多租户 SaaS 产品。
 
-Current work does not implement:
+当前工作不实现：
 
-- Full Gate engine.
-- Portfolio management.
-- Priority algorithm.
-- Experiment platform.
-- Global compliance engine.
-- Store health sync.
-- Generation orchestration.
-- Multi-agent runtime.
-- Microservices.
+- 完整 Gate engine。
+- Portfolio management。
+- Priority algorithm。
+- Experiment platform。
+- 全球合规引擎。
+- Store health sync。
+- Generation orchestration。
+- Multi-agent runtime。
+- Microservices。
 
-## 8. Product Principles
+## 8. 产品原则
 
-1. Real business is more important than theoretical completeness.
-2. Human judgment is better than fake automation.
-3. Evidence and Reference must be traceable.
-4. AI output is draft by default.
-5. Approved content must not be silently overwritten.
-6. End-to-end value is more important than single-module completeness.
-7. Release may skip upstream modules, but must not lose required upstream outputs.
-8. Selection-to-Content Handoff is the current MVP input.
-9. Content Knowledge Pack is a lightweight current MVP capability.
-10. Manual Reference is acceptable in the first version.
-11. Owned Content is the current MVP route.
-12. Generation-ready Pack is the current MVP output endpoint.
-13. Full Generation Orchestration is a future capability.
-14. ComfyUI / Seedance work may proceed only as Parallel Lab.
-15. Do not build Platform Core before repeated real needs appear.
-16. Do not build Agent OS first.
-17. Do not split microservices first.
-18. Do not build complete Gate, Priority, Portfolio, or Experiment first.
-19. Stable shared mechanisms are extracted only from real repetition.
+1. 真实业务优于理论完整性。
+2. 人工判断优于虚假自动化。
+3. Evidence 和 Reference 必须可追溯。
+4. AI 输出默认是 Draft。
+5. Approved 内容不得被静默覆盖。
+6. 端到端价值优于单模块完备。
+7. Release 可以跳过上游模块，但不能丢失必要上游输出。
+8. Selection-to-Content Handoff 是当前 MVP 输入。
+9. Content Knowledge Pack 是当前 MVP 的轻量能力。
+10. Manual Reference 可以作为第一版方案。
+11. Owned Content 是当前 MVP 路线。
+12. Generation-ready Pack 是当前 MVP 输出终点。
+13. 完整 Generation Orchestration 是未来能力。
+14. ComfyUI / Seedance 工作只能作为 Parallel Lab 推进。
+15. 不在真实重复需求出现前建设 Platform Core。
+16. 不先建设 Agent OS。
+17. 不先拆分 microservices。
+18. 不先建设完整 Gate、Priority、Portfolio 或 Experiment。
+19. 稳定共享机制只能从真实重复中抽取。
 
-## 9. Implementation Authorization
+## 9. 实施授权
 
-All formal product and architecture documents currently set:
+所有正式产品与架构文档当前均设置：
 
 ```text
 implementation_allowed: false
 ```
 
-This documentation consolidation does not authorize business code.
+本次文档收敛不授权业务代码。
 
-After human review approves [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md), coding work must be authorized through a single future working file:
+[01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) 通过人工评审后，编码工作必须通过未来唯一的 working 文件授权：
 
 ```text
 working/ACTIVE_ITERATION.md
 ```
 
-That file does not exist after this consolidation.
+本次收敛后该文件不存在。
