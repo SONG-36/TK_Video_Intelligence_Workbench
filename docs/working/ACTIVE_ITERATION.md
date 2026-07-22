@@ -311,3 +311,39 @@ Scope compliance must explicitly answer:
 Did this task stay within WS-0 + WS-1 car vacuum cleaner Walking Skeleton?
 Did this task avoid Platform Kernel, Gate Engine, Agent Runtime, Workflow Engine, TikTok Search, full Knowledge Platform, and Generation Orchestration?
 ```
+
+## 14. Iteration Task Ledger and Owner Review Rules
+
+This ledger tracks coding steps under this active iteration.
+
+It is not a backlog expansion mechanism.
+
+New steps must stay within WS-0 + WS-1 car vacuum cleaner Walking Skeleton.
+
+Each coding step still requires a separate human instruction before execution.
+
+| Step | Status | Goal | Allowed Scope | Validation | Owner Review Focus | Notes |
+|---|---|---|---|---|---|---|
+| Step 0 | PLANNED | Establish minimum backend foundation covering WS-0 domain objects and validation tests. | Backend foundation only for ContentProject, OperatingContextSnapshot, Product Lite, ProductVersion Lite, and Evidence Lite. | Documentation checks plus scoped validation tests authorized by the Step 0 instruction. | Domain semantics, ProductVersion Lite boundary, Evidence binding, validation rules, and tests. | Must not start WS-1 behavior. |
+| Step 1 | NOT_STARTED | Establish WS-0 thin API or service interface. | Thin interface for creating and inspecting WS-0 project context only. | Step 1 checks authorized after Step 0 owner review. | Whether the interface preserves handoff context, ProductVersion Lite, Evidence scope, and reviewable errors. | Requires Step 0 review before starting. |
+| Step 2 | NOT_STARTED | Add Knowledge Pack v0.1 and Manual Reference input boundaries. | WS-1 begins with versioned Knowledge Pack input and manual Reference entry. | Scoped tests for Knowledge Pack versioning and Reference traceability. | Knowledge Pack version recording, manual Reference traceability, and no full knowledge platform. | No TikTok Search. |
+| Step 3 | NOT_STARTED | Generate 3 CreativeConcept Drafts and allow human selection or editing of one. | Concept Draft generation and human selection/edit boundary only. | Tests or fixtures proving three Drafts, traceable inputs, and selected Concept state. | AI Draft status, Evidence and Reference citations, and human selection semantics. | No Agent Runtime or Workflow Engine. |
+| Step 4 | NOT_STARTED | Generate ScriptPack Draft, Human Review, Markdown export, and JSON export. | ScriptPack Draft, Review decision, and export contract for the pilot Production Pack. | Export validation for Markdown and JSON plus review status checks. | Human approval boundary, export traceability, risk notes, and final review status. | No GenerationPlan, RenderBatch, RenderJob, ComfyUI, or Seedance. |
+
+Owner Review Rules:
+
+- Owner must deeply review business semantics, domain rules, schemas, validation, tests, and export traceability.
+- Owner does not need to understand every line of engineering boilerplate before allowing the next step.
+- Core business rules requiring owner review:
+  - Evidence must bind to ProductVersion Lite.
+  - Evidence is source material, not automatically confirmed Fact.
+  - AI outputs default to Draft.
+  - Human Review is required before approval.
+  - Manual Reference must remain traceable.
+  - Knowledge Pack version must be recorded by AI runs.
+  - Export must preserve Evidence, Reference, Knowledge Pack version, AI Draft status, and final review status.
+- Each coding step report must identify:
+  - Business-core files requiring owner review.
+  - Engineering-boilerplate files that only need sanity review.
+  - Tests that protect core business rules.
+  - Known unimplemented rules.
