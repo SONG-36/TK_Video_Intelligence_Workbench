@@ -2,7 +2,7 @@
 document_type: mvp_walking_skeleton
 project: "TikTok Video Intelligence Workbench"
 baseline_version: "0.4"
-status: DRAFT_FOR_REVIEW
+status: BASELINE_APPROVED
 implementation_allowed: false
 authority: LEVEL_2_CURRENT_MVP
 last_updated: 2026-07-22
