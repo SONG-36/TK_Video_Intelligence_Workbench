@@ -4,93 +4,111 @@
 
 This is a design-first and documentation-first repository.
 
-Current project constraints:
+Current constraints:
 
-- `implementation_allowed: false` remains in effect.
-- Business code may only be created when a formal Scope or Plan document explicitly enables implementation and has a clear `implementation_scope`.
-- Do not create backend, frontend, domain, kernel, skills, agents, workflows, deploy, or similar implementation directories.
+- `implementation_allowed: false` remains in effect across all formal product and architecture documents.
+- Business code is not authorized.
+- Do not create backend, frontend, deploy, database, domain, kernel, skills, agents, workflows, prompt, knowledge pack, generation, or similar implementation directories unless a future approved `working/ACTIVE_ITERATION.md` explicitly authorizes the task.
 - Repository documents are the formal source of truth.
+- Working documents are temporary materials and do not become authority sources.
+- Archive documents are historical only.
 
-Long-term Roadmap, Business Process, and Evolution Backlog documents do not automatically authorize implementation.
+Current state:
 
-Current allowed implementation scope:
-
-- `RELEASE_1A_MVP_ONLY`, only as defined by [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) and [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md).
-
-Detailed document rules live in [governance/DOCUMENT_STANDARD.md](governance/DOCUMENT_STANDARD.md).
+- No business code exists.
+- No backend exists.
+- No frontend exists.
+- No database exists.
+- No Product Workspace exists.
+- No Reference Workspace exists.
+- No Creative / Script module exists.
+- No Generation module exists.
+- No Platform Core code exists.
 
 ## 2. Canonical Documents
 
-Canonical documents, in authority order:
+Formal product and architecture documents are fixed to:
 
-1. [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md)
-2. [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md)
-3. [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md)
-4. [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
-5. [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md)
-6. [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md)
-7. [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md)
-8. [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md)
-9. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
-10. [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md)
-11. [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md)
-12. [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md)
-13. [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md)
-14. [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md)
-15. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+1. [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
+2. [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
+3. [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
+4. [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
+5. [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)
+6. [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)
+7. [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
 
-Files under `archive/` are not current authority sources.
-Files under `working/` are not formal baselines.
-When formal documents conflict with archived files, formal documents win.
+Do not create additional formal numbered product or architecture documents without explicit human approval.
 
 ## 3. Required Reading Before Changes
 
-Before modifying documents, read:
+Before modifying formal documents, read:
 
 - [AGENTS.md](AGENTS.md)
 - [DOCUMENT_MAP.md](DOCUMENT_MAP.md)
-- [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md)
-- The directly affected files
-- [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+- [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
+- The directly affected formal document.
+- [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
 
-Before implementation work, also read [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md), [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md), [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md), [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md), [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md), and [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md).
+Before any future implementation work, also read:
 
-## 4. Incremental Editing Rules
+- [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
+- [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
+- [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
+- [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)
+- The approved `working/ACTIVE_ITERATION.md`
+
+If `working/ACTIVE_ITERATION.md` does not exist, business code is not authorized.
+
+## 4. Documentation Growth Rules
+
+1. Formal product and architecture documents are fixed to 00-05 plus `architecture/ADR_LOG.md`.
+2. Do not create new formal numbered documents without explicit human approval.
+3. Phase, Slice, and Iteration plans belong in `working/ACTIVE_ITERATION.md`.
+4. Only one `working/ACTIVE_ITERATION.md` may exist at a time.
+5. Working documents do not constitute authority sources.
+6. New decisions should update existing authority documents first.
+7. Git history is the default historical archive.
+8. Do not create code directories because a future capability exists in the backlog.
+9. All business code must be authorized by an approved active iteration.
+
+## 5. Incremental Editing Rules
 
 - Make incremental edits only.
 - Do not rewrite the document system because of a local decision.
-- Do not delete OPEN QUESTIONS.
+- Do not delete open questions unless the question is resolved by a new authority decision.
 - Do not write inferred fields as frozen schemas.
 - Do not modify documents without practical impact.
 - When changing upper-level principles, check lower-level consistency.
 - When changing lower-level design, do not bypass upper-level boundaries.
-- Do not change Platform Kernel five-mechanism boundaries unless the kernel itself has materially changed.
+- Do not turn Platform Core observation dimensions into an implementation requirement.
 
-## 5. Markdown and Mermaid Rules
+## 6. Markdown and Mermaid Rules
 
 - Each formal design document must have exactly one H1.
 - Sections must start at H2 after the document H1.
 - Keep Mermaid diagrams single-topic.
 - Avoid very wide diagrams, crossing-heavy diagrams, and long node text.
 - Mermaid code fences must be closed.
-- Do not place unreadable long paragraphs inside Mermaid nodes.
 - Prefer relative Markdown links for file references.
 
-## 6. Git Rules
+## 7. Git Rules
 
 - Do not automatically run `git commit`, `git push`, `git rebase`, or `git reset`.
+- Do not run `git add`.
 - Do not overwrite user changes.
 - Check `git status` before and after modifications.
 - Use `git mv` when moving tracked files.
+- Do not modify existing files under `archive/`.
 - On completion, report `git diff --stat` and `git status --short`.
 
-## 7. Completion Report
+## 8. Completion Report
 
 Every completed task must report:
 
 - Modified files.
 - Created files.
 - Moved files.
+- Deleted files.
 - Reason for each change.
 - Files reviewed but not modified.
 - Validation commands and results.

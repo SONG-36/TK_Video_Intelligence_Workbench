@@ -1,6 +1,20 @@
 # DOCUMENT_STANDARD
 
-## 1. Frontmatter
+## 1. Formal Document Set
+
+Formal numbered product and architecture documents are limited to:
+
+- [../00_PRODUCT_SYSTEM_OVERVIEW.md](../00_PRODUCT_SYSTEM_OVERVIEW.md)
+- [../01_MVP_WALKING_SKELETON.md](../01_MVP_WALKING_SKELETON.md)
+- [../02_DOMAIN_MODEL.md](../02_DOMAIN_MODEL.md)
+- [../03_TECHNICAL_ARCHITECTURE.md](../03_TECHNICAL_ARCHITECTURE.md)
+- [../04_EVOLUTION_BACKLOG.md](../04_EVOLUTION_BACKLOG.md)
+- [../05_EXISTING_SYSTEM_MAPPING.md](../05_EXISTING_SYSTEM_MAPPING.md)
+- [../architecture/ADR_LOG.md](../architecture/ADR_LOG.md)
+
+Do not create duplicate Scope, Phase, Slice, Plan, or Roadmap documents as new formal numbered documents.
+
+## 2. Frontmatter
 
 Formal design documents need these frontmatter fields:
 
@@ -20,17 +34,15 @@ Optional fields:
 - `canonical`
 - `implementation_scope`
 
-When implementation is explicitly enabled, the document must include a clear `implementation_scope`.
+Current post-consolidation rule:
 
-Current allowed `implementation_scope` values:
+- No formal product or architecture document may set `implementation_allowed` to `true`.
+- Any future change that sets `implementation_allowed` to `true` requires explicit human approval and a clear `implementation_scope`.
+- Long-term backlog documents never constitute implementation authorization.
 
-- `RELEASE_1A_MVP_ONLY`
+## 3. Status Enum
 
-Long-term Backlog documents never constitute implementation authorization.
-
-## 2. Status Enum
-
-Allowed status values:
+Allowed document status values:
 
 - `DRAFT_FOR_DISCUSSION`
 - `DRAFT_FOR_REVIEW`
@@ -39,58 +51,42 @@ Allowed status values:
 - `SUPERSEDED`
 - `ARCHIVED`
 
-## 3. Terminology
+Current formal documents are `DRAFT_FOR_REVIEW` until human review completes.
 
-- Release = business delivery version.
-- Phase = internal design or implementation stage.
-- canonical = current formal authority document.
-- archive = historical trace, not a current authority source.
-- working = temporary draft area.
+## 4. Authority Rules
 
-## 4. Change Rules
+- Product position is detailed in the product overview.
+- MVP flow is detailed in the Walking Skeleton document.
+- Domain objects are detailed in the domain model.
+- Technical architecture is detailed in the technical architecture document.
+- Long-term capabilities are detailed in the evolution backlog.
+- Existing system reuse is detailed in existing system mapping.
+- Architecture decisions are recorded in ADR Log.
+- Working files do not use formal authority.
+- Git history is the default document history.
 
-### Principle Change
+## 5. Change Rules
 
-Changes top-level system purpose, design principles, or authority rules.
+| Change Type | Update First |
+|---|---|
+| Product position or role boundary | [../00_PRODUCT_SYSTEM_OVERVIEW.md](../00_PRODUCT_SYSTEM_OVERVIEW.md) |
+| Current MVP flow or acceptance | [../01_MVP_WALKING_SKELETON.md](../01_MVP_WALKING_SKELETON.md) |
+| Domain object or boundary | [../02_DOMAIN_MODEL.md](../02_DOMAIN_MODEL.md) |
+| Technical architecture or adapter boundary | [../03_TECHNICAL_ARCHITECTURE.md](../03_TECHNICAL_ARCHITECTURE.md) |
+| Deferred capability | [../04_EVOLUTION_BACKLOG.md](../04_EVOLUTION_BACKLOG.md) |
+| Existing system reuse | [../05_EXISTING_SYSTEM_MAPPING.md](../05_EXISTING_SYSTEM_MAPPING.md) |
+| Major architecture decision | [../architecture/ADR_LOG.md](../architecture/ADR_LOG.md) |
 
-Check:
+## 6. Implementation Authorization
 
-- [../00_MASTER_DESIGN.md](../00_MASTER_DESIGN.md)
-- [../01_CAPABILITY_ROADMAP.md](../01_CAPABILITY_ROADMAP.md)
-- [../architecture/02_ARCHITECTURE_DECISIONS.md](../architecture/02_ARCHITECTURE_DECISIONS.md)
+Implementation changes are not allowed while formal documents set `implementation_allowed: false`.
 
-### Boundary Change
+Before any future implementation change:
 
-Changes what a release includes, excludes, accepts, or outputs.
+- Human review must approve the relevant MVP boundary.
+- A single `working/ACTIVE_ITERATION.md` must exist.
+- The active iteration must define implementation scope.
+- The active iteration must define allowed file and directory creation.
+- The active iteration must define validation commands.
 
-Check:
-
-- [../02_DELIVERY_RELEASES.md](../02_DELIVERY_RELEASES.md)
-- [../03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](../03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
-- [../04_RELEASE_1_BUSINESS_PROCESS.md](../04_RELEASE_1_BUSINESS_PROCESS.md)
-
-### Business Process Change
-
-Changes stages, gates, exits, route changes, or human decision flow.
-
-Check:
-
-- [../03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](../03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
-- [../04_RELEASE_1_BUSINESS_PROCESS.md](../04_RELEASE_1_BUSINESS_PROCESS.md)
-- [../05_RELEASE_1_VERTICAL_SLICES.md](../05_RELEASE_1_VERTICAL_SLICES.md)
-
-### Architecture Decision Change
-
-Changes architecture boundaries, accepted ADRs, or Platform Kernel responsibilities.
-
-Check:
-
-- [../00_MASTER_DESIGN.md](../00_MASTER_DESIGN.md)
-- [../architecture/01_PLATFORM_ARCHITECTURE.md](../architecture/01_PLATFORM_ARCHITECTURE.md)
-- [../architecture/02_ARCHITECTURE_DECISIONS.md](../architecture/02_ARCHITECTURE_DECISIONS.md)
-
-### Implementation Change
-
-Implementation changes are not allowed while `implementation_allowed: false`.
-
-Before any future implementation change, confirm the relevant formal Scope or Plan document has approved implementation and a clear `implementation_scope`.
+Backlog entries do not authorize code.

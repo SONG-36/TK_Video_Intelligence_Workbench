@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lightweight documentation checks for the design repository."""
+"""Documentation checks for the consolidated canonical document set."""
 
 from __future__ import annotations
 
@@ -12,6 +12,16 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[2]
 
 FORMAL_DOCS = [
+    "00_PRODUCT_SYSTEM_OVERVIEW.md",
+    "01_MVP_WALKING_SKELETON.md",
+    "02_DOMAIN_MODEL.md",
+    "03_TECHNICAL_ARCHITECTURE.md",
+    "04_EVOLUTION_BACKLOG.md",
+    "05_EXISTING_SYSTEM_MAPPING.md",
+    "architecture/ADR_LOG.md",
+]
+
+OLD_FORMAL_DOCS = [
     "00_MASTER_DESIGN.md",
     "01_CAPABILITY_ROADMAP.md",
     "02_DELIVERY_RELEASES.md",
@@ -49,15 +59,35 @@ ALLOWED_STATUS = {
     "ARCHIVED",
 }
 
-IMPLEMENTATION_TRUE_ALLOWED = {
-    "06_RELEASE_1A_MVP_SCOPE.md",
-    "07_RELEASE_1A_IMPLEMENTATION_PLAN.md",
+REQUIRED_ENTRYPOINT_REFS = {
+    "README.md": [
+        "00_PRODUCT_SYSTEM_OVERVIEW.md",
+        "01_MVP_WALKING_SKELETON.md",
+        "02_DOMAIN_MODEL.md",
+        "03_TECHNICAL_ARCHITECTURE.md",
+        "04_EVOLUTION_BACKLOG.md",
+        "05_EXISTING_SYSTEM_MAPPING.md",
+        "architecture/ADR_LOG.md",
+    ],
+    "AGENTS.md": [
+        "00_PRODUCT_SYSTEM_OVERVIEW.md",
+        "01_MVP_WALKING_SKELETON.md",
+        "02_DOMAIN_MODEL.md",
+        "03_TECHNICAL_ARCHITECTURE.md",
+        "04_EVOLUTION_BACKLOG.md",
+        "05_EXISTING_SYSTEM_MAPPING.md",
+        "architecture/ADR_LOG.md",
+    ],
+    "DOCUMENT_MAP.md": [
+        "00_PRODUCT_SYSTEM_OVERVIEW.md",
+        "01_MVP_WALKING_SKELETON.md",
+        "02_DOMAIN_MODEL.md",
+        "03_TECHNICAL_ARCHITECTURE.md",
+        "04_EVOLUTION_BACKLOG.md",
+        "05_EXISTING_SYSTEM_MAPPING.md",
+        "architecture/ADR_LOG.md",
+    ],
 }
-
-ALLOWED_IMPLEMENTATION_SCOPES = {
-    "RELEASE_1A_MVP_ONLY",
-}
-
 
 failures: list[str] = []
 warnings: list[str] = []
@@ -100,12 +130,73 @@ def parse_frontmatter(text: str) -> dict[str, str]:
     return {}
 
 
-def check_formal_docs_exist() -> None:
+def is_under(path: Path, dirname: str) -> bool:
+    return dirname in path.relative_to(ROOT).parts
+
+
+def markdown_files() -> list[Path]:
+    paths: list[Path] = []
+    for path in ROOT.rglob("*.md"):
+        rel_parts = path.relative_to(ROOT).parts
+        if ".git" in rel_parts or "archive" in rel_parts:
+            continue
+        paths.append(path)
+    return sorted(paths)
+
+
+def strip_code_fences(text: str) -> str:
+    return re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+
+
+def check_formal_set() -> None:
     missing = [doc for doc in FORMAL_DOCS if not (ROOT / doc).is_file()]
     if missing:
-        report_fail(f"formal design documents missing: {', '.join(missing)}")
+        report_fail(f"formal documents missing: {', '.join(missing)}")
     else:
-        report_pass("all formal design documents exist")
+        report_pass("all formal documents exist")
+
+    active_numbered = sorted(
+        str(path.relative_to(ROOT))
+        for path in ROOT.glob("[0-9][0-9]_*.md")
+        if path.is_file()
+    )
+    expected_root = sorted(doc for doc in FORMAL_DOCS if "/" not in doc)
+    if active_numbered == expected_root:
+        report_pass("root formal numbered documents are exactly 00-05")
+    else:
+        report_fail(
+            "unexpected root formal numbered documents: "
+            + ", ".join(active_numbered)
+        )
+
+    architecture_md = sorted(
+        str(path.relative_to(ROOT)) for path in (ROOT / "architecture").glob("*.md")
+    )
+    if architecture_md == ["architecture/ADR_LOG.md"]:
+        report_pass("architecture formal documents are exactly ADR_LOG")
+    else:
+        report_fail(
+            "unexpected architecture documents: "
+            + ", ".join(architecture_md)
+        )
+
+
+def check_old_docs_absent() -> None:
+    present = [doc for doc in OLD_FORMAL_DOCS if (ROOT / doc).exists()]
+    if present:
+        report_fail(f"old formal documents still present: {', '.join(present)}")
+    else:
+        report_pass("old formal documents are absent from active tree")
+
+    disallowed = sorted(
+        str(path.relative_to(ROOT))
+        for pattern in ("06_*.md", "07_*.md", "08_*.md", "09_*.md", "10_*.md", "11_*.md", "12_*.md")
+        for path in ROOT.glob(pattern)
+    )
+    if disallowed:
+        report_fail("disallowed numbered formal files found: " + ", ".join(disallowed))
+    else:
+        report_pass("no disallowed numbered formal files found")
 
 
 def check_h1(path: Path, text: str) -> None:
@@ -120,39 +211,26 @@ def check_h1(path: Path, text: str) -> None:
 def check_fences(path: Path, text: str) -> None:
     rel = path.relative_to(ROOT)
     in_fence = False
-    fence_lang = ""
     fence_start = 0
-    mermaid_unclosed = False
 
     for line_no, line in enumerate(text.splitlines(), 1):
-        match = re.match(r"^\s*```\s*([^`]*)$", line)
-        if not match:
+        if not re.match(r"^\s*```\s*[^`]*$", line):
             continue
         if not in_fence:
             in_fence = True
-            fence_lang = match.group(1).strip().lower()
             fence_start = line_no
         else:
             in_fence = False
-            fence_lang = ""
             fence_start = 0
 
     if in_fence:
         report_fail(f"{rel} has unclosed code fence starting at line {fence_start}")
-        if fence_lang.startswith("mermaid"):
-            mermaid_unclosed = True
     else:
         report_pass(f"{rel} code fences are closed")
-
-    if mermaid_unclosed:
-        report_fail(f"{rel} has an unclosed Mermaid fence")
-    else:
-        report_pass(f"{rel} Mermaid fences are structurally closed")
 
 
 def check_frontmatter(path: Path, text: str) -> None:
     rel = path.relative_to(ROOT)
-    rel_str = str(rel)
     frontmatter = parse_frontmatter(text)
     if not frontmatter:
         report_fail(f"{rel} has no parseable frontmatter")
@@ -170,33 +248,16 @@ def check_frontmatter(path: Path, text: str) -> None:
     else:
         report_fail(f"{rel} status is not allowed: {status or '<missing>'}")
 
-    implementation_allowed = frontmatter.get("implementation_allowed", "").lower()
-    implementation_scope = frontmatter.get("implementation_scope", "")
-    if implementation_allowed == "false":
-        if rel_str == "08_LONG_TERM_EVOLUTION_BACKLOG.md":
-            report_pass(f"{rel} is a non-implementation backlog")
-        elif rel_str in {
-            "09_EXISTING_SYSTEM_MAPPING.md",
-            "10_RELEASE_1A_TECHNICAL_BASELINE.md",
-            "11_RELEASE_1A_DOMAIN_MODEL_LITE.md",
-            "12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md",
-        }:
-            report_pass(f"{rel} is implementation preparation only")
-        else:
-            report_pass(f"{rel} implementation_allowed is false")
-    elif implementation_allowed == "true":
-        if rel_str not in IMPLEMENTATION_TRUE_ALLOWED:
-            report_fail(f"{rel} is not allowed to set implementation_allowed true")
-        elif implementation_scope not in ALLOWED_IMPLEMENTATION_SCOPES:
-            report_fail(f"{rel} has invalid or missing implementation_scope: {implementation_scope or '<missing>'}")
-        else:
-            report_pass(f"{rel} implementation authorization is scoped: {implementation_scope}")
+    impl = frontmatter.get("implementation_allowed", "").lower()
+    if impl == "false":
+        report_pass(f"{rel} implementation_allowed is false")
     else:
-        report_fail(f"{rel} implementation_allowed is neither true nor false")
+        report_fail(f"{rel} implementation_allowed must be false")
 
-
-def strip_code_fences(text: str) -> str:
-    return re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    if frontmatter.get("last_updated") == "2026-07-22":
+        report_pass(f"{rel} last_updated is 2026-07-22")
+    else:
+        report_fail(f"{rel} last_updated is not 2026-07-22")
 
 
 def check_links(path: Path, text: str) -> None:
@@ -227,34 +288,92 @@ def check_links(path: Path, text: str) -> None:
         report_warning(f"{rel} has no relative Markdown links to check")
 
 
-def all_markdown_files_for_links() -> list[Path]:
-    paths = []
-    for path in ROOT.rglob("*.md"):
-        rel_parts = path.relative_to(ROOT).parts
-        if rel_parts[0] in {".git", "archive", "working"}:
+def check_old_references() -> None:
+    old_names = [Path(doc).name for doc in OLD_FORMAL_DOCS]
+    old_paths = OLD_FORMAL_DOCS
+    patterns = sorted(set(old_names + old_paths))
+    offenders: list[str] = []
+
+    for path in markdown_files():
+        rel = str(path.relative_to(ROOT))
+        if rel == "architecture/ADR_LOG.md":
             continue
-        paths.append(path)
-    return sorted(paths)
+        text = read_text(path)
+        for pattern in patterns:
+            if pattern in text:
+                offenders.append(f"{rel}: {pattern}")
 
-
-def check_master_candidates() -> None:
-    candidates = [
-        path
-        for path in ROOT.glob("00_MASTER_DESIGN*.md")
-        if "archive" not in path.parts and "working" not in path.parts
-    ]
-    if candidates == [ROOT / "00_MASTER_DESIGN.md"]:
-        report_pass("root has only one formal 00_MASTER_DESIGN candidate")
+    if offenders:
+        report_fail("old formal document references outside ADR_LOG: " + "; ".join(offenders[:20]))
     else:
-        names = ", ".join(str(path.relative_to(ROOT)) for path in candidates)
-        report_fail(f"root has multiple or unexpected Master Design candidates: {names}")
+        report_pass("old formal document references appear only in ADR_LOG")
+
+
+def check_active_iteration_count() -> None:
+    active = sorted(ROOT.glob("working/ACTIVE_ITERATION*.md"))
+    if len(active) <= 1:
+        report_pass("at most one ACTIVE_ITERATION file exists")
+    else:
+        report_fail(
+            "multiple ACTIVE_ITERATION files found: "
+            + ", ".join(str(path.relative_to(ROOT)) for path in active)
+        )
+
+
+def check_kernel_not_current_implementation() -> None:
+    banned_patterns = [
+        r"Platform Kernel code exists",
+        r"Platform Kernel is implemented",
+        r"Kernel Framework is implemented",
+        r"current MVP implements Platform Kernel",
+        r"current MVP implements Kernel Framework",
+    ]
+    offenders: list[str] = []
+    for doc in FORMAL_DOCS:
+        path = ROOT / doc
+        if not path.exists():
+            continue
+        text = read_text(path)
+        for pattern in banned_patterns:
+            if re.search(pattern, text, flags=re.IGNORECASE):
+                offenders.append(f"{doc}: {pattern}")
+    if offenders:
+        report_fail("formal docs imply Platform Kernel is currently implemented: " + "; ".join(offenders))
+    else:
+        report_pass("formal docs do not describe Platform Kernel as current implementation")
+
+
+def check_entrypoints() -> None:
+    for rel, required_refs in REQUIRED_ENTRYPOINT_REFS.items():
+        path = ROOT / rel
+        if not path.exists():
+            report_fail(f"{rel} missing")
+            continue
+        text = read_text(path)
+        missing = [ref for ref in required_refs if ref not in text]
+        if missing:
+            report_fail(f"{rel} missing new canonical refs: {', '.join(missing)}")
+        else:
+            report_pass(f"{rel} points to new canonical documents")
+
+
+def check_no_implementation_true() -> None:
+    offenders: list[str] = []
+    for path in markdown_files():
+        if "implementation_allowed: true" in read_text(path):
+            offenders.append(str(path.relative_to(ROOT)))
+    if offenders:
+        report_fail("implementation_allowed true found in markdown: " + ", ".join(offenders))
+    else:
+        report_pass("no implementation_allowed true in active markdown")
 
 
 def main() -> int:
     print("Documentation checks")
     print("====================")
 
-    check_formal_docs_exist()
+    check_formal_set()
+    check_old_docs_absent()
 
     for doc in FORMAL_DOCS:
         path = ROOT / doc
@@ -265,10 +384,14 @@ def main() -> int:
         check_fences(path, text)
         check_frontmatter(path, text)
 
-    for path in all_markdown_files_for_links():
+    for path in markdown_files():
         check_links(path, read_text(path))
 
-    check_master_candidates()
+    check_old_references()
+    check_active_iteration_count()
+    check_kernel_not_current_implementation()
+    check_entrypoints()
+    check_no_implementation_true()
 
     print("====================")
     print(f"PASS: {len(passes)}")

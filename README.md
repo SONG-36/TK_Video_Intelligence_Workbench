@@ -1,24 +1,30 @@
 # TikTok Video Intelligence Workbench
 
-This repository is moving from pure design into Release 1A implementation preparation.
+TikTok Video Intelligence Workbench is an AI-assisted Content Decision Workspace for converting selected product context, evidence, content knowledge, and references into a human-reviewed Generation-ready Owned Content Production Pack.
 
-The only allowed implementation scope is Release 1A MVP, and only where a formal Scope or Plan document explicitly enables implementation with `implementation_scope: RELEASE_1A_MVP_ONLY`.
+Current state:
 
-The current product target is Release 1A: Content Decision Workspace MVP.
+- Product and architecture are being consolidated around a Production-intent Walking Skeleton.
+- The repository currently contains no business code.
+- There is no backend, frontend, database, Product Workspace, Reference Workspace, Creative / Script module, Generation module, or Platform Core code.
+- Current formal documents do not authorize business code.
 
-Start here:
+Formal document entry points:
 
-- [DOCUMENT_MAP.md](DOCUMENT_MAP.md) for the formal document map, authority order, and reading sequence.
-- [AGENTS.md](AGENTS.md) for Codex operating rules in this repository.
-- [governance/DOCUMENT_STANDARD.md](governance/DOCUMENT_STANDARD.md) for document status, metadata, and change rules.
-- [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) for the current MVP implementation scope.
-- [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) for implementation preparation and sequencing.
-- [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) for deferred long-term capabilities.
-- [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md) for existing tools and reuse boundaries.
-- [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md) for the minimal technical baseline.
-- [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md) for I1 domain concepts.
-- [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md) for the first implementation slice plan.
+- [DOCUMENT_MAP.md](DOCUMENT_MAP.md)
+- [AGENTS.md](AGENTS.md)
+- [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
+- [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
+- [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
+- [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
+- [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)
+- [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)
+- [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
+- [governance/DOCUMENT_STANDARD.md](governance/DOCUMENT_STANDARD.md)
 
-The canonical Master Design is [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md).
+Development environment pins:
 
-This repository currently contains no business code.
+- Node: `.nvmrc`
+- Python: `.python-version`
+
+Before any coding starts, [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) must pass human review and the active coding task must be defined in one `working/ACTIVE_ITERATION.md`.

@@ -1,146 +1,62 @@
 # DOCUMENT_MAP
 
-## 1. Canonical Master
+## 1. Canonical Authority Order
 
-[00_MASTER_DESIGN.md](00_MASTER_DESIGN.md) is the canonical Master Design.
+Formal product and architecture authority is fixed to:
 
-Archived Master drafts are not current authority sources.
+1. [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
+2. [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
+3. [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
+4. [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
+5. [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md)
+6. [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md)
+7. [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
 
-## 2. Document Authority Order
+Working files are not authority sources. Archive files are historical only.
 
-1. [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md)
-2. [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md)
-3. [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md)
-4. [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
-5. [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md)
-6. [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md)
-7. [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md)
-8. [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md)
-9. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
-10. [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md)
-11. [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md)
-12. [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md)
-13. [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md)
-14. [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md)
-15. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
+## 2. What Each Document Answers
 
-## 3. What Each Document Answers
-
-| Document | Status | Answers |
-|---|---|---|
-| [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md) | BASELINE_CANDIDATE | Why the system exists, what the long-term direction is, what Release 1 covers, and how top-level architecture boundaries work. |
-| [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md) | BASELINE_CANDIDATE | Which long-term capabilities the system needs and how capabilities relate to releases. |
-| [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md) | BASELINE_CANDIDATE | How long-term capabilities are split into delivery releases. |
-| [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md) | BASELINE_CANDIDATE | What Release 1 includes, excludes, accepts as input, and must output. |
-| [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md) | DRAFT_FOR_DISCUSSION | How people move through Release 1 decisions, gates, exits, and route changes. |
-| [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md) | DRAFT_FOR_DISCUSSION | How Release 1 can be split into verifiable vertical slices. |
-| [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) | BASELINE_CANDIDATE | What Release 1A MVP is allowed to implement. |
-| [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) | DRAFT_FOR_REVIEW | How Release 1A implementation preparation and staged delivery should proceed. |
-| [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) | BASELINE_CANDIDATE | Which long-term mechanisms are deferred and what triggers their redesign. |
-| [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md) | BASELINE_CANDIDATE | Which existing tools were found and how they may be reused or wrapped. |
-| [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md) | DRAFT_FOR_REVIEW | Which minimal technical stack, code boundary, local dev scheme, and adapter boundary should guide I1. |
-| [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md) | DRAFT_FOR_REVIEW | Which domain concepts are required for I1 and which are deferred. |
-| [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md) | DRAFT_FOR_REVIEW | What the first Product Workspace implementation slice should include and exclude. |
-| [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md) | BASELINE_CANDIDATE | How the platform architecture supports the business design. |
-| [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md) | BASELINE_CANDIDATE | Which architecture and business-architecture decisions have been accepted or proposed. |
-
-## 4. Reading Order
-
-Read documents in the authority order above unless a task is narrowly scoped.
-
-For Release 1 work, read:
-
-1. [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md)
-2. [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md)
-3. [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md)
-4. [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md)
-5. [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md)
-6. [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md)
-7. [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md)
-8. [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md)
-9. [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md)
-10. [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md)
-11. [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md)
-12. [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md)
-13. [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md)
-14. [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md)
-
-In the current dual-track model:
-
-- [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) defines what to implement now.
-- [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) defines how implementation preparation and staged delivery should proceed.
-- [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md) defines what existing tools were found and how they should be handled.
-- [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md) defines the minimal technical baseline.
-- [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md) defines the I1 domain model boundary.
-- [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md) defines the first implementation slice.
-- [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) records what to improve later and when to revisit it.
-
-## 5. Document Dependencies
-
-```mermaid
-flowchart TB
-    M[00_MASTER_DESIGN.md]
-    C[01_CAPABILITY_ROADMAP.md]
-    D[02_DELIVERY_RELEASES.md]
-    R[03_RELEASE_1_SCOPE_AND_BOUNDARIES.md]
-    BP[04_RELEASE_1_BUSINESS_PROCESS.md]
-    VS[05_RELEASE_1_VERTICAL_SLICES.md]
-    S[06_RELEASE_1A_MVP_SCOPE.md]
-    I[07_RELEASE_1A_IMPLEMENTATION_PLAN.md]
-    E[08_LONG_TERM_EVOLUTION_BACKLOG.md]
-    X[09_EXISTING_SYSTEM_MAPPING.md]
-    T[10_RELEASE_1A_TECHNICAL_BASELINE.md]
-    L[11_RELEASE_1A_DOMAIN_MODEL_LITE.md]
-    P1[12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md]
-    PA[architecture/01_PLATFORM_ARCHITECTURE.md]
-    ADR[architecture/02_ARCHITECTURE_DECISIONS.md]
-
-    M --> C
-    M --> D
-    D --> R
-    R --> S
-    S --> I
-    I --> X
-    I --> T
-    S --> L
-    T --> L
-    L --> P1
-    T --> P1
-    M --> E
-    C --> E
-    D --> E
-    R --> BP
-    BP --> VS
-    M --> PA
-    PA --> ADR
-```
-
-## 6. Change Check Matrix
-
-| Change type | Check these files |
+| Document | Responsibility |
 |---|---|
-| Top-level purpose or principle | [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md), [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md), [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md) |
-| Release sequence or responsibility | [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md), [01_CAPABILITY_ROADMAP.md](01_CAPABILITY_ROADMAP.md), [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md) |
-| Release 1 boundary | [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md), [02_DELIVERY_RELEASES.md](02_DELIVERY_RELEASES.md), [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md) |
-| Release 1A implementation scope | [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md), [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md), [08_LONG_TERM_EVOLUTION_BACKLOG.md](08_LONG_TERM_EVOLUTION_BACKLOG.md) |
-| Existing system reuse | [09_EXISTING_SYSTEM_MAPPING.md](09_EXISTING_SYSTEM_MAPPING.md), [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md), [07_RELEASE_1A_IMPLEMENTATION_PLAN.md](07_RELEASE_1A_IMPLEMENTATION_PLAN.md) |
-| Product Workspace implementation | [12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md](12_PHASE_I1_PRODUCT_WORKSPACE_PLAN.md), [11_RELEASE_1A_DOMAIN_MODEL_LITE.md](11_RELEASE_1A_DOMAIN_MODEL_LITE.md), [10_RELEASE_1A_TECHNICAL_BASELINE.md](10_RELEASE_1A_TECHNICAL_BASELINE.md), [06_RELEASE_1A_MVP_SCOPE.md](06_RELEASE_1A_MVP_SCOPE.md) |
-| Release 1 process | [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md), [03_RELEASE_1_SCOPE_AND_BOUNDARIES.md](03_RELEASE_1_SCOPE_AND_BOUNDARIES.md), [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md) |
-| Vertical slice | [05_RELEASE_1_VERTICAL_SLICES.md](05_RELEASE_1_VERTICAL_SLICES.md), [04_RELEASE_1_BUSINESS_PROCESS.md](04_RELEASE_1_BUSINESS_PROCESS.md), [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md) |
-| Architecture decision | [architecture/02_ARCHITECTURE_DECISIONS.md](architecture/02_ARCHITECTURE_DECISIONS.md), [architecture/01_PLATFORM_ARCHITECTURE.md](architecture/01_PLATFORM_ARCHITECTURE.md), [00_MASTER_DESIGN.md](00_MASTER_DESIGN.md) |
+| [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md) | Product position, role boundary, value chain, current MVP boundary, dual-track model, non-goals, principles. |
+| [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) | Current MVP chain, capability classification, first pilot, acceptance questions, iteration sequence. |
+| [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md) | Current Walking Skeleton domain objects, boundaries, minimal relationships, future-only object list. |
+| [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md) | Technical stack, modular monolith, adapter boundary, AI boundary, Platform Core extraction rule. |
+| [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md) | Deferred long-term capability groups and revisit triggers. |
+| [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md) | Evidence-based mapping of external/sibling systems and adapter reuse boundaries. |
+| [architecture/ADR_LOG.md](architecture/ADR_LOG.md) | Architecture and product-architecture decision history. |
+| [working/CURRENT_IMPLEMENTATION_AUDIT.md](working/CURRENT_IMPLEMENTATION_AUDIT.md) | Current implementation facts from audit; retained as evidence, not formal authority. |
 
-## 7. Working and Archive Areas
+## 3. Reading Order
 
-[working/](working/) is for temporary discussion drafts and is not a formal baseline.
+Use the authority order above.
 
-[archive/](archive/) is for historical designs that have been replaced and is not a current authority source.
+For current MVP review, read:
 
-## 8. Next Design Focus
+1. [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md)
+2. [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md)
+3. [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md)
+4. [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md)
+5. [architecture/ADR_LOG.md](architecture/ADR_LOG.md)
 
-The next design focus areas are:
+For existing system reuse, also read [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md).
 
-- Phase I1 -- Product Workspace Skeleton.
-- Product / ProductVersion / Evidence schema.
-- Local code directory creation.
-- Database migration and tests.
-- Minimal Product Workspace frontend flow.
+For deferred capabilities, read [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md).
+
+## 4. Change Check Matrix
+
+| Change Type | Update First |
+|---|---|
+| Product position or role boundary | [00_PRODUCT_SYSTEM_OVERVIEW.md](00_PRODUCT_SYSTEM_OVERVIEW.md) |
+| Current MVP flow or acceptance | [01_MVP_WALKING_SKELETON.md](01_MVP_WALKING_SKELETON.md) |
+| Domain object or boundary | [02_DOMAIN_MODEL.md](02_DOMAIN_MODEL.md) |
+| Technical stack, adapters, AI, Platform Core rule | [03_TECHNICAL_ARCHITECTURE.md](03_TECHNICAL_ARCHITECTURE.md) |
+| Deferred long-term capability | [04_EVOLUTION_BACKLOG.md](04_EVOLUTION_BACKLOG.md) |
+| External/sibling reuse decision | [05_EXISTING_SYSTEM_MAPPING.md](05_EXISTING_SYSTEM_MAPPING.md) |
+| Major decision or supersession | [architecture/ADR_LOG.md](architecture/ADR_LOG.md) |
+
+## 5. Documentation Growth Rule
+
+Do not create new formal numbered product or architecture documents without explicit human approval.
+
+Phase, slice, and iteration planning belongs in `working/ACTIVE_ITERATION.md` when coding is approved. At most one active iteration file may exist at a time.
