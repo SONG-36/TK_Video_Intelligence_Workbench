@@ -1,14 +1,15 @@
-"""WS-1 input boundary objects.
+"""WS-1 thin domain boundaries.
 
-These objects capture only the versioned Knowledge Pack v0.1 and manual
-Reference intake needed before concept generation. They are not a knowledge
-base platform, reference search system, AI run, or approval workflow.
+These objects capture only the in-memory WS-1 inputs, CreativeConcept Drafts,
+ScriptPack Drafts, and review decisions needed by the walking skeleton. They
+are not a knowledge base platform, reference search system, AI run, prompt
+system, export layer, or approval workflow engine.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal, Mapping
+from typing import Literal, Mapping, Sequence
 
 from tvi_workbench.ws0 import DomainValidationError
 
@@ -153,3 +154,102 @@ class CreativeConceptDraft:
             raise DomainValidationError("CreativeConceptDraft requires manual reference refs")
         object.__setattr__(self, "evidence_refs", evidence_refs)
         object.__setattr__(self, "manual_reference_refs", reference_refs)
+
+
+@dataclass(frozen=True)
+class ScriptPackDraft:
+    id: str
+    project_id: str
+    product_version_id: str
+    concept_id: str
+    title: str
+    target_duration_seconds: int
+    aspect_ratio: str
+    voiceover_script: str
+    storyboard: Sequence[str]
+    shot_list: Sequence[str]
+    visual_requirements: Sequence[str]
+    asset_requirements: Sequence[str]
+    generation_notes: Sequence[str]
+    risk_notes: Sequence[str]
+    evidence_refs: tuple[str, ...]
+    manual_reference_refs: tuple[str, ...]
+    knowledge_pack_id: str
+    knowledge_pack_version: str
+    generation_method: str
+    status: Literal["draft"] = "draft"
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "id", _required_text(self.id, "id"))
+        object.__setattr__(self, "project_id", _required_text(self.project_id, "project_id"))
+        object.__setattr__(
+            self,
+            "product_version_id",
+            _required_text(self.product_version_id, "product_version_id"),
+        )
+        object.__setattr__(self, "concept_id", _required_text(self.concept_id, "concept_id"))
+        object.__setattr__(self, "title", _required_text(self.title, "title"))
+        if not isinstance(self.target_duration_seconds, int) or self.target_duration_seconds <= 0:
+            raise DomainValidationError("target_duration_seconds must be a positive integer")
+        object.__setattr__(self, "aspect_ratio", _required_text(self.aspect_ratio, "aspect_ratio"))
+        object.__setattr__(
+            self,
+            "voiceover_script",
+            _required_text(self.voiceover_script, "voiceover_script"),
+        )
+        object.__setattr__(
+            self,
+            "knowledge_pack_id",
+            _required_text(self.knowledge_pack_id, "knowledge_pack_id"),
+        )
+        version = _required_text(self.knowledge_pack_version, "knowledge_pack_version")
+        if version != "v0.1":
+            raise DomainValidationError("ScriptPackDraft requires Knowledge Pack version v0.1")
+        object.__setattr__(self, "knowledge_pack_version", version)
+        object.__setattr__(
+            self,
+            "generation_method",
+            _required_text(self.generation_method, "generation_method"),
+        )
+        if self.status != "draft":
+            raise DomainValidationError("ScriptPackDraft status must remain draft")
+
+        evidence_refs = tuple(_required_text(ref, "evidence_ref") for ref in self.evidence_refs)
+        if not evidence_refs:
+            raise DomainValidationError("ScriptPackDraft requires evidence refs")
+        reference_refs = tuple(_required_text(ref, "manual_reference_ref") for ref in self.manual_reference_refs)
+        if not reference_refs:
+            raise DomainValidationError("ScriptPackDraft requires manual reference refs")
+        object.__setattr__(self, "evidence_refs", evidence_refs)
+        object.__setattr__(self, "manual_reference_refs", reference_refs)
+
+        for field_name in (
+            "storyboard",
+            "shot_list",
+            "visual_requirements",
+            "asset_requirements",
+            "generation_notes",
+            "risk_notes",
+        ):
+            value = getattr(self, field_name)
+            cleaned = tuple(_required_text(item, field_name) for item in value)
+            if not cleaned:
+                raise DomainValidationError(f"ScriptPackDraft requires {field_name}")
+            object.__setattr__(self, field_name, cleaned)
+
+
+@dataclass(frozen=True)
+class ReviewDecision:
+    project_id: str
+    script_pack_id: str
+    decision: Literal["approved", "rework", "hold", "stopped"]
+    reviewer_note: str
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "project_id", _required_text(self.project_id, "project_id"))
+        object.__setattr__(self, "script_pack_id", _required_text(self.script_pack_id, "script_pack_id"))
+        decision = _required_text(self.decision, "decision")
+        if decision not in {"approved", "rework", "hold", "stopped"}:
+            raise DomainValidationError("Review decision must be approved, rework, hold, or stopped")
+        object.__setattr__(self, "decision", decision)
+        object.__setattr__(self, "reviewer_note", _required_text(self.reviewer_note, "reviewer_note"))
