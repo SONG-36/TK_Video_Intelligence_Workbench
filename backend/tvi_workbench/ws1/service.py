@@ -5,11 +5,19 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass, replace
-from typing import Literal, Sequence
+from typing import Any, Literal, Sequence
 
 from tvi_workbench.ws0 import DomainValidationError
 
-from .domain import CreativeConceptDraft, KnowledgePack, ManualReference, ReviewDecision, ScriptPackDraft
+from .domain import (
+    CreativeConceptDraft,
+    ExportBusinessContext,
+    KnowledgePack,
+    ManualReference,
+    ProductionPackExport,
+    ReviewDecision,
+    ScriptPackDraft,
+)
 
 
 @dataclass(frozen=True)
@@ -48,6 +56,16 @@ class GenerateCreativeConceptDraftsResult:
 class GenerateScriptPackDraftRequest:
     prepared_inputs: PrepareWS1InputsResult
     concept: CreativeConceptDraft
+
+
+@dataclass(frozen=True)
+class ExportProductionPackRequest:
+    business_context: ExportBusinessContext
+    prepared_inputs: PrepareWS1InputsResult
+    concept_drafts: Sequence[CreativeConceptDraft]
+    selected_concept: CreativeConceptDraft
+    script_pack: ScriptPackDraft
+    review: ReviewDecision
 
 
 CONCEPT_GENERATION_METHOD = "deterministic_mock_v0"
@@ -357,6 +375,35 @@ def review_script_pack(
     )
 
 
+def export_production_pack_markdown(request: ExportProductionPackRequest) -> str:
+    """Build a human-readable Generation-ready Production Pack preview."""
+
+    export_data = _build_production_pack_data(request)
+    markdown = _render_production_pack_markdown(export_data)
+    return ProductionPackExport(
+        format="markdown",
+        project_id=export_data["project_id"],
+        product_version_id=export_data["product_version_id"],
+        production_readiness=export_data["production_readiness"],
+        content=markdown,
+    ).content
+
+
+def export_production_pack_json(request: ExportProductionPackRequest) -> dict[str, Any]:
+    """Build a JSON-compatible Generation-ready Production Pack dict."""
+
+    export_data = _build_production_pack_data(request)
+    return dict(
+        ProductionPackExport(
+            format="json",
+            project_id=export_data["project_id"],
+            product_version_id=export_data["product_version_id"],
+            production_readiness=export_data["production_readiness"],
+            content=export_data,
+        ).content
+    )
+
+
 def create_script_pack_id(concept: CreativeConceptDraft) -> str:
     source = "|".join(
         [
@@ -371,6 +418,321 @@ def create_script_pack_id(concept: CreativeConceptDraft) -> str:
     )
     digest = hashlib.sha256(source.encode("utf-8")).hexdigest()[:12]
     return f"script-pack-{digest}"
+
+
+def _build_production_pack_data(request: ExportProductionPackRequest) -> dict[str, Any]:
+    prepared_inputs = _validate_prepared_inputs(
+        request.prepared_inputs,
+        action="Production Pack export",
+    )
+    business_context = _validate_export_business_context(request.business_context)
+    concept_drafts = _validate_export_concepts(prepared_inputs, request.concept_drafts)
+    selected_concept = _validate_selected_export_concept(prepared_inputs, request.selected_concept)
+    script_pack = _validate_export_script_pack(prepared_inputs, selected_concept, request.script_pack)
+    review = _validate_export_review(prepared_inputs, script_pack, request.review)
+    production_readiness = _production_readiness(review)
+
+    return {
+        "project_id": prepared_inputs.project_id,
+        "product_context": {
+            "project_id": prepared_inputs.project_id,
+            "product_version_id": prepared_inputs.product_version_id,
+            "product_name": business_context.product_name,
+            "product_version_label": business_context.product_version_label,
+            "summary": business_context.product_context_summary,
+        },
+        "handoff_context": {
+            "summary": business_context.handoff_summary,
+            "target_market": business_context.target_market,
+            "platform": business_context.platform,
+            "content_objective": business_context.content_objective,
+        },
+        "selection_to_content_handoff_summary": business_context.handoff_summary,
+        "product_version_id": prepared_inputs.product_version_id,
+        "evidence_refs": list(script_pack.evidence_refs),
+        "knowledge_pack": {
+            "id": prepared_inputs.knowledge_pack.id,
+            "version": prepared_inputs.knowledge_pack.version,
+            "title": prepared_inputs.knowledge_pack.title,
+        },
+        "manual_references": [
+            {
+                "id": reference.id,
+                "title": reference.title,
+                "source_identifier": reference.source_identifier,
+                "source_type": reference.source_type,
+                "summary": reference.summary,
+                "observed_pattern": reference.observed_pattern,
+                "content_notes": reference.content_notes,
+                "usage_notes": reference.usage_notes,
+                "intake_method": reference.intake_method,
+                "project_id": reference.project_id,
+                "product_version_id": reference.product_version_id,
+            }
+            for reference in prepared_inputs.manual_references
+        ],
+        "manual_reference_refs": list(script_pack.manual_reference_refs),
+        "creative_concept_summaries": [
+            _concept_summary(concept) for concept in concept_drafts
+        ],
+        "selected_concept": _concept_summary(selected_concept),
+        "selected_concept_id": selected_concept.id,
+        "concept_generation_method": selected_concept.generation_method,
+        "script_pack": {
+            "id": script_pack.id,
+            "status": script_pack.status,
+            "concept_id": script_pack.concept_id,
+            "title": script_pack.title,
+            "target_duration_seconds": script_pack.target_duration_seconds,
+            "aspect_ratio": script_pack.aspect_ratio,
+            "voiceover_script": script_pack.voiceover_script,
+            "storyboard": list(script_pack.storyboard),
+            "shot_list": list(script_pack.shot_list),
+            "visual_requirements": list(script_pack.visual_requirements),
+            "asset_requirements": list(script_pack.asset_requirements),
+            "generation_notes": list(script_pack.generation_notes),
+            "risk_notes": list(script_pack.risk_notes),
+            "generation_method": script_pack.generation_method,
+        },
+        "script_pack_id": script_pack.id,
+        "review": {
+            "decision": review.decision,
+            "reviewer_note": review.reviewer_note,
+            "project_id": review.project_id,
+            "script_pack_id": review.script_pack_id,
+        },
+        "production_readiness": production_readiness,
+    }
+
+
+def _validate_export_concepts(
+    prepared_inputs: PrepareWS1InputsResult,
+    concept_drafts: Sequence[CreativeConceptDraft],
+) -> tuple[CreativeConceptDraft, ...]:
+    concepts = tuple(concept_drafts)
+    if len(concepts) != 3:
+        raise DomainValidationError("Production Pack export requires all three CreativeConcept Draft summaries")
+    for concept in concepts:
+        if not isinstance(concept, CreativeConceptDraft):
+            raise DomainValidationError("concept_drafts must contain CreativeConceptDraft items")
+        _validate_concept_trace(prepared_inputs, concept)
+    return concepts
+
+
+def _validate_export_business_context(
+    business_context: ExportBusinessContext,
+) -> ExportBusinessContext:
+    if not isinstance(business_context, ExportBusinessContext):
+        raise DomainValidationError("business_context must be an ExportBusinessContext")
+    return ExportBusinessContext(
+        product_context_summary=_required_text(
+            business_context.product_context_summary,
+            "product_context_summary",
+        ),
+        handoff_summary=_required_text(business_context.handoff_summary, "handoff_summary"),
+        target_market=_required_text(business_context.target_market, "target_market"),
+        platform=_required_text(business_context.platform, "platform"),
+        content_objective=_required_text(business_context.content_objective, "content_objective"),
+        product_name=_required_text(business_context.product_name, "product_name"),
+        product_version_label=_required_text(
+            business_context.product_version_label,
+            "product_version_label",
+        ),
+    )
+
+
+def _validate_selected_export_concept(
+    prepared_inputs: PrepareWS1InputsResult,
+    selected_concept: CreativeConceptDraft,
+) -> CreativeConceptDraft:
+    if not isinstance(selected_concept, CreativeConceptDraft):
+        raise DomainValidationError("selected_concept must be a CreativeConceptDraft")
+    if not selected_concept.selected:
+        raise DomainValidationError("Production Pack export requires a selected CreativeConcept")
+    _validate_concept_trace(prepared_inputs, selected_concept)
+    return selected_concept
+
+
+def _validate_export_script_pack(
+    prepared_inputs: PrepareWS1InputsResult,
+    selected_concept: CreativeConceptDraft,
+    script_pack: ScriptPackDraft,
+) -> ScriptPackDraft:
+    if not isinstance(script_pack, ScriptPackDraft):
+        raise DomainValidationError("script_pack must be a ScriptPackDraft")
+    if script_pack.project_id != prepared_inputs.project_id:
+        raise DomainValidationError("ScriptPackDraft must bind to the prepared ContentProject")
+    if script_pack.product_version_id != prepared_inputs.product_version_id:
+        raise DomainValidationError("ScriptPackDraft must bind to the prepared ProductVersion")
+    if selected_concept.id != script_pack.concept_id:
+        raise DomainValidationError("Selected CreativeConcept must match ScriptPackDraft concept_id")
+    if script_pack.evidence_refs != selected_concept.evidence_refs:
+        raise DomainValidationError("ScriptPackDraft must preserve selected CreativeConcept Evidence trace")
+    if script_pack.manual_reference_refs != selected_concept.manual_reference_refs:
+        raise DomainValidationError("ScriptPackDraft must preserve selected CreativeConcept ManualReference trace")
+    if script_pack.knowledge_pack_id != selected_concept.knowledge_pack_id:
+        raise DomainValidationError("ScriptPackDraft must preserve selected CreativeConcept Knowledge Pack")
+    if script_pack.knowledge_pack_version != selected_concept.knowledge_pack_version:
+        raise DomainValidationError("ScriptPackDraft must preserve selected CreativeConcept Knowledge Pack version")
+    return script_pack
+
+
+def _validate_export_review(
+    prepared_inputs: PrepareWS1InputsResult,
+    script_pack: ScriptPackDraft,
+    review: ReviewDecision,
+) -> ReviewDecision:
+    if not isinstance(review, ReviewDecision):
+        raise DomainValidationError("review must be a ReviewDecision")
+    if review.project_id != prepared_inputs.project_id:
+        raise DomainValidationError("ReviewDecision must bind to the prepared ContentProject")
+    if review.script_pack_id != script_pack.id:
+        raise DomainValidationError("ReviewDecision script_pack_id must match ScriptPackDraft id")
+    return review
+
+
+def _validate_concept_trace(
+    prepared_inputs: PrepareWS1InputsResult,
+    concept: CreativeConceptDraft,
+) -> None:
+    if concept.project_id != prepared_inputs.project_id:
+        raise DomainValidationError("CreativeConcept must bind to the prepared ContentProject")
+    if concept.product_version_id != prepared_inputs.product_version_id:
+        raise DomainValidationError("CreativeConcept must bind to the prepared ProductVersion")
+    if concept.knowledge_pack_id != prepared_inputs.knowledge_pack.id:
+        raise DomainValidationError("CreativeConcept must preserve the prepared Knowledge Pack")
+    if concept.knowledge_pack_version != prepared_inputs.knowledge_pack.version:
+        raise DomainValidationError("CreativeConcept must preserve the prepared Knowledge Pack version")
+
+    evidence_refs = tuple(_required_text(ref, "evidence_ref") for ref in concept.evidence_refs)
+    if not evidence_refs:
+        raise DomainValidationError("Production Pack export requires Evidence trace")
+    manual_reference_refs = tuple(reference.id for reference in prepared_inputs.manual_references)
+    if concept.manual_reference_refs != manual_reference_refs:
+        raise DomainValidationError("CreativeConcept must preserve the prepared ManualReference trace")
+
+
+def _production_readiness(review: ReviewDecision) -> Literal["generation_ready", "not_generation_ready"]:
+    if review.decision == "approved":
+        return "generation_ready"
+    return "not_generation_ready"
+
+
+def _concept_summary(concept: CreativeConceptDraft) -> dict[str, Any]:
+    return {
+        "id": concept.id,
+        "angle": concept.angle,
+        "title": concept.title,
+        "hook": concept.hook,
+        "rationale": concept.rationale,
+        "status": concept.status,
+        "selected": concept.selected,
+        "generation_method": concept.generation_method,
+        "project_id": concept.project_id,
+        "product_version_id": concept.product_version_id,
+        "evidence_refs": list(concept.evidence_refs),
+        "manual_reference_refs": list(concept.manual_reference_refs),
+        "knowledge_pack_id": concept.knowledge_pack_id,
+        "knowledge_pack_version": concept.knowledge_pack_version,
+    }
+
+
+def _render_production_pack_markdown(export_data: dict[str, Any]) -> str:
+    script_pack = export_data["script_pack"]
+    review = export_data["review"]
+    lines = [
+        "# Generation-ready Owned Content Production Pack",
+        "",
+        "## Product Context",
+        f"- Project ID: {export_data['project_id']}",
+        f"- ProductVersion ID: {export_data['product_version_id']}",
+        f"- Product Name: {export_data['product_context']['product_name']}",
+        f"- ProductVersion Label: {export_data['product_context']['product_version_label']}",
+        f"- Summary: {export_data['product_context']['summary']}",
+        "",
+        "## Selection-to-Content Handoff Summary",
+        f"- Summary: {export_data['handoff_context']['summary']}",
+        f"- Target Market: {export_data['handoff_context']['target_market']}",
+        f"- Platform: {export_data['handoff_context']['platform']}",
+        f"- Content Objective: {export_data['handoff_context']['content_objective']}",
+        "",
+        "## ProductVersion Lite",
+        f"- ProductVersion ID: {export_data['product_version_id']}",
+        "",
+        "## Evidence References",
+        *_bullet_lines(export_data["evidence_refs"]),
+        "",
+        "## Knowledge Pack",
+        f"- ID: {export_data['knowledge_pack']['id']}",
+        f"- Version: {export_data['knowledge_pack']['version']}",
+        f"- Title: {export_data['knowledge_pack']['title']}",
+        "",
+        "## Manual References",
+        *[
+            (
+                f"- {reference['id']}: {reference['title']} "
+                f"({reference['source_type']} - {reference['source_identifier']})"
+            )
+            for reference in export_data["manual_references"]
+        ],
+        "",
+        "## CreativeConcept Draft Summaries",
+        *[
+            f"- {concept['id']}: {concept['angle']} | {concept['title']} | {concept['status']}"
+            for concept in export_data["creative_concept_summaries"]
+        ],
+        "",
+        "## Selected / Human-edited Concept",
+        f"- ID: {export_data['selected_concept']['id']}",
+        f"- Angle: {export_data['selected_concept']['angle']}",
+        f"- Title: {export_data['selected_concept']['title']}",
+        f"- Hook: {export_data['selected_concept']['hook']}",
+        f"- Rationale: {export_data['selected_concept']['rationale']}",
+        f"- Generation Method: {export_data['selected_concept']['generation_method']}",
+        "",
+        "## Script",
+        f"- ScriptPack ID: {script_pack['id']}",
+        f"- ScriptPack Status: {script_pack['status']}",
+        f"- Target Duration Seconds: {script_pack['target_duration_seconds']}",
+        f"- Aspect Ratio: {script_pack['aspect_ratio']}",
+        "",
+        script_pack["voiceover_script"],
+        "",
+        "## Storyboard",
+        *_numbered_lines(script_pack["storyboard"]),
+        "",
+        "## Shot List",
+        *_numbered_lines(script_pack["shot_list"]),
+        "",
+        "## Visual Requirements",
+        *_bullet_lines(script_pack["visual_requirements"]),
+        "",
+        "## Asset Requirements",
+        *_bullet_lines(script_pack["asset_requirements"]),
+        "",
+        "## Generation Notes",
+        *_bullet_lines(script_pack["generation_notes"]),
+        "",
+        "## Risk Notes",
+        *_bullet_lines(script_pack["risk_notes"]),
+        "",
+        "## Human Review",
+        f"- Decision: {review['decision']}",
+        f"- Reviewer Note: {review['reviewer_note']}",
+        "",
+        "## Production Readiness",
+        export_data["production_readiness"],
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def _bullet_lines(values: Sequence[str]) -> list[str]:
+    return [f"- {value}" for value in values]
+
+
+def _numbered_lines(values: Sequence[str]) -> list[str]:
+    return [f"{index}. {value}" for index, value in enumerate(values, start=1)]
 
 
 def _validate_script_pack_concept(

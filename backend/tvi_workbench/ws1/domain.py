@@ -9,7 +9,7 @@ system, export layer, or approval workflow engine.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal, Mapping, Sequence
+from typing import Any, Literal, Mapping, Sequence
 
 from tvi_workbench.ws0 import DomainValidationError
 
@@ -253,3 +253,62 @@ class ReviewDecision:
             raise DomainValidationError("Review decision must be approved, rework, hold, or stopped")
         object.__setattr__(self, "decision", decision)
         object.__setattr__(self, "reviewer_note", _required_text(self.reviewer_note, "reviewer_note"))
+
+
+@dataclass(frozen=True)
+class ExportBusinessContext:
+    product_context_summary: str
+    handoff_summary: str
+    target_market: str
+    platform: str
+    content_objective: str
+    product_name: str
+    product_version_label: str
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "product_context_summary",
+            _required_text(self.product_context_summary, "product_context_summary"),
+        )
+        object.__setattr__(self, "handoff_summary", _required_text(self.handoff_summary, "handoff_summary"))
+        object.__setattr__(self, "target_market", _required_text(self.target_market, "target_market"))
+        object.__setattr__(self, "platform", _required_text(self.platform, "platform"))
+        object.__setattr__(self, "content_objective", _required_text(self.content_objective, "content_objective"))
+        object.__setattr__(self, "product_name", _required_text(self.product_name, "product_name"))
+        object.__setattr__(
+            self,
+            "product_version_label",
+            _required_text(self.product_version_label, "product_version_label"),
+        )
+
+
+@dataclass(frozen=True)
+class ProductionPackExport:
+    format: Literal["markdown", "json"]
+    project_id: str
+    product_version_id: str
+    production_readiness: Literal["generation_ready", "not_generation_ready"]
+    content: str | Mapping[str, Any]
+
+    def __post_init__(self) -> None:
+        export_format = _required_text(self.format, "format")
+        if export_format not in {"markdown", "json"}:
+            raise DomainValidationError("ProductionPackExport format must be markdown or json")
+        object.__setattr__(self, "format", export_format)
+        object.__setattr__(self, "project_id", _required_text(self.project_id, "project_id"))
+        object.__setattr__(
+            self,
+            "product_version_id",
+            _required_text(self.product_version_id, "product_version_id"),
+        )
+        readiness = _required_text(self.production_readiness, "production_readiness")
+        if readiness not in {"generation_ready", "not_generation_ready"}:
+            raise DomainValidationError(
+                "production_readiness must be generation_ready or not_generation_ready"
+            )
+        object.__setattr__(self, "production_readiness", readiness)
+        if export_format == "markdown" and not isinstance(self.content, str):
+            raise DomainValidationError("Markdown ProductionPackExport content must be text")
+        if export_format == "json" and not isinstance(self.content, Mapping):
+            raise DomainValidationError("JSON ProductionPackExport content must be a mapping")
