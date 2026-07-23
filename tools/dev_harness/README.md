@@ -22,3 +22,15 @@ The interface is organized as a business flow:
 System IDs, Knowledge Pack version, manual intake method, and prepared status are generated or fixed by the harness rather than treated as primary owner inputs.
 
 It is not the product frontend, not an API, not a database workflow, not an AI workflow, and not a formal export.
+
+Run [ws_full_walking_skeleton_app.py](ws_full_walking_skeleton_app.py) to smoke test the completed WS-0 + WS-1 chain:
+
+```text
+streamlit run tools/dev_harness/ws_full_walking_skeleton_app.py
+```
+
+The full harness lets the owner enter realistic car vacuum cleaner inputs, then runs the existing backend services through project creation, WS-1 input preparation, CreativeConcept Drafts, manual concept creation, selected concept edit, ScriptPackDraft generation, Human Review, Markdown export, and JSON-compatible export.
+
+The full harness generates project, product, and product version IDs with a slug plus deterministic hash so Chinese or other non-ASCII owner inputs remain stable without collapsing to repeated fallback IDs. It also lets the owner choose whether the selected concept goes directly to ScriptPack generation or first receives a human edit.
+
+The Markdown and JSON shown by this harness are in-memory previews produced by backend export functions. The harness does not write export files, persist records, call AI, call external APIs, or create a formal frontend.
