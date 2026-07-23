@@ -8,7 +8,7 @@ base platform, reference search system, AI run, or approval workflow.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Mapping
+from typing import Literal, Mapping
 
 from tvi_workbench.ws0 import DomainValidationError
 
@@ -98,3 +98,58 @@ class ManualReference:
         object.__setattr__(self, "content_notes", content_notes or None)
         object.__setattr__(self, "usage_notes", usage_notes or None)
 
+
+@dataclass(frozen=True)
+class CreativeConceptDraft:
+    id: str
+    project_id: str
+    product_version_id: str
+    angle: str
+    title: str
+    hook: str
+    rationale: str
+    evidence_refs: tuple[str, ...]
+    manual_reference_refs: tuple[str, ...]
+    knowledge_pack_id: str
+    knowledge_pack_version: str
+    generation_method: str
+    status: Literal["draft"] = "draft"
+    selected: bool = False
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "id", _required_text(self.id, "id"))
+        object.__setattr__(self, "project_id", _required_text(self.project_id, "project_id"))
+        object.__setattr__(
+            self,
+            "product_version_id",
+            _required_text(self.product_version_id, "product_version_id"),
+        )
+        object.__setattr__(self, "angle", _required_text(self.angle, "angle"))
+        object.__setattr__(self, "title", _required_text(self.title, "title"))
+        object.__setattr__(self, "hook", _required_text(self.hook, "hook"))
+        object.__setattr__(self, "rationale", _required_text(self.rationale, "rationale"))
+        object.__setattr__(
+            self,
+            "knowledge_pack_id",
+            _required_text(self.knowledge_pack_id, "knowledge_pack_id"),
+        )
+        version = _required_text(self.knowledge_pack_version, "knowledge_pack_version")
+        if version != "v0.1":
+            raise DomainValidationError("CreativeConceptDraft requires Knowledge Pack version v0.1")
+        object.__setattr__(self, "knowledge_pack_version", version)
+        object.__setattr__(
+            self,
+            "generation_method",
+            _required_text(self.generation_method, "generation_method"),
+        )
+        if self.status != "draft":
+            raise DomainValidationError("CreativeConceptDraft status must remain draft")
+
+        evidence_refs = tuple(_required_text(ref, "evidence_ref") for ref in self.evidence_refs)
+        if not evidence_refs:
+            raise DomainValidationError("CreativeConceptDraft requires evidence refs")
+        reference_refs = tuple(_required_text(ref, "manual_reference_ref") for ref in self.manual_reference_refs)
+        if not reference_refs:
+            raise DomainValidationError("CreativeConceptDraft requires manual reference refs")
+        object.__setattr__(self, "evidence_refs", evidence_refs)
+        object.__setattr__(self, "manual_reference_refs", reference_refs)
