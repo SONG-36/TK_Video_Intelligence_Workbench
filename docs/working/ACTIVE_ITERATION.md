@@ -328,8 +328,44 @@ Each coding step still requires a separate human instruction before execution.
 | Step 1 | VERIFIED_WITH_LOCAL_PY312_ENV | Establish WS-0 thin service interface. Service/interface has been implemented with `create_project_from_handoff(...)`. | Thin in-memory service interface for creating and inspecting WS-0 project context only. Business-core files: `backend/tvi_workbench/ws0/service.py`, `tests/ws0/test_service.py`, `backend/tvi_workbench/ws0/domain.py`. Engineering-boilerplate files: `backend/tvi_workbench/ws0/__init__.py`. | Python 3.12 local venv pytest passed: `9 passed`. Docs check to be recorded by this task report. | Service preserves handoff context, ProductVersion Lite, Evidence scope, traceable IDs, and reviewable validation errors. | Step 1 enforces that a WS-0 project requires at least one Evidence Lite item. Step 1 did not implement FastAPI, DB, frontend, WS-1, AI, or export. |
 | Step 2 | VERIFIED_WITH_LOCAL_PY312_ENV | Add Knowledge Pack v0.1 and Manual Reference input boundaries. Knowledge Pack v0.1 + Manual Reference input boundary has been implemented with `prepare_ws1_inputs(...)`. | WS-1 begins with versioned Knowledge Pack input and manual Reference entry. Business-core files: `backend/tvi_workbench/ws1/domain.py`, `backend/tvi_workbench/ws1/service.py`, `tests/ws1/test_input_preparation.py`. Engineering-boilerplate files: `backend/tvi_workbench/ws1/__init__.py`. | Python 3.12 local venv pytest passed: `18 passed`. 3-5 manual references rule implemented. Traceability mismatch tests for project_id and product_version_id are covered. Docs check to be recorded by this task report. | Knowledge Pack version recording, manual Reference traceability, project/ProductVersion binding, prepared-not-approved status, and no full knowledge platform. | Step 2 did not implement CreativeConcept, ScriptPack, Export, AI, FastAPI, DB, frontend, TikTok Search, or full Knowledge Base platform. |
 | Step 2.5 | READY_FOR_OWNER_VISUAL_SMOKE_TEST | Add visual real input smoke harness for WS-0 -> WS-1 input preparation. UX has been refined into owner-friendly business flow sections. | Local Streamlit dev harness only: `tools/dev_harness/ws_pilot_input_app.py`. This is not formal frontend, API, DB, or product UI. | Python 3.12 local venv pytest and docs check to be recorded by this task report. Streamlit installed only in local venv. | Owner can manually enter car vacuum cleaner WS-0 and WS-1 inputs and inspect project/ProductVersion/Evidence/KnowledgePack/Reference traceability. System IDs, Knowledge Pack version, manual intake, and prepared status are generated/fixed instead of primary owner inputs. | Step 2.5 did not implement AI, Concept, ScriptPack, Export, FastAPI, DB, formal frontend, TikTok Search, or full Knowledge Base platform. |
-| Step 3 | NOT_STARTED | Generate 3 CreativeConcept Drafts and allow human selection or editing of one. | Concept Draft generation and human selection/edit boundary only. | Tests or fixtures proving three Drafts, traceable inputs, and selected Concept state. | AI Draft status, Evidence and Reference citations, and human selection semantics. | No Agent Runtime or Workflow Engine. |
-| Step 4 | NOT_STARTED | Generate ScriptPack Draft, Human Review, Markdown export, and JSON export. | ScriptPack Draft, Review decision, and export contract for the pilot Production Pack. | Export validation for Markdown and JSON plus review status checks. | Human approval boundary, export traceability, risk notes, and final review status. | No GenerationPlan, RenderBatch, RenderJob, ComfyUI, or Seedance. |
+| Step 3 | VERIFIED_WITH_LOCAL_PY312_ENV | Generate 3 CreativeConcept Drafts and allow human selection, human edit, or owner-created manual Draft. CreativeConcept Draft boundary has been implemented and review-fixed. | Concept Draft generation and human selection/edit/manual creation boundary only. Business-core files: `backend/tvi_workbench/ws1/domain.py`, `backend/tvi_workbench/ws1/service.py`, `tests/ws1/test_creative_concepts.py`. | Python 3.12 local venv pytest passed as part of final validation: `91 passed`. Tests cover exactly 3 Drafts, draft status, ProductVersion trace, Evidence refs, ManualReference refs, KnowledgePack version, manual creation, selection, editing, duplicate selection protection, and Chinese/non-ASCII manual concept id safety. | Draft semantics, Evidence and Reference traceability, KnowledgePack version preservation, selected Concept state, and human edit provenance. | Step 3 did not implement OpenAI, RAG, prompt system, Agent Runtime, Workflow Engine, FastAPI, DB, frontend, TikTok Search, ScriptPack, Export, or Generation Orchestration. |
+| Step 4 | VERIFIED_WITH_LOCAL_PY312_ENV_AND_OWNER_SMOKE_TEST | Generate ScriptPack Draft, Human Review, Markdown export, and JSON-compatible export. ScriptPackDraft, ReviewDecision, ProductionPackExport, Markdown export, and JSON-compatible export have been implemented and review-fixed. | ScriptPack Draft, Review decision, and in-memory export contract for the pilot Production Pack. Business-core files: `backend/tvi_workbench/ws1/domain.py`, `backend/tvi_workbench/ws1/service.py`, `tests/ws1/test_script_pack_review.py`, `tests/ws1/test_production_pack_export.py`, `tests/ws1/test_walking_skeleton_e2e_acceptance.py`. Dev harness: `tools/dev_harness/ws_full_walking_skeleton_app.py`. | Final validation: Python 3.12 local venv pytest passed: `91 passed`. Docs check passed: `PASS 67 / WARNING 8 / FAIL 0`. E2E acceptance test verifies WS-0 project creation through approved Production Pack export. Streamlit full walking skeleton harness was manually run and accepted by owner. | Human approval boundary, reviewed ScriptPackDraft, ProductVersion-scoped Evidence traceability, ManualReference traceability, KnowledgePack v0.1 preservation, Markdown/JSON export usefulness, and generation-ready readiness mapping. | Step 4 stayed inside WS-0 + WS-1. It did not add Platform Kernel, Gate Engine, Agent Runtime, Workflow Engine, TikTok Search, full Knowledge Platform, GenerationPlan, RenderBatch, RenderJob, ComfyUI, Seedance, Kling, DB, API, formal frontend, or Generation Orchestration. |
+
+### Iteration Acceptance Summary
+
+Status:
+
+```text
+VERIFIED_WITH_LOCAL_PY312_ENV_AND_OWNER_MANUAL_SMOKE_TEST
+```
+
+Final accepted chain:
+
+```text
+ContentProject
+-> Selection-to-Content Handoff / OperatingContextSnapshot
+-> Product / ProductVersion Lite
+-> ProductVersion-scoped Evidence Lite
+-> KnowledgePack v0.1
+-> 3-5 ManualReferences
+-> 3 CreativeConcept Drafts plus owner manual concept option
+-> human selected or human-edited Concept
+-> ScriptPackDraft
+-> ReviewDecision
+-> Markdown ProductionPackExport
+-> JSON-compatible ProductionPackExport
+```
+
+Acceptance evidence:
+
+- Backend in-memory WS-0 + WS-1 chain is implemented.
+- E2E acceptance test verifies WS-0 project creation through approved Production Pack export.
+- Streamlit full walking skeleton smoke harness runs successfully and was manually validated by the owner.
+- Final local validation in Python 3.12 environment:
+  - `python3 -m pytest`: `91 passed`
+  - `python3 governance/checks/check_docs.py`: `PASS 67 / WARNING 8 / FAIL 0`
+- Scope stayed inside WS-0 + WS-1 car vacuum cleaner walking skeleton.
+- No Platform Kernel, Gate Engine, Agent Runtime, Workflow Engine, TikTok Search, full Knowledge Platform, Generation Orchestration, DB, API, formal frontend, or external AI integration was added.
 
 Owner Review Rules:
 
